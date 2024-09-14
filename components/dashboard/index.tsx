@@ -1,12 +1,10 @@
 "use client"
 
-import { useState, useEffect, SetStateAction } from "react"
+import { useState, useEffect, use } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
-import { Switch } from "@/components/ui/switch"
-import { Slider } from "@/components/ui/slider"
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -21,11 +19,6 @@ import {
   CartesianGrid,
   Tooltip,
   ResponsiveContainer,
-  PieChart,
-  Pie,
-  Cell,
-  BarChart,
-  Bar,
 } from "recharts"
 
 import { Icons } from "@/components/ui/icons"
@@ -39,81 +32,50 @@ const portfolioData = [
   { name: "Jun", value: 160000 },
 ]
 
-const assetData = [
-  {
-    name: "AAPL",
-    type: "Stock",
-    value: 150.25,
-    change: 1.32,
-    logo: "https://logo.clearbit.com/apple.com",
-  },
-  {
-    name: "BTC",
-    type: "Crypto",
-    value: 35000,
-    change: -2.5,
-    logo: "https://logo.clearbit.com/bitcoin.org",
-  },
-  {
-    name: "TSLA 700C",
-    type: "Option",
-    value: 15.5,
-    change: 5.2,
-    logo: "https://logo.clearbit.com/tesla.com",
-  },
-  {
-    name: "ETH",
-    type: "Crypto",
-    value: 2250,
-    change: 3.1,
-    logo: "https://logo.clearbit.com/ethereum.org",
-  },
-  {
-    name: "GOOGL",
-    type: "Stock",
-    value: 2800,
-    change: -0.5,
-    logo: "https://logo.clearbit.com/google.com",
-  },
-]
+const getBackgroundColor = (url: string): Promise<string | null> => {
+  return new Promise((resolve, reject) => {
+    if (typeof window === "undefined") {
+      // Server-side, return null
+      resolve(null)
+      return
+    }
 
-const getBackgroundColor = (url: string) => {
-  // get the color of the edge pixels of the image
-  const img = new Image()
-  img.src = url
-  img.crossOrigin = "Anonymous"
-  img.onload = () => {
-    const canvas = document.createElement("canvas")
-    const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
-    ctx.drawImage(img, 0, 0)
-    const color = ctx.getImageData(0, 0, 1, 1).data
-    return `rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.5)`
-  }
+    const img = new Image()
+    img.crossOrigin = "Anonymous"
+    img.src = url
+    img.onload = () => {
+      const canvas = document.createElement("canvas")
+      canvas.width = img.width
+      canvas.height = img.height
+      const ctx = canvas.getContext("2d") as CanvasRenderingContext2D
+      ctx.drawImage(img, 0, 0)
+      const color = ctx.getImageData(0, 0, 1, 1).data
+      resolve(`rgba(${color[0]}, ${color[1]}, ${color[2]}, 0.5)`)
+    }
+    img.onerror = () => {
+      resolve(null)
+    }
+  })
 }
 
-const aiRecommendations = [
+const initialAiRecommendations = [
   {
     asset: "AAPL",
     action: "Buy",
     confidence: 0.85,
     logo: "https://logo.clearbit.com/apple.com",
-    backgroundColor: getBackgroundColor("https://logo.clearbit.com/apple.com"),
   },
   {
     asset: "BTC",
     action: "Hold",
     confidence: 0.72,
     logo: "https://logo.clearbit.com/bitcoin.org",
-    backgroundColor: getBackgroundColor(
-      "https://logo.clearbit.com/bitcoin.org"
-    ),
   },
   {
     asset: "TSLA 700C",
     action: "Sell",
     confidence: 0.68,
     logo: "https://logo.clearbit.com/tesla.com",
-    backgroundColor: getBackgroundColor("https://logo.clearbit.com/tesla.com"),
   },
 ]
 
@@ -124,14 +86,13 @@ const kpiData = [
   { label: "Max Drawdown", value: "5%", change: -1 },
 ]
 
-const positionData = [
+const initialPositionData = [
   {
     symbol: "AAPL",
     quantity: 100,
     entryPrice: 140,
     currentPrice: 150,
     logo: "https://logo.clearbit.com/apple.com",
-    backgroundColor: getBackgroundColor("https://logo.clearbit.com/apple.com"),
   },
   {
     symbol: "TSLA 700C",
@@ -139,7 +100,6 @@ const positionData = [
     entryPrice: 12,
     currentPrice: 15.5,
     logo: "https://logo.clearbit.com/tesla.com",
-    backgroundColor: getBackgroundColor("https://logo.clearbit.com/tesla.com"),
   },
   {
     symbol: "ETH",
@@ -147,9 +107,6 @@ const positionData = [
     entryPrice: 2000,
     currentPrice: 2250,
     logo: "https://logo.clearbit.com/ethereum.org",
-    backgroundColor: getBackgroundColor(
-      "https://logo.clearbit.com/ethereum.org"
-    ),
   },
 ]
 
@@ -197,8 +154,61 @@ const timeframes = ["1D", "1W", "1M", "3M", "1Y", "All"]
 const COLORS = ["#8884d8", "#82ca9d", "#ffc658"]
 
 export default function Dashboard() {
-  const [isAutomatedTrading, setIsAutomatedTrading] = useState(true)
-  const [riskLevel, setRiskLevel] = useState(50)
+  const [aiRecommendations, setAiRecommendations] = useState(
+    initialAiRecommendations
+  )
+
+  const [positionData, setPositionData] = useState(initialPositionData)
+
+  useEffect(() => {
+    let isMounted = true
+
+    // Function to fetch background colors
+    const fetchBackgroundColors = async () => {
+      const updatedRecommendations = await Promise.all(
+        aiRecommendations.map(async (rec) => {
+          const bgColor = await getBackgroundColor(rec.logo)
+          return { ...rec, backgroundColor: bgColor || "transparent" }
+        })
+      )
+
+      if (isMounted) {
+        setAiRecommendations(updatedRecommendations)
+      }
+    }
+
+    fetchBackgroundColors()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  useEffect(() => {
+    // fetch curent positions and background colors\
+
+    let isMounted = true
+
+    const fetchBackgroundColors = async () => {
+      const updatedPositions = await Promise.all(
+        positionData.map(async (position) => {
+          const bgColor = await getBackgroundColor(position.logo)
+          return { ...position, backgroundColor: bgColor || "transparent" }
+        })
+      )
+
+      if (isMounted) {
+        setPositionData(updatedPositions)
+      }
+    }
+
+    fetchBackgroundColors()
+
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
   const [tradeFeed, setTradeFeed] = useState([
     {
       id: 1,
@@ -380,17 +390,27 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <div className="space-y-2">
-                {positionData.map((position, index) => (
+                {positionData.map((position:any, index) => (
                   <div
                     key={index}
                     className="flex items-center justify-between rounded-lg border bg-white p-3 dark:bg-black"
                   >
                     <div className="flex items-center space-x-3">
-                      <Avatar className="size-9 bg-neutral-50 shadow-md">
+                      <Avatar
+                        className="size-9 bg-neutral-50 shadow-md"
+                        style={{
+                          backgroundColor:
+                            position.backgroundColor || "transparent",
+                        }}
+                      >
                         <AvatarImage
                           className="rounded-full border border-neutral-50 p-0.5"
                           src={position.logo}
                           alt={position.symbol}
+                          style={{
+                            backgroundColor:
+                              position.backgroundColor || "transparent",
+                          }}
                         />
                         <AvatarFallback>
                           <Icons.activity className="h-4 w-4" />
@@ -441,17 +461,26 @@ export default function Dashboard() {
             </CardHeader>
             <CardContent>
               <ul className="space-y-4">
-                {aiRecommendations.map((rec, index) => (
+                {aiRecommendations.map((rec: any, index) => (
                   <li
                     key={index}
-                    className="flex items-center justify-between rounded-lg border bg-muted p-3"
+                    className="flex items-center justify-between rounded-lg border p-3"
                   >
                     <div className="flex items-center space-x-3">
-                      <Avatar className="size-9 bg-neutral-50 shadow-md">
+                      <Avatar
+                        style={{
+                          backgroundColor: rec.backgroundColor || "transparent",
+                        }}
+                        className="size-9 p-0.5 shadow-md"
+                      >
                         <AvatarImage
-                          className="rounded-full border border-neutral-50 p-0.5"
+                          className="rounded-full"
                           src={rec.logo}
                           alt={rec.asset}
+                          style={{
+                            backgroundColor:
+                              rec.backgroundColor || "transparent",
+                          }}
                         />
                         <AvatarFallback>
                           <Icons.activity className="h-4 w-4" />
