@@ -224,32 +224,32 @@ export default function Settings() {
 
                   {/* Configurable Risk Allocation */}
                   <div className="mt-6 space-y-4">
-                    <h3 className="text-md font-semibold">
-                      Configure Risk Allocation
-                    </h3>
-                    {Object.keys(riskAllocation).map(
-                      (assetType: keyof typeof riskAllocation) => (
-                        <div key={assetType} className="space-y-2">
-                          <div className="flex justify-between">
-                            <span>{assetType}</span>
-                            <span>{riskAllocation[assetType]}%</span>
-                          </div>
-                          <Slider
-                            value={[riskAllocation[assetType]]}
-                            onValueChange={(value: number[]) =>
-                              handleRiskChange(assetType, value[0])
-                            }
-                            max={100}
-                            step={1}
-                          />
+                    <CardTitle>Configure Risk Allocation</CardTitle>
+                    {(
+                      Object.keys(riskAllocation) as Array<
+                        keyof typeof riskAllocation
+                      >
+                    ).map((assetType) => (
+                      <div key={assetType} className="space-y-2">
+                        <div className="flex justify-between">
+                          <span>{assetType}</span>
+                          <span>{riskAllocation[assetType]}%</span>
                         </div>
-                      )
-                    )}
+                        <Slider
+                          value={[riskAllocation[assetType]]}
+                          onValueChange={(value: number[]) =>
+                            handleRiskChange(assetType, value[0])
+                          }
+                          max={100}
+                          step={1}
+                        />
+                      </div>
+                    ))}
                     {totalRiskAllocation !== 100 && (
-                      <Alert variant="destructive">
+                      <div className="text-red-600">
                         Total allocation must equal 100%. Current total:{" "}
                         {totalRiskAllocation}%
-                      </Alert>
+                      </div>
                     )}
                   </div>
                   <Button className="mt-4">Save Changes</Button>

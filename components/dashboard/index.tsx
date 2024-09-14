@@ -247,25 +247,6 @@ export default function Dashboard() {
     }
   }
 
-  const totalRiskAllocation = Object.values(riskAllocation).reduce(
-    (acc, val) => acc + val,
-    0
-  )
-
-  const handleRiskChange = (assetType: string, value: number) => {
-    setRiskAllocation((prev) => ({
-      ...prev,
-      [assetType]: value,
-    }))
-  }
-
-  const riskData = Object.keys(riskAllocation).map(
-    (key: "Stocks" | "Options" | "Crypto") => ({
-      name: key,
-      value: riskAllocation[key],
-    })
-  )
-
   return (
     <div className="mx-auto w-full space-y-6">
       {/* Main Content */}
@@ -273,7 +254,7 @@ export default function Dashboard() {
         {/* Left Column (Main Content) */}
         <div className="space-y-6 lg:col-span-3">
           {/* Portfolio Overview */}
-          <Card className="shadow-black/10 rounded-2xl shadow-2xl">
+          <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <div className="flex items-center space-x-2">
                 <CardTitle>Portfolio Overview</CardTitle>
@@ -353,7 +334,7 @@ export default function Dashboard() {
           </Card>
 
           {/* Key Performance Indicators */}
-          <Card className="shadow-black/10 rounded-2xl shadow-2xl">
+          <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Key Performance Indicators</CardTitle>
               <Button variant="link" size="sm" className="px-0">
@@ -390,7 +371,7 @@ export default function Dashboard() {
           </Card>
 
           {/* Current Positions */}
-          <Card className="shadow-black/10 rounded-2xl shadow-2xl">
+          <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Current Positions</CardTitle>
               <Button variant="link" size="sm" className="px-0">
@@ -451,7 +432,7 @@ export default function Dashboard() {
           </Card>
 
           {/* AI Recommendations */}
-          <Card className="shadow-black/10 rounded-2xl shadow-2xl">
+          <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>AI Recommendations</CardTitle>
               <Button variant="link" size="sm" className="px-0">
@@ -508,7 +489,7 @@ export default function Dashboard() {
         {/* Right Column */}
         <div className="space-y-6 lg:col-span-1">
           {/* Trading Activity */}
-          <Card className="shadow-black/10 rounded-2xl shadow-2xl">
+          <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Trading Activity</CardTitle>
               <Button variant="link" size="sm" className="px-0">
@@ -544,7 +525,7 @@ export default function Dashboard() {
             </CardContent>
           </Card>
           {/* Alerts and Notifications */}
-          <Card className="shadow-black/10 rounded-2xl shadow-2xl">
+          <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>
                 <div className="flex items-center space-x-2">
@@ -586,7 +567,7 @@ export default function Dashboard() {
           </Card>
 
           {/* Recent News and Sentiment */}
-          <Card className="shadow-black/10 rounded-2xl shadow-2xl">
+          <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Market Sentiment</CardTitle>
               <Button variant="link" size="sm" className="px-0">
@@ -626,7 +607,7 @@ export default function Dashboard() {
           </Card>
 
           {/* Major Events */}
-          <Card className="shadow-black/10 rounded-2xl shadow-2xl">
+          <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>
                 <div className="flex items-center space-x-2">
