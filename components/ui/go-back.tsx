@@ -11,7 +11,7 @@ export default function GoBack() {
       aria-label="Go Back"
       variant={"custom"}
       onClick={() => router.back()}
-      className="group flex w-fit flex-row items-center gap-2 px-0 font-medium text-blue-500"
+      className="group flex w-fit flex-row items-center space-x-1 px-0 font-medium text-neutral-500"
     >
       <i>
         <svg

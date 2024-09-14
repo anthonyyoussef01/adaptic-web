@@ -47,7 +47,7 @@ export const columns: ColumnDef<Quote>[] = [
         <div
           className={cn(
             "text-right",
-            change < 0 ? "text-red-500" : "text-green-500"
+            change < 0 ? "text-red-500" : "text-teal-500"
           )}
         >
           {change > 0 ? "+" : ""}
@@ -66,10 +66,10 @@ export const columns: ColumnDef<Quote>[] = [
         <div className="flex justify-end">
           <div
             className={cn(
-              "w-[4rem] min-w-fit rounded-md px-2 py-0.5 text-right",
+              "w-[4rem] min-w-fit rounded-lg px-2 py-0.5 text-right",
               changePercent < 0
                 ? "bg-red-300 text-red-800 dark:bg-red-950 dark:text-red-500"
-                : "bg-green-300 text-green-800 dark:bg-green-950 dark:text-green-400"
+                : "bg-teal-300 text-teal-800 dark:bg-teal-950 dark:text-teal-400"
             )}
           >
             {changePercent.toFixed(2)}%

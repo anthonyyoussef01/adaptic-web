@@ -14,7 +14,7 @@ https://github.com/DariusLukasukas/stocks/assets/64962012/d81789c6-18ee-4217-ba2
   - Comprehensive financial statements (income statement, balance sheet, cash flow)
   - Key ratios and fundamental metrics
   - Detailed company profiles and summaries
-- Interactive Charting Tools:
+-Interactive Charting Tools:
   - Customizable Visx area charts for visualizing market trends and patterns
   - Adjustable timeframes (intraday, daily, weekly, monthly, etc.)
 - Market News Integration:

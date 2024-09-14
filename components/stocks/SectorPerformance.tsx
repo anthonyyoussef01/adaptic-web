@@ -51,9 +51,9 @@ export default async function SectorPerformance() {
           <span className="font-medium">{sector.sector}</span>
           <span
             className={cn(
-              "w-[4rem] min-w-fit rounded-md px-2 py-0.5 text-right transition-colors",
+              "w-[4rem] min-w-fit rounded-lg px-2 py-0.5 text-right transition-colors",
               parseFloat(sector.changesPercentage) > 0
-                ? "bg-gradient-to-l from-green-300 text-green-800 dark:from-green-950 dark:text-green-400"
+                ? "bg-gradient-to-l from-teal-300 text-teal-800 dark:from-teal-950 dark:text-teal-400"
                 : "bg-gradient-to-l from-red-300 text-red-800 dark:from-red-950 dark:text-red-500"
             )}
           >

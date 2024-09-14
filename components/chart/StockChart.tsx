@@ -73,7 +73,7 @@ export default async function StockChart({
                 {quote.regularMarketChange &&
                 quote.regularMarketChangePercent !== undefined ? (
                   quote.regularMarketChange > 0 ? (
-                    <span className="text-green-800 dark:text-green-400">
+                    <span className="text-teal-800 dark:text-teal-400">
                       +{quote.regularMarketChange.toFixed(2)} (+
                       {quote.regularMarketChangePercent.toFixed(2)}%)
                     </span>
@@ -98,7 +98,7 @@ export default async function StockChart({
                     {quote.postMarketChange &&
                     quote.postMarketChangePercent !== undefined ? (
                       quote.postMarketChange > 0 ? (
-                        <span className="text-green-800 dark:text-green-400">
+                        <span className="text-teal-800 dark:text-teal-400">
                           +{quote.postMarketChange.toFixed(2)} (+
                           {quote.postMarketChangePercent.toFixed(2)}%)
                         </span>
@@ -123,7 +123,7 @@ export default async function StockChart({
                     {quote.preMarketChange &&
                     quote.preMarketChangePercent !== undefined ? (
                       quote.preMarketChange > 0 ? (
-                        <span className="text-green-800 dark:text-green-400">
+                        <span className="text-teal-800 dark:text-teal-400">
                           +{quote.preMarketChange.toFixed(2)} (+
                           {quote.preMarketChangePercent.toFixed(2)}%)
                         </span>
@@ -144,7 +144,7 @@ export default async function StockChart({
               <span
                 className={cn(
                   priceChange > 0
-                    ? "text-green-800 dark:text-green-400"
+                    ? "text-teal-800 dark:text-teal-400"
                     : "text-red-800 dark:text-red-500"
                 )}
               >

@@ -13,20 +13,33 @@ import Link from "next/link"
 import GoBack from "./go-back"
 import { usePathname } from "next/navigation"
 import CommandMenu from "./command-menu"
+import Logo from "../logo"
+import { cn } from "@/lib/utils"
 
 const NAVIGATION = [
-  { title: "Markets", href: "/" },
+  { title: "Dashboard", href: "/" },
+  { title: "Markets", href: "/markets" },
   { title: "Screener", href: "/screener" },
+  { title: "Settings", href: "/settings" },
 ]
 
 export default function Navigation() {
   const pathname = usePathname()
 
+  console.log(pathname, "pathname")
+
   return (
     <header className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container">
         <div className="flex w-full flex-row justify-between py-4">
-          <div>{pathname !== "/" && <GoBack />}</div>
+          <div className="flex items-center space-x-6">
+            <Logo />
+            <div>
+              {pathname !== "/" &&
+                pathname !== "/markets" &&
+                pathname !== "/screener" && <GoBack />}
+            </div>
+          </div>
           <div className="flex flex-row items-center gap-2">
             <NavigationMenu>
               <NavigationMenuList>
@@ -34,7 +47,11 @@ export default function Navigation() {
                   <NavigationMenuItem key={item.title}>
                     <Link href={item.href} legacyBehavior passHref>
                       <NavigationMenuLink
-                        className={navigationMenuTriggerStyle()}
+                        className={cn(
+                          navigationMenuTriggerStyle(),
+                          pathname === item.href &&
+                            "pointer-events-none bg-accent text-accent-foreground"
+                        )}
                       >
                         {item.title}
                       </NavigationMenuLink>

@@ -113,7 +113,7 @@ export function DataTable<TData, TValue>({
             onChange={(event) =>
               table.getColumn("shortName")?.setFilterValue(event.target.value)
             }
-            className="max-w-sm bg-background caret-blue-500"
+            className="max-w-sm bg-background caret-neutral-500"
           />
         </div>
         <DataTableViewOptions table={table} />

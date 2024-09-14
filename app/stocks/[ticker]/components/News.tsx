@@ -39,7 +39,7 @@ export default async function News({ ticker }: { ticker: string }) {
           <Link
             href={url}
             prefetch={false}
-            className="group flex w-fit flex-row items-center gap-2 pb-4 text-sm font-medium text-blue-500"
+            className="group flex w-fit flex-row items-center gap-2 pb-4 text-sm font-medium text-neutral-500"
           >
             See More Data from Yahoo Finance
             <i>

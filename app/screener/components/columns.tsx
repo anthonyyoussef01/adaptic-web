@@ -18,7 +18,7 @@ export const columns: ColumnDef<ScreenerQuote>[] = [
         <Link
           prefetch={false}
           href={`/stocks/${symbol}`}
-          className="font-bold text-blue-500 hover:underline"
+          className="font-bold text-neutral-500 hover:underline"
         >
           {symbol}
         </Link>
@@ -84,7 +84,7 @@ export const columns: ColumnDef<ScreenerQuote>[] = [
             className={cn(
               "text-right",
               marketChange > 0
-                ? "text-green-800 dark:text-green-400"
+                ? "text-teal-800 dark:text-teal-400"
                 : "text-red-800 dark:text-red-500"
             )}
           >
@@ -108,9 +108,9 @@ export const columns: ColumnDef<ScreenerQuote>[] = [
         <div className="flex justify-end">
           <div
             className={cn(
-              "w-[4rem] min-w-fit rounded-md px-2 py-0.5 text-right",
+              "w-[4rem] min-w-fit rounded-lg px-2 py-0.5 text-right",
               marketChangePercent > 0
-                ? "bg-green-300 text-green-800 dark:bg-green-950 dark:text-green-400"
+                ? "bg-teal-300 text-teal-800 dark:bg-teal-950 dark:text-teal-400"
                 : "bg-red-300 text-red-800 dark:bg-red-950 dark:text-red-500"
             )}
           >

@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
-import { Inter } from "next/font/google"
+import { Noto_Sans } from "next/font/google"
 import "./globals.css"
 import { ViewTransitions } from "next-view-transitions"
 import { ThemeProvider } from "@/components/ui/theme-provider"
 import Navigation from "@/components/ui/navigation"
 import Footer from "@/components/ui/footer"
 
-const inter = Inter({ subsets: ["latin"] })
+const redHatDisplay = Noto_Sans({ subsets: ["latin"] })
 
 export const metadata: Metadata = {
-  title: "Finly: Stock Quotes, Market News, & Analysis",
+  title: "Adaptic.ai: Stock Quotes, Market News, & Analysis",
   description:
-    "Finly is a source of free stock quotes, business and finance news, portfolio management tools, and international market data.",
+    "Adaptic.ai is a source of free stock quotes, business and finance news, portfolio management tools, and international market data.",
 }
 
 export default function RootLayout({
@@ -23,7 +23,7 @@ export default function RootLayout({
     <ViewTransitions>
       <html lang="en" suppressHydrationWarning>
         <body
-          className={`${inter.className} min-h-screen bg-background pb-6 antialiased selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black`}
+          className={`${redHatDisplay.className} min-h-screen bg-background pb-6 antialiased selection:bg-black selection:text-white dark:selection:bg-muted dark:selection:text-black`}
         >
           <ThemeProvider
             attribute="class"
@@ -32,7 +32,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navigation />
-            <main className="container">{children}</main>
+            <main className="container pt-2">{children}</main>
             <Footer />
           </ThemeProvider>
         </body>

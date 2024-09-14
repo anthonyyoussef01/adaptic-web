@@ -197,7 +197,7 @@ function GraphSlider({ data, width, height, top, state, dispatch }: any) {
         y={y}
         top={top}
         yScale={yScale}
-        color={state.hovered ? "dodgerblue" : isIncreasing ? "green" : "red"}
+        color={state.hovered ? "teal" : isIncreasing ? "teal" : "red"}
       />
       <Area
         id="top"
@@ -206,7 +206,7 @@ function GraphSlider({ data, width, height, top, state, dispatch }: any) {
         y={y}
         yScale={yScale}
         top={top}
-        color={state.hovered ? "dodgerblue" : isIncreasing ? "green" : "red"}
+        color={state.hovered ? "teal" : isIncreasing ? "teal" : "red"}
         mask="url(#mask)"
       />
       {state.x && (
@@ -216,16 +216,14 @@ function GraphSlider({ data, width, height, top, state, dispatch }: any) {
             x2={state.x}
             y1={0}
             y2={680}
-            stroke={
-              state.hovered ? "dodgerblue" : isIncreasing ? "green" : "red"
-            }
+            stroke={state.hovered ? "teal" : isIncreasing ? "teal" : "red"}
             strokeWidth={2}
           />
           <circle
             cx={state.x}
             cy={yScale(state.close)}
             r={8}
-            fill={state.hovered ? "dodgerblue" : isIncreasing ? "green" : "red"}
+            fill={state.hovered ? "teal" : isIncreasing ? "teal" : "red"}
             stroke="#FFF"
             strokeWidth={3}
           />
@@ -234,7 +232,7 @@ function GraphSlider({ data, width, height, top, state, dispatch }: any) {
             x={state.x + 8 > width / 2 ? state.x - 8 : state.x + 6}
             y={0}
             dy={"0.75em"}
-            fill={state.hovered ? "dodgerblue" : isIncreasing ? "green" : "red"}
+            fill={state.hovered ? "teal" : isIncreasing ? "teal" : "red"}
             className="text-base font-medium"
           >
             {formatCurrency(state.close)}
@@ -356,7 +354,7 @@ export default function AreaClosedChart({ chartQuotes, range }: any) {
             onClick={handleClick}
             className={
               range === r
-                ? "bg-accent font-bold text-accent-foreground"
+                ? "bg-teal text-teal-foreground font-bold"
                 : "text-muted-foreground"
             }
           >

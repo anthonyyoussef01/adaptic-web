@@ -26,7 +26,7 @@ export default async function CompanySummaryCard({
 
   return (
     <Card className="group relative min-h-max overflow-hidden">
-      <div className="absolute z-0 h-full w-full bg-gradient-to-t from-neutral-50 via-neutral-200 to-neutral-50 bg-size-200 bg-pos-0 blur-2xl transition-all duration-500 group-hover:bg-pos-100 dark:from-black dark:via-blue-950 dark:to-black" />
+      <div className="absolute z-0 h-full w-full bg-gradient-to-t from-neutral-50 via-neutral-200 to-neutral-50 bg-size-200 bg-pos-0 blur-2xl transition-all duration-500 group-hover:bg-pos-100 dark:from-black dark:via-neutral-950 dark:to-black" />
 
       <CardContent className="z-50 flex h-full w-full flex-col items-start justify-center gap-6 py-10 text-sm lg:flex-row">
         <div className="z-50 max-w-2xl text-pretty font-medium">
@@ -55,7 +55,7 @@ export default async function CompanySummaryCard({
                 {website && (
                   <Link
                     href={website}
-                    className="text-blue-600 hover:underline dark:text-blue-500"
+                    className="text-neutral-600 hover:underline dark:text-neutral-500"
                   >
                     {website}
                   </Link>

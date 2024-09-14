@@ -31,11 +31,11 @@ export default async function FearGreedIndex() {
         <strong
           className={cn(
             data.fgi.now.value > 80
-              ? "text-green-500"
+              ? "text-teal-500"
               : data.fgi.now.value > 60
-                ? "text-green-400"
+                ? "text-teal-400"
                 : data.fgi.now.value > 40
-                  ? "text-gray-500"
+                  ? "text-neutral-500"
                   : data.fgi.now.value > 20
                     ? "text-red-400"
                     : "text-red-500"

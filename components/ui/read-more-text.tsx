@@ -17,7 +17,7 @@ export default function ReadMoreText({
       {text.length > truncateLength && (
         <button
           onClick={() => setIsReadMore(!isReadMore)}
-          className="text-blue-600 dark:text-blue-500"
+          className="text-neutral-600 dark:text-neutral-500"
         >
           {isReadMore ? "Show less" : "Read more"}
         </button>
