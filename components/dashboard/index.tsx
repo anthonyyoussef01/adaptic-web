@@ -1,5 +1,5 @@
 "use client"
-
+import { Suspense } from "react"
 import { useState, useEffect } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -281,16 +281,17 @@ export default function Dashboard() {
   )
 
   return (
-    <div className="mx-auto w-full space-y-6">
-      <h1 className="text-2xl font-bold">Dashboard</h1>
-      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-        {/* Main Content */}
-        <div className="space-y-6 lg:col-span-2">
-          {/* Portfolio Overview */}
-          <PortfolioOverview />
+    <Suspense fallback={<div>Loading...</div>}>
+      <div className="mx-auto w-full space-y-6">
+        <h1 className="text-2xl font-bold">Dashboard</h1>
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+          {/* Main Content */}
+          <div className="space-y-6 lg:col-span-2">
+            {/* Portfolio Overview */}
+            <PortfolioOverview />
 
-          {/* Current Positions */}
-          {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
+            {/* Current Positions */}
+            {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Current Positions</CardTitle>
               <Button variant="link" size="xs">
@@ -337,8 +338,8 @@ export default function Dashboard() {
             </CardContent>
           </Card> */}
 
-          {/* AI Recommendations */}
-          {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
+            {/* AI Recommendations */}
+            {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>AI Recommendations</CardTitle>
               <Button variant="link" size="xs">
@@ -383,13 +384,13 @@ export default function Dashboard() {
               </div>
             </CardContent>
           </Card> */}
-          {/* <AIInsights /> */}
-        </div>
+            {/* <AIInsights /> */}
+          </div>
 
-        {/* Right Sidebar */}
-        <div className="space-y-6">
-          {/* Trading Activity */}
-          {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
+          {/* Right Sidebar */}
+          <div className="space-y-6">
+            {/* Trading Activity */}
+            {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Trading Activity</CardTitle>
               <Button variant="link" size="xs">
@@ -424,8 +425,8 @@ export default function Dashboard() {
             </CardContent>
           </Card> */}
 
-          {/* Alerts and Notifications */}
-          {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
+            {/* Alerts and Notifications */}
+            {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Notifications</CardTitle>
               <Button variant="link" size="xs">
@@ -453,75 +454,76 @@ export default function Dashboard() {
             </CardContent>
           </Card> */}
 
-          {/* Market Sentiment */}
-          <Card className="rounded-2xl shadow-2xl shadow-black/10">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Market Sentiment</CardTitle>
-              <Button variant="link" size="xs">
-                View All
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {newsData.map((news) => (
-                  <div key={news.id} className="rounded-lg border p-2">
-                    <p className="font-semibold">{news.title}</p>
-                    <div className="flex items-center justify-between text-sm">
-                      <span className="text-gray-500">{news.source}</span>
-                      <Badge
-                        variant={
-                          news.sentiment === "Positive"
-                            ? "default"
-                            : news.sentiment === "Negative"
-                              ? "destructive"
-                              : "secondary"
-                        }
-                      >
-                        {news.sentiment}
-                      </Badge>
+            {/* Market Sentiment */}
+            <Card className="rounded-2xl shadow-2xl shadow-black/10">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Market Sentiment</CardTitle>
+                <Button variant="link" size="xs">
+                  View All
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {newsData.map((news) => (
+                    <div key={news.id} className="rounded-lg border p-2">
+                      <p className="font-semibold">{news.title}</p>
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-gray-500">{news.source}</span>
+                        <Badge
+                          variant={
+                            news.sentiment === "Positive"
+                              ? "default"
+                              : news.sentiment === "Negative"
+                                ? "destructive"
+                                : "secondary"
+                          }
+                        >
+                          {news.sentiment}
+                        </Badge>
+                      </div>
                     </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
 
-          {/* Major Events */}
-          <Card className="rounded-2xl shadow-2xl shadow-black/10">
-            <CardHeader className="flex flex-row items-center justify-between">
-              <CardTitle>Major Events</CardTitle>
-              <Button variant="link" size="xs">
-                View All
-              </Button>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {calendarData.map((event, index) => (
-                  <div
-                    key={index}
-                    className="flex items-center justify-between rounded-lg border p-2"
-                  >
-                    <div>
-                      <p className="font-semibold">{event.event}</p>
-                      <p className="text-sm text-gray-500">
-                        {new Date(event.date).toLocaleDateString()}
-                      </p>
+            {/* Major Events */}
+            <Card className="rounded-2xl shadow-2xl shadow-black/10">
+              <CardHeader className="flex flex-row items-center justify-between">
+                <CardTitle>Major Events</CardTitle>
+                <Button variant="link" size="xs">
+                  View All
+                </Button>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {calendarData.map((event, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between rounded-lg border p-2"
+                    >
+                      <div>
+                        <p className="font-semibold">{event.event}</p>
+                        <p className="text-sm text-gray-500">
+                          {new Date(event.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <Button size="sm">Details</Button>
                     </div>
-                    <Button size="sm">Details</Button>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
         </div>
-      </div>
-      {/* Trades */}
-      <div className="w-full">
-        <Trades />
-      </div>
+        {/* Trades */}
+        <div className="w-full">
+          <Trades />
+        </div>
 
-      {/* Asset Allocation */}
-      <AssetAllocation />
-    </div>
+        {/* Asset Allocation */}
+        <AssetAllocation />
+      </div>
+    </Suspense>
   )
 }
