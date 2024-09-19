@@ -8,7 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Icons } from "@/components/ui/icons"
-import AreaClosedChart from "@/components/chart/AreaClosedChart"
+import { PortfolioChart } from "@/components/chart/PortfolioChart"
 
 // Generate a larger array of dummy data (timestamps and prices)
 const generateDummyData = () => {
@@ -241,12 +241,9 @@ const PortfolioOverview: React.FC = () => {
           ))}
         </div>
 
-        <AreaClosedChart
-          chartQuotes={filteredData} // Ensure filteredData is valid
-          range={selectedTimeframe}
-          interval={selectedInterval} // Pass interval to the chart
-          hideTimePicker
-        />
+        <div className="-mr-3">
+          <PortfolioChart />
+        </div>
 
         <div className="mt-6 grid grid-cols-3 gap-4">
           {riskMetrics.map((metric, index) => (
