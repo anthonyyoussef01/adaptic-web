@@ -3,8 +3,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { Icons } from "@/components/ui/icons"
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 
 export function AssetAllocation() {
+  const [activeTab, setActiveTab] = React.useState("all")
+
   const allocationData = [
     {
       name: "Apple Inc.",
@@ -44,7 +47,7 @@ export function AssetAllocation() {
       type: "Crypto",
       amount: 44351,
       percentage: 11.66,
-      color: "#000000",
+      color: "#222222",
     },
     {
       name: "Polkadot",
@@ -102,15 +105,31 @@ export function AssetAllocation() {
 
   return (
     <Card className="rounded-3xl shadow-lg">
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle>Allocation</CardTitle>
+      <CardHeader className="flex flex-row items-center justify-between pb-3">
+        <CardTitle className="pb-1">Current Allocation</CardTitle>
         <Button variant="outline" size="sm" className="text-xs">
           <Icons.refresh className="mr-1 h-3 w-3" /> Rebalance
         </Button>
       </CardHeader>
       <CardContent>
+        <Tabs defaultValue="asset" onValueChange={(e) => setActiveTab(e)}>
+          <TabsList className="-ml-1 bg-transparent">
+            <TabsTrigger value="asset" className="font-semibold">
+              By Asset
+            </TabsTrigger>
+            <TabsTrigger value="class" className="font-semibold">
+              By Class
+            </TabsTrigger>
+            <TabsTrigger value="sector" className="font-semibold">
+              By Sector
+            </TabsTrigger>
+            <TabsTrigger value="geography" className="font-semibold">
+              By Geography
+            </TabsTrigger>
+          </TabsList>
+        </Tabs>
         <div
-          className="grid gap-4"
+          className="mt-4 grid gap-4"
           style={{
             gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
             gridAutoRows: "minmax(40px, auto)",

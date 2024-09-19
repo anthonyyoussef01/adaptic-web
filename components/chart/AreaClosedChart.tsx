@@ -255,11 +255,12 @@ export default function AreaClosedChart({ chartQuotes, range, hideTimePicker }: 
   const { replace } = useRouter()
   const pathname = usePathname()
 
-  const last = chartQuotes[chartQuotes.length - 1]
+  // Safeguard: Ensure chartQuotes has at least one item before accessing last
+  const last = chartQuotes && chartQuotes.length > 0 ? chartQuotes[chartQuotes.length - 1] : null
 
   const initialState = {
-    close: last.close,
-    date: last.date,
+    close: last ? last.close : 0, // Fallback value if last is null
+    date: last ? last.date : new Date().toISOString(), // Fallback to current date if last is null
     translate: "0%",
     hovered: false,
   }
@@ -367,3 +368,4 @@ export default function AreaClosedChart({ chartQuotes, range, hideTimePicker }: 
     </div>
   )
 }
+

@@ -15,6 +15,7 @@ const badgeVariants = cva(
         destructive:
           "bg-destructive hover:bg-destructive/80 border-transparent text-destructive-foreground",
         green: "bg-teal-600 hover:bg-teal-500 border-transparent text-white",
+        blue: "bg-blue-600 hover:bg-blue-500 border-transparent text-white",
         outline: "text-foreground",
       },
     },
@@ -34,7 +35,7 @@ function Badge({ className, variant, animate, ...props }: BadgeProps) {
   return (
     <div className={cn(badgeVariants({ variant }), className)} {...props}>
       {animate && (
-        <span className="-ml-1 mr-1 relative flex h-3 w-3 items-center justify-center">
+        <span className="relative -ml-1 mr-1 flex h-3 w-3 items-center justify-center">
           <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
           <span className="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
         </span>
