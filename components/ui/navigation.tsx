@@ -29,7 +29,7 @@ export default function Navigation() {
   console.log(pathname, "pathname")
 
   return (
-    <header className="sticky top-0 z-40 w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="max-w-8xl sticky top-0 z-40 mx-auto w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container">
         <div className="flex w-full flex-row justify-between py-4">
           <div className="flex items-center space-x-6">

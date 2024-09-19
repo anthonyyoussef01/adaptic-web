@@ -250,7 +250,7 @@ function GraphSlider({ data, width, height, top, state, dispatch }: any) {
   )
 }
 
-export default function AreaClosedChart({ chartQuotes, range }: any) {
+export default function AreaClosedChart({ chartQuotes, range, hideTimePicker }: any) {
   const searchParams = useSearchParams()
   const { replace } = useRouter()
   const pathname = usePathname()
@@ -326,7 +326,7 @@ export default function AreaClosedChart({ chartQuotes, range }: any) {
         {formattedDate}{" "}
         {range !== "3m" && range !== "1y" && "at " + formattedTime}
       </div>
-      <div className="h-80">
+      <div className="h-60">
         {chartQuotes.length > 0 ? (
           <ParentSize>
             {({ width, height }) => (
@@ -341,26 +341,28 @@ export default function AreaClosedChart({ chartQuotes, range }: any) {
             )}
           </ParentSize>
         ) : (
-          <div className="flex h-80 w-full items-center justify-center">
+          <div className="flex h-60 w-full items-center justify-center">
             <p>No data available</p>
           </div>
         )}
       </div>
       <div className="mt-1 flex flex-row">
-        {rangeOptions.map((r) => (
-          <Button
-            key={r}
-            variant={"ghost"}
-            onClick={handleClick}
-            className={
-              range === r
-                ? "bg-teal text-teal-foreground font-bold"
-                : "text-muted-foreground"
-            }
-          >
-            {r.toUpperCase()}
-          </Button>
-        ))}
+        {
+          !hideTimePicker && rangeOptions.map((r) => (
+            <Button
+              key={r}
+              variant={"ghost"}
+              onClick={handleClick}
+              className={
+                range === r
+                  ? "bg-teal text-teal-foreground font-bold"
+                  : "text-muted-foreground"
+              }
+            >
+              {r.toUpperCase()}
+            </Button>
+          ))
+        }
       </div>
     </div>
   )

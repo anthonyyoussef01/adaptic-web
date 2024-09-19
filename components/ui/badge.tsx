@@ -14,7 +14,7 @@ const badgeVariants = cva(
           "bg-secondary hover:bg-secondary/80 border-muted-foreground text-secondary-foreground",
         destructive:
           "bg-destructive hover:bg-destructive/80 border-transparent text-destructive-foreground",
-        green: "bg-teal-500 hover:bg-green-400 border-transparent text-white",
+        green: "bg-teal-600 hover:bg-teal-500 border-transparent text-white",
         outline: "text-foreground",
       },
     },
@@ -26,11 +26,21 @@ const badgeVariants = cva(
 
 export interface BadgeProps
   extends React.HTMLAttributes<HTMLDivElement>,
-    VariantProps<typeof badgeVariants> {}
+    VariantProps<typeof badgeVariants> {
+  animate?: boolean
+}
 
-function Badge({ className, variant, ...props }: BadgeProps) {
+function Badge({ className, variant, animate, ...props }: BadgeProps) {
   return (
-    <div className={cn(badgeVariants({ variant }), className)} {...props} />
+    <div className={cn(badgeVariants({ variant }), className)} {...props}>
+      {animate && (
+        <span className="-ml-1 mr-1 relative flex h-3 w-3 items-center justify-center">
+          <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-white opacity-75"></span>
+          <span className="relative inline-flex h-2 w-2 rounded-full bg-white"></span>
+        </span>
+      )}
+      {props.children}
+    </div>
   )
 }
 
