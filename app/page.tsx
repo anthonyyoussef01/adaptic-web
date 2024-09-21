@@ -2,7 +2,7 @@ import Dashboard from "@/components/dashboard"
 import { NewsArticle } from "@/components/markets/market-sentiment"
 
 async function getArticles(tickers: string[]) {
-  const response = await fetch("http://localhost:3000/api/news/by-ticker", {
+  const response = await fetch(`${process.env.BASE_URL}/api/news/by-ticker`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -27,12 +27,15 @@ async function getArticles(tickers: string[]) {
 }
 
 async function getMarketSentiment() {
-  const response = await fetch("http://localhost:3000/api/markets/sentiment", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-  })
+  const response = await fetch(
+    `${process.env.BASE_URL}/api/markets/sentiment`,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    }
+  )
 
   const data = await response.json()
 
