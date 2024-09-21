@@ -193,25 +193,33 @@ export function AssetAllocation() {
     maxPercentage: number
     className?: string
   }) => {
+    // Normalize percentage for grid width sizing
+    const minSpanWidth = 6
+    const maxSpanWidth = 24 // adjust as needed
+    const gridSpanWidth = Math.max(
+      minSpanWidth,
+      Math.round((percentage / maxPercentage) * maxSpanWidth)
+    )
+
     // Normalize percentage for grid sizing
-    const minSpan = 1
-    const maxSpan = 6 // adjust as needed
-    const gridSpan = Math.max(
-      minSpan,
-      Math.round((percentage / maxPercentage) * maxSpan)
+    const minSpanHeight = 1
+    const maxSpanHeight = 8 // adjust as needed
+    const gridSpanHeight = Math.max(
+      minSpanHeight,
+      Math.round((percentage / maxPercentage) * maxSpanHeight)
     )
 
     return (
       <div
         className={cn(
           className && className,
-          "flex cursor-pointer flex-col justify-between rounded-xl p-3 transition-all duration-300 ease-in-out hover:scale-105"
+          "flex max-w-full cursor-pointer flex-col justify-between overflow-hidden rounded-xl p-3 transition-all duration-300 ease-in-out hover:scale-105"
         )}
         style={{
           backgroundColor: color + "20", // Add 20% opacity to the color
           borderLeft: `4px solid ${color}`,
-          gridColumn: `span ${gridSpan}`,
-          gridRow: `span ${gridSpan}`,
+          gridColumn: `span ${gridSpanWidth}`,
+          gridRow: `span ${gridSpanHeight}`,
         }}
       >
         <div className="">
@@ -238,7 +246,7 @@ export function AssetAllocation() {
     const maxPercentage = Math.max(...data.map((item) => item.percentage))
 
     return (
-      <div className="mt-4 grid w-full gap-4 max-grid-auto">
+      <div className="mt-4 grid w-full gap-4">
         {data.map((item) => (
           <AllocationItem
             key={item.groupKey || item.symbol}
