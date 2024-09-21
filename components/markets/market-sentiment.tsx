@@ -7,28 +7,7 @@ import {
 } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { ArticleCard } from "./ArticleCard"
-
-export type NewsArticle = {
-  id: string | number
-  title: string
-  url: string
-  timePublished: string
-  authors: string[]
-  summary: string
-  bannerImage: string
-  source: string
-  category: string
-  sourceDomain: string
-  topics: string[]
-  sentiment: string
-  tickerSentiment: {
-    ticker: string
-    relevance_score: string
-    ticker_sentiment_score: string
-    ticker_sentiment_label: string
-  }
-  logo: string
-}
+import { NewsArticle } from "@/types/news"
 
 interface MarketSentimentProps {
   sentimentColor: string
@@ -44,7 +23,7 @@ export function MarketSentiment({
   newsData,
 }: MarketSentimentProps) {
   return (
-    <Card className="relative flex flex-col border border-muted-foreground/20 justify-between overflow-hidden rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl">
+    <Card className="relative flex flex-col justify-between overflow-hidden rounded-none border border-muted-foreground/20 shadow-2xl shadow-black/10 sm:rounded-3xl">
       <CardHeader className="z-10 flex flex-row items-start justify-between">
         <div>
           <CardTitle>
