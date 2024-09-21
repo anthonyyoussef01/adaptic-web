@@ -96,7 +96,7 @@ export function AssetAllocation() {
       geography: "USA",
       exchange: "NYSE",
       sector: "Technology",
-      color: "#000000",
+      color: "#222222",
     },
     {
       name: "Coca-Cola Company",
@@ -194,7 +194,7 @@ export function AssetAllocation() {
     className?: string
   }) => {
     // Normalize percentage for grid width sizing
-    const minSpanWidth = 6
+    const minSpanWidth = 8
     const maxSpanWidth = 24 // adjust as needed
     const gridSpanWidth = Math.max(
       minSpanWidth,
@@ -368,7 +368,7 @@ export function AssetAllocation() {
   }
 
   return (
-    <Card className="relative z-10 rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl">
+    <Card className="relative z-10 rounded-none border-none sm:border-solid shadow-2xl shadow-black/10 sm:rounded-3xl">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
         <CardTitle className="pb-1">Allocation</CardTitle>
         <Button variant="outline" size="sm" className="text-xs">

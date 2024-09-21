@@ -144,7 +144,7 @@ export function Trades() {
   ]
 
   return (
-    <Card className="relative z-10 rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl">
+    <Card className="relative z-10 border-none rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl sm:border-solid ">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Trades</CardTitle>
         <Button

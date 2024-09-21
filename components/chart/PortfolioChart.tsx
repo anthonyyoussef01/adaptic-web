@@ -1,3 +1,5 @@
+"use client"
+
 import React, { useEffect, useRef, useState } from "react"
 import { createChart, IChartApi, ColorType } from "lightweight-charts"
 import { useTheme } from "next-themes"
@@ -20,6 +22,7 @@ export function PortfolioChart({ data, isDesktop }: PortfolioChartProps) {
   const [selectedTheme, setSelectedTheme] = useState<string | null>(null)
   useEffect(() => {
     setSelectedTheme(theme as string)
+    console.log("theme:", theme)
   }, [theme])
 
   useEffect(() => {
@@ -27,17 +30,12 @@ export function PortfolioChart({ data, isDesktop }: PortfolioChartProps) {
       const chart = createChart(chartContainerRef.current, {
         layout: {
           attributionLogo: false,
-          textColor: isDesktop
-            ? "white"
-            : selectedTheme === "dark"
-              ? "white"
-              : "black",
+          textColor: "white",
           background: {
             type: ColorType.Solid,
             color: "transparent",
           },
           fontSize: 12,
-          fontFamily: "Inter",
         },
         grid: {
           vertLines: { color: "rgba(42, 46, 57, 0.0)" },

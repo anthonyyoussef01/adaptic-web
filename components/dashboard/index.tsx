@@ -60,7 +60,7 @@ export default function Dashboard({
             />
 
             {/* Major Events */}
-            <Card className="rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl">
+            <Card className="rounded-none border-none sm:border-solid shadow-2xl shadow-black/10 sm:rounded-3xl">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Major Events</CardTitle>
                 <Button variant="link" size="xs">

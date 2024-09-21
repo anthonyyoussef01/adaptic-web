@@ -23,7 +23,7 @@ export function MarketSentiment({
   newsData,
 }: MarketSentimentProps) {
   return (
-    <Card className="relative flex flex-col justify-between overflow-hidden rounded-none border border-muted-foreground/20 shadow-2xl shadow-black/10 sm:rounded-3xl">
+    <Card className="relative flex flex-col justify-between overflow-hidden rounded-none border-none sm:border-solid border-muted-foreground/20 shadow-2xl shadow-black/10 sm:rounded-3xl">
       <CardHeader className="z-10 flex flex-row items-start justify-between">
         <div>
           <CardTitle>

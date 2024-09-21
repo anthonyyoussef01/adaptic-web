@@ -626,15 +626,17 @@ const PortfolioOverview: React.FC = () => {
   const intervalOptions = getIntervalsForTimeframe(selectedTimeframe)
 
   return (
-    <Card className="relative rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl lg:bg-indigo-700">
+    <Card className="relative mx-3 rounded-3xl bg-indigo-700 shadow-2xl shadow-black/10 sm:mx-0">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className={cn(isDesktop && "text-white/60")}>
-          Portfolio Overview
-        </CardTitle>
+        <CardTitle className="text-white/60">Total Assets</CardTitle>
         <div className="flex space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="sm" className="flex items-center space-x-1 pr-2">
+              <Button
+                size="sm"
+                variant="secondary"
+                className="flex items-center space-x-1 pr-2"
+              >
                 <span>
                   {
                     timeframes.find((tf) => tf.value === selectedTimeframe)
@@ -663,7 +665,11 @@ const PortfolioOverview: React.FC = () => {
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="sm" className="flex items-center space-x-1 pr-2">
+              <Button
+                size="sm"
+                variant="secondary"
+                className="flex items-center space-x-1 pr-2"
+              >
                 <span>
                   {
                     intervalOptions.find(
@@ -688,8 +694,8 @@ const PortfolioOverview: React.FC = () => {
         </div>
       </CardHeader>
 
-      <div className="absolute left-4 top-14 z-10 flex flex-col sm:top-12 sm:flex-row sm:items-center sm:space-x-2">
-        <span className="text-xl font-bold lg:text-3xl lg:text-white">
+      <div className="absolute left-3 top-14 z-10 flex flex-col sm:left-4 sm:top-12 sm:flex-row sm:items-center sm:space-x-2">
+        <span className="text-xl font-bold text-white lg:text-3xl">
           $7,839,940.00
         </span>
 
@@ -707,7 +713,7 @@ const PortfolioOverview: React.FC = () => {
         </span>
       </div>
       <CardContent>
-        <div className="-ml-3 -mr-2 mt-6 lg:-ml-4 lg:-ml-5">
+        <div className="font-satoshi -ml-3 -mr-2 mt-6 lg:-ml-4 lg:-ml-5">
           <PortfolioChart data={filteredData} isDesktop={isDesktop} />
         </div>
       </CardContent>
