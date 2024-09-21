@@ -15,7 +15,7 @@ import { usePathname } from "next/navigation"
 import CommandMenu from "./command-menu"
 import Logo from "../logo"
 import { cn } from "@/lib/utils"
-
+import { Icons } from "@/components/ui/icons"
 const NAVIGATION = [
   { title: "Dashboard", href: "/" },
   { title: "Markets", href: "/markets" },
@@ -32,7 +32,7 @@ export default function Navigation() {
     <header className="max-w-9xl sticky top-0 z-40 mx-auto w-full bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex w-full flex-row justify-between py-4">
         <div className="flex items-center space-x-6">
-          <Logo className="text-indigo-700 transition duration-200 hover:scale-105 hover:text-indigo-800 dark:hover:text-indigo-500" />
+          <Logo className="text-green-400 transition duration-200 hover:scale-105 hover:text-green-500 dark:text-green-300 dark:hover:text-green-400" />
           <div>
             {pathname !== "/" &&
               pathname !== "/markets" &&
@@ -40,7 +40,7 @@ export default function Navigation() {
           </div>
         </div>
         <div className="flex flex-row items-center gap-2">
-          <NavigationMenu>
+          <NavigationMenu className="hidden sm:flex">
             <NavigationMenuList>
               {NAVIGATION.map((item) => (
                 <NavigationMenuItem key={item.title}>
@@ -62,6 +62,7 @@ export default function Navigation() {
           <CommandMenu />
 
           <ThemeToggle />
+          <Icons.menu className="sm:hidden" />
         </div>
       </div>
     </header>

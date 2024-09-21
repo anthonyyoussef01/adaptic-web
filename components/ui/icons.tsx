@@ -17,6 +17,7 @@ import {
   BarChart,
   Bell,
   DollarSign,
+  Menu,
   Bitcoin,
   Briefcase,
   AlertTriangle,
@@ -51,6 +52,7 @@ export const Icons = {
   stock: LineChart,
   barChart: BarChart,
   bell: Bell,
+  menu: Menu,
   dollarSign: DollarSign,
   bitcoin: Bitcoin,
   crypto: ({ ...props }: LucideProps) => (
