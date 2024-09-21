@@ -4,7 +4,10 @@ import { cn } from "@/lib/utils"
 export default function Logo({ className }: { className?: string }) {
   return (
     <Link
-      className={cn(className && className, "flex items-center space-x-2")}
+      className={cn(
+        className && className,
+        "flex items-center justify-start space-x-2"
+      )}
       href="/"
     >
       <svg
