@@ -8,7 +8,7 @@ export default function Logo({ className }: { className?: string }) {
       href="/"
     >
       <svg
-        className="size-9"
+        className="h-full w-full"
         viewBox="0 0 1000 1000"
         xmlns="http://www.w3.org/2000/svg"
       >
