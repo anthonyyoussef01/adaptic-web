@@ -76,7 +76,7 @@ export default function Settings() {
 
         {/* General Settings */}
         <TabsContent value="general" className="mt-4 space-y-6">
-          <Card className="rounded-2xl shadow-lg shadow-black/10">
+          <Card className="rounded-3xl shadow-lg shadow-black/10">
             <CardHeader>
               <CardTitle>Personal Information</CardTitle>
             </CardHeader>
@@ -100,7 +100,7 @@ export default function Settings() {
 
         {/* Notifications Settings */}
         <TabsContent value="notifications" className="mt-4 space-y-6">
-          <Card className="rounded-2xl shadow-lg shadow-black/10">
+          <Card className="rounded-3xl shadow-lg shadow-black/10">
             <CardHeader>
               <CardTitle> Notification Preferences</CardTitle>
             </CardHeader>
@@ -137,7 +137,7 @@ export default function Settings() {
 
         {/* Trading Preferences Settings */}
         <TabsContent value="trading" className="mt-4 space-y-6">
-          <Card className="rounded-2xl shadow-lg shadow-black/10">
+          <Card className="rounded-3xl shadow-lg shadow-black/10">
             <CardHeader>
               <CardTitle> Trading Preferences</CardTitle>
             </CardHeader>
@@ -185,7 +185,7 @@ export default function Settings() {
 
         {/* AI Settings */}
         <TabsContent value="ai" className="mt-4 space-y-6">
-          <Card className="rounded-2xl shadow-lg shadow-black/10">
+          <Card className="rounded-3xl shadow-lg shadow-black/10">
             <CardHeader>
               <CardTitle> AI-Powered Trading</CardTitle>
             </CardHeader>
@@ -261,7 +261,7 @@ export default function Settings() {
 
         {/* Security Settings */}
         <TabsContent value="security" className="mt-4 space-y-6">
-          <Card className="rounded-2xl shadow-lg shadow-black/10">
+          <Card className="rounded-3xl shadow-lg shadow-black/10">
             <CardHeader>
               <CardTitle> Security Settings</CardTitle>
             </CardHeader>

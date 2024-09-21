@@ -29,6 +29,8 @@ import {
   Activity,
   Eye,
   LucideProps,
+  Cpu,
+  ShoppingCart,
 } from "lucide-react"
 
 export const Icons = {
@@ -86,4 +88,42 @@ export const Icons = {
   shield: Shield,
   activity: Activity,
   eye: Eye,
+  cpu: Cpu,
+  shoppingCart: ShoppingCart,
+  usa: ({ ...props }: LucideProps) => (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="flag-usa"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 512 512"
+      fill="currentColor"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M512 256c0-141.4-114.6-256-256-256S0 114.6 0 256s114.6 256 256 256 256-114.6 256-256zm-256 96V160c-70.7 0-128 57.3-128 128s57.3 128 128 128zm0-256v128c70.7 0 128-57.3 128-128s-57.3-128-128-128z"
+      />
+    </svg>
+  ),
+  globe: ({ ...props }: LucideProps) => (
+    <svg
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fas"
+      data-icon="globe"
+      role="img"
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 496 512"
+      fill="currentColor"
+      {...props}
+    >
+      <path
+        fill="currentColor"
+        d="M496 256c0-141.4-114.6-256-256-256S0 114.6 0 256s114.6 256 256 256 256-114.6 256-256zm-256 96V160c-70.7 0-128 57.3-128 128s57.3 128 128 128zm0-256v128c70.7 0 128-57.3 128-128s-57.3-128-128-128z"
+      />
+    </svg>
+  ),
 }

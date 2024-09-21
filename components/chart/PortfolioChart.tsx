@@ -1,586 +1,94 @@
 import React, { useEffect, useRef, useState } from "react"
 import { createChart, IChartApi, ColorType } from "lightweight-charts"
-import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useTheme } from "next-themes"
 
-export function PortfolioChart() {
+interface DataPoint {
+  time: string
+  value: number
+}
+
+interface PortfolioChartProps {
+  data: DataPoint[]
+  isDesktop?: boolean
+}
+
+export function PortfolioChart({ data, isDesktop }: PortfolioChartProps) {
   const chartContainerRef = useRef<HTMLDivElement | null>(null)
-  const [chart, setChart] = useState<IChartApi | null>(null)
-  const [interval, setInterval] = useState<string>("1D")
-
-  const dayData = [
-    { time: "2018-10-19", value: 229340.19 },
-    { time: "2018-10-22", value: 235000.87 },
-    { time: "2018-10-23", value: 245600.83 },
-    { time: "2018-10-24", value: 254900.78 },
-    { time: "2018-10-25", value: 256090.82 },
-    { time: "2018-10-26", value: 250000.81 },
-    { time: "2018-10-29", value: 250000.82 },
-    { time: "2018-10-30", value: 250000.71 },
-    { time: "2018-10-31", value: 250000.82 },
-    { time: "2018-11-01", value: 250000.72 },
-    { time: "2018-11-02", value: 250000.74 },
-    { time: "2018-11-05", value: 250000.81 },
-    { time: "2018-11-06", value: 250000.75 },
-    { time: "2018-11-07", value: 250000.73 },
-    { time: "2018-11-08", value: 250000.75 },
-    { time: "2018-11-09", value: 250000.75 },
-    { time: "2018-11-12", value: 250000.76 },
-    { time: "2018-11-13", value: 250000.8 },
-    { time: "2018-11-14", value: 250000.77 },
-    { time: "2018-11-15", value: 250000.75 },
-    { time: "2018-11-16", value: 250000.75 },
-    { time: "2018-11-19", value: 250000.75 },
-    { time: "2018-11-20", value: 250000.72 },
-    { time: "2018-11-21", value: 250000.78 },
-    { time: "2018-11-23", value: 250000.72 },
-    { time: "2018-11-26", value: 250000.78 },
-    { time: "2018-11-27", value: 250000.85 },
-    { time: "2018-11-28", value: 250000.85 },
-    { time: "2018-11-29", value: 250000.55 },
-    { time: "2018-11-30", value: 250000.41 },
-    { time: "2018-12-03", value: 250000.41 },
-    { time: "2018-12-04", value: 250000.42 },
-    { time: "2018-12-06", value: 250000.33 },
-    { time: "2018-12-07", value: 250000.39 },
-    { time: "2018-12-10", value: 250000.32 },
-    { time: "2018-12-11", value: 250000.48 },
-    { time: "2018-12-12", value: 250000.39 },
-    { time: "2018-12-13", value: 250000.45 },
-    { time: "2018-12-14", value: 250000.52 },
-    { time: "2018-12-17", value: 250000.38 },
-    { time: "2018-12-18", value: 250000.36 },
-    { time: "2018-12-19", value: 250000.65 },
-    { time: "2018-12-20", value: 250000.7 },
-    { time: "2018-12-21", value: 250000.66 },
-    { time: "2018-12-24", value: 250000.66 },
-    { time: "2018-12-26", value: 250000.65 },
-    { time: "2018-12-27", value: 250000.66 },
-    { time: "2018-12-28", value: 250000.68 },
-    { time: "2018-12-31", value: 250000.77 },
-    { time: "2019-01-02", value: 250000.72 },
-    { time: "2019-01-03", value: 250000.69 },
-    { time: "2019-01-04", value: 250000.71 },
-    { time: "2019-01-07", value: 250000.72 },
-    { time: "2019-01-08", value: 250000.72 },
-    { time: "2019-01-09", value: 250000.66 },
-    { time: "2019-01-10", value: 250000.85 },
-    { time: "2019-01-11", value: 250000.92 },
-    { time: "2019-01-14", value: 250000.94 },
-    { time: "2019-01-15", value: 250000.95 },
-    { time: "2019-01-16", value: 263940.0 },
-    { time: "2019-01-17", value: 250000.99 },
-    { time: "2019-01-18", value: 250000.6 },
-    { time: "2019-01-22", value: 250000.81 },
-    { time: "2019-01-23", value: 250000.7 },
-    { time: "2019-01-24", value: 250000.74 },
-    { time: "2019-01-25", value: 250000.8 },
-    { time: "2019-01-28", value: 250000.83 },
-    { time: "2019-01-29", value: 250000.7 },
-    { time: "2019-01-30", value: 250000.78 },
-    { time: "2019-01-31", value: 250000.35 },
-    { time: "2019-02-01", value: 250000.6 },
-    { time: "2019-02-04", value: 250000.65 },
-    { time: "2019-02-05", value: 250000.73 },
-    { time: "2019-02-06", value: 250000.71 },
-    { time: "2019-02-07", value: 250000.71 },
-    { time: "2019-02-08", value: 250000.72 },
-    { time: "2019-02-11", value: 250000.76 },
-    { time: "2019-02-12", value: 250000.84 },
-    { time: "2019-02-13", value: 250000.85 },
-    { time: "2019-02-14", value: 250000.87 },
-    { time: "2019-02-15", value: 250000.89 },
-    { time: "2019-02-19", value: 250000.9 },
-    { time: "2019-02-20", value: 250000.92 },
-    { time: "2019-02-21", value: 250000.96 },
-    { time: "2019-02-22", value: 259440.40 },
-    { time: "2019-02-25", value: 250000.93 },
-    { time: "2019-02-26", value: 250000.92 },
-    { time: "2019-02-27", value: 250000.67 },
-    { time: "2019-02-28", value: 250000.79 },
-    { time: "2019-03-01", value: 250000.86 },
-    { time: "2019-03-04", value: 250000.94 },
-    { time: "2019-03-05", value: 263940.02 },
-    { time: "2019-03-06", value: 250000.95 },
-    { time: "2019-03-07", value: 250000.89 },
-    { time: "2019-03-08", value: 250000.94 },
-    { time: "2019-03-11", value: 250000.91 },
-    { time: "2019-03-12", value: 250000.92 },
-    { time: "2019-03-13", value: 263940.0 },
-    { time: "2019-03-14", value: 263940.05 },
-    { time: "2019-03-15", value: 263940.11 },
-    { time: "2019-03-18", value: 263940.1 },
-    { time: "2019-03-19", value: 250000.98 },
-    { time: "2019-03-20", value: 263940.11 },
-    { time: "2019-03-21", value: 263940.12 },
-    { time: "2019-03-22", value: 250000.88 },
-    { time: "2019-03-25", value: 250000.85 },
-    { time: "2019-03-26", value: 250000.72 },
-    { time: "2019-03-27", value: 250000.73 },
-    { time: "2019-03-28", value: 250000.8 },
-    { time: "2019-03-29", value: 250000.77 },
-    { time: "2019-04-01", value: 263940.06 },
-    { time: "2019-04-02", value: 250000.93 },
-    { time: "2019-04-03", value: 250000.95 },
-    { time: "2019-04-04", value: 263940.06 },
-    { time: "2019-04-05", value: 263940.16 },
-    { time: "2019-04-08", value: 263940.12 },
-    { time: "2019-04-09", value: 263940.07 },
-    { time: "2019-04-10", value: 263940.13 },
-    { time: "2019-04-11", value: 263940.04 },
-    { time: "2019-04-12", value: 263940.04 },
-    { time: "2019-04-15", value: 263940.05 },
-    { time: "2019-04-16", value: 263940.01 },
-    { time: "2019-04-17", value: 263940.09 },
-    { time: "2019-04-18", value: 263940.0 },
-    { time: "2019-04-22", value: 263940.0 },
-    { time: "2019-04-23", value: 263940.06 },
-    { time: "2019-04-24", value: 263940.0 },
-    { time: "2019-04-25", value: 250000.81 },
-    { time: "2019-04-26", value: 250000.88 },
-    { time: "2019-04-29", value: 250000.91 },
-    { time: "2019-04-30", value: 250000.9 },
-    { time: "2019-05-01", value: 263940.02 },
-    { time: "2019-05-02", value: 250000.97 },
-    { time: "2019-05-03", value: 263940.02 },
-    { time: "2019-05-06", value: 263940.03 },
-    { time: "2019-05-07", value: 263940.04 },
-    { time: "2019-05-08", value: 263940.05 },
-    { time: "2019-05-09", value: 263940.05 },
-    { time: "2019-05-10", value: 263940.08 },
-    { time: "2019-05-13", value: 263940.05 },
-    { time: "2019-05-14", value: 263940.01 },
-    { time: "2019-05-15", value: 263940.03 },
-    { time: "2019-05-16", value: 263940.14 },
-    { time: "2019-05-17", value: 263940.09 },
-    { time: "2019-05-20", value: 263940.01 },
-    { time: "2019-05-21", value: 263940.12 },
-    { time: "2019-05-22", value: 263940.15 },
-    { time: "2019-05-23", value: 263940.18 },
-    { time: "2019-05-24", value: 263940.16 },
-    { time: "2019-05-28", value: 263940.23 },
-  ]
-
-  const weekData = [
-    { time: "2016-07-18", value: 263940.1 },
-    { time: "2016-07-25", value: 263940.19 },
-    { time: "2016-08-01", value: 263940.24 },
-    { time: "2016-08-08", value: 263940.22 },
-    { time: "2016-08-15", value: 250000.98 },
-    { time: "2016-08-22", value: 250000.85 },
-    { time: "2016-08-29", value: 250000.98 },
-    { time: "2016-09-05", value: 250000.71 },
-    { time: "2016-09-12", value: 250000.84 },
-    { time: "2016-09-19", value: 250000.89 },
-    { time: "2016-09-26", value: 250000.65 },
-    { time: "2016-10-03", value: 250000.69 },
-    { time: "2016-10-10", value: 250000.67 },
-    { time: "2016-10-17", value: 263940.11 },
-    { time: "2016-10-24", value: 250000.8 },
-    { time: "2016-10-31", value: 250000.7 },
-    { time: "2016-11-07", value: 250000.4 },
-    { time: "2016-11-14", value: 250000.32 },
-    { time: "2016-11-21", value: 250000.48 },
-    { time: "2016-11-28", value: 250000.08 },
-    { time: "2016-12-05", value: 250000.06 },
-    { time: "2016-12-12", value: 250000.11 },
-    { time: "2016-12-19", value: 250000.34 },
-    { time: "2016-12-26", value: 250000.2 },
-    { time: "2017-01-02", value: 250000.33 },
-    { time: "2017-01-09", value: 250000.56 },
-    { time: "2017-01-16", value: 250000.32 },
-    { time: "2017-01-23", value: 250000.71 },
-    { time: "2017-01-30", value: 250000.85 },
-    { time: "2017-02-06", value: 250000.77 },
-    { time: "2017-02-13", value: 250000.94 },
-    { time: "2017-02-20", value: 250000.67 },
-    { time: "2017-02-27", value: 250000.6 },
-    { time: "2017-03-06", value: 250000.54 },
-    { time: "2017-03-13", value: 250000.84 },
-    { time: "2017-03-20", value: 250000.96 },
-    { time: "2017-03-27", value: 250000.9 },
-    { time: "2017-04-03", value: 250000.97 },
-    { time: "2017-04-10", value: 263940.0 },
-    { time: "2017-04-17", value: 263940.13 },
-    { time: "2017-04-24", value: 263940.02 },
-    { time: "2017-05-01", value: 263940.3 },
-    { time: "2017-05-08", value: 263940.27 },
-    { time: "2017-05-15", value: 263940.24 },
-    { time: "2017-05-22", value: 263940.02 },
-    { time: "2017-05-29", value: 263940.2 },
-    { time: "2017-06-05", value: 263940.12 },
-    { time: "2017-06-12", value: 263940.2 },
-    { time: "2017-06-19", value: 263940.46 },
-    { time: "2017-06-26", value: 263940.39 },
-    { time: "2017-07-03", value: 263940.52 },
-    { time: "2017-07-10", value: 263940.57 },
-    { time: "2017-07-17", value: 263940.65 },
-    { time: "2017-07-24", value: 263940.45 },
-    { time: "2017-07-31", value: 263940.37 },
-    { time: "2017-08-07", value: 263940.13 },
-    { time: "2017-08-14", value: 263940.21 },
-    { time: "2017-08-21", value: 263940.31 },
-    { time: "2017-08-28", value: 263940.33 },
-    { time: "2017-09-04", value: 263940.38 },
-    { time: "2017-09-11", value: 263940.38 },
-    { time: "2017-09-18", value: 263940.5 },
-    { time: "2017-09-25", value: 263940.39 },
-    { time: "2017-10-02", value: 250000.95 },
-    { time: "2017-10-09", value: 263940.15 },
-    { time: "2017-10-16", value: 263940.43 },
-    { time: "2017-10-23", value: 263940.22 },
-    { time: "2017-10-30", value: 263940.14 },
-    { time: "2017-11-06", value: 263940.08 },
-    { time: "2017-11-13", value: 263940.27 },
-    { time: "2017-11-20", value: 263940.3 },
-    { time: "2017-11-27", value: 250000.92 },
-    { time: "2017-12-04", value: 263940.1 },
-    { time: "2017-12-11", value: 250000.88 },
-    { time: "2017-12-18", value: 250000.82 },
-    { time: "2017-12-25", value: 250000.82 },
-    { time: "2018-01-01", value: 250000.81 },
-    { time: "2018-01-08", value: 250000.95 },
-    { time: "2018-01-15", value: 263940.03 },
-    { time: "2018-01-22", value: 263940.04 },
-    { time: "2018-01-29", value: 250000.96 },
-    { time: "2018-02-05", value: 250000.99 },
-    { time: "2018-02-12", value: 263940.0 },
-    { time: "2018-02-19", value: 263940.06 },
-    { time: "2018-02-26", value: 250000.77 },
-    { time: "2018-03-05", value: 250000.81 },
-    { time: "2018-03-12", value: 250000.88 },
-    { time: "2018-03-19", value: 250000.72 },
-    { time: "2018-03-26", value: 250000.75 },
-    { time: "2018-04-02", value: 250000.7 },
-    { time: "2018-04-09", value: 250000.73 },
-    { time: "2018-04-16", value: 250000.74 },
-    { time: "2018-04-23", value: 250000.69 },
-    { time: "2018-04-30", value: 250000.76 },
-    { time: "2018-05-07", value: 250000.89 },
-    { time: "2018-05-14", value: 250000.89 },
-    { time: "2018-05-21", value: 263940.0 },
-    { time: "2018-05-28", value: 250000.79 },
-    { time: "2018-06-04", value: 263940.11 },
-    { time: "2018-06-11", value: 263940.43 },
-    { time: "2018-06-18", value: 263940.3 },
-    { time: "2018-06-25", value: 263940.58 },
-    { time: "2018-07-02", value: 263940.33 },
-    { time: "2018-07-09", value: 263940.33 },
-    { time: "2018-07-16", value: 263940.32 },
-    { time: "2018-07-23", value: 263940.2 },
-    { time: "2018-07-30", value: 263940.03 },
-    { time: "2018-08-06", value: 263940.15 },
-    { time: "2018-08-13", value: 263940.17 },
-    { time: "2018-08-20", value: 263940.28 },
-    { time: "2018-08-27", value: 250000.86 },
-    { time: "2018-09-03", value: 250000.69 },
-    { time: "2018-09-10", value: 250000.69 },
-    { time: "2018-09-17", value: 250000.64 },
-    { time: "2018-09-24", value: 250000.67 },
-    { time: "2018-10-01", value: 250000.55 },
-    { time: "2018-10-08", value: 250000.59 },
-    { time: "2018-10-15", value: 263940.19 },
-    { time: "2018-10-22", value: 250000.81 },
-    { time: "2018-10-29", value: 250000.74 },
-    { time: "2018-11-05", value: 250000.75 },
-    { time: "2018-11-12", value: 250000.75 },
-    { time: "2018-11-19", value: 250000.72 },
-    { time: "2018-11-26", value: 250000.41 },
-    { time: "2018-12-03", value: 250000.39 },
-    { time: "2018-12-10", value: 250000.52 },
-    { time: "2018-12-17", value: 250000.66 },
-    { time: "2018-12-24", value: 250000.68 },
-    { time: "2018-12-31", value: 250000.71 },
-    { time: "2019-01-07", value: 250000.92 },
-    { time: "2019-01-14", value: 250000.6 },
-    { time: "2019-01-21", value: 250000.8 },
-    { time: "2019-01-28", value: 250000.6 },
-    { time: "2019-02-04", value: 250000.72 },
-    { time: "2019-02-11", value: 250000.89 },
-    { time: "2019-02-18", value: 263940.0 },
-    { time: "2019-02-25", value: 250000.86 },
-    { time: "2019-03-04", value: 250000.94 },
-    { time: "2019-03-11", value: 263940.11 },
-    { time: "2019-03-18", value: 250000.88 },
-    { time: "2019-03-25", value: 250000.77 },
-    { time: "2019-04-01", value: 263940.16 },
-    { time: "2019-04-08", value: 263940.04 },
-    { time: "2019-04-15", value: 263940.0 },
-    { time: "2019-04-22", value: 250000.88 },
-    { time: "2019-04-29", value: 263940.02 },
-    { time: "2019-05-06", value: 263940.08 },
-    { time: "2019-05-13", value: 263940.09 },
-    { time: "2019-05-20", value: 263940.16 },
-    { time: "2019-05-27", value: 263940.23 },
-  ]
-
-  const monthData = [
-    { time: "2006-12-01", value: 250000.4 },
-    { time: "2007-01-01", value: 250000.5 },
-    { time: "2007-02-01", value: 250000.11 },
-    { time: "2007-03-01", value: 250000.24 },
-    { time: "2007-04-02", value: 250000.34 },
-    { time: "2007-05-01", value: 249999.82 },
-    { time: "2007-06-01", value: 249990.85 },
-    { time: "2007-07-02", value: 249990.24 },
-    { time: "2007-08-01", value: 249990.05 },
-    { time: "2007-09-03", value: 22.26 },
-    { time: "2007-10-01", value: 22.52 },
-    { time: "2007-11-01", value: 20.84 },
-    { time: "2007-12-03", value: 20.37 },
-    { time: "2008-01-01", value: 249990.9 },
-    { time: "2008-02-01", value: 22.58 },
-    { time: "2008-03-03", value: 21.74 },
-    { time: "2008-04-01", value: 22.5 },
-    { time: "2008-05-01", value: 22.38 },
-    { time: "2008-06-02", value: 20.58 },
-    { time: "2008-07-01", value: 20.6 },
-    { time: "2008-08-01", value: 20.82 },
-    { time: "2008-09-01", value: 17.5 },
-    { time: "2008-10-01", value: 17.7 },
-    { time: "2008-11-03", value: 15.52 },
-    { time: "2008-12-01", value: 18.58 },
-    { time: "2009-01-01", value: 15.4 },
-    { time: "2009-02-02", value: 11.68 },
-    { time: "2009-03-02", value: 14.89 },
-    { time: "2009-04-01", value: 16.24 },
-    { time: "2009-05-01", value: 18.33 },
-    { time: "2009-06-01", value: 18.08 },
-    { time: "2009-07-01", value: 20.07 },
-    { time: "2009-08-03", value: 20.35 },
-    { time: "2009-09-01", value: 21.53 },
-    { time: "2009-10-01", value: 21.48 },
-    { time: "2009-11-02", value: 20.28 },
-    { time: "2009-12-01", value: 21.39 },
-    { time: "2010-01-01", value: 22.0 },
-    { time: "2010-02-01", value: 22.31 },
-    { time: "2010-03-01", value: 22.82 },
-    { time: "2010-04-01", value: 22.58 },
-    { time: "2010-05-03", value: 21.02 },
-    { time: "2010-06-01", value: 21.45 },
-    { time: "2010-07-01", value: 22.42 },
-    { time: "2010-08-02", value: 249990.61 },
-    { time: "2010-09-01", value: 249999.4 },
-    { time: "2010-10-01", value: 249999.46 },
-    { time: "2010-11-01", value: 249990.64 },
-    { time: "2010-12-01", value: 22.9 },
-    { time: "2011-01-03", value: 249990.73 },
-    { time: "2011-02-01", value: 249990.52 },
-    { time: "2011-03-01", value: 249999.15 },
-    { time: "2011-04-01", value: 249999.37 },
-    { time: "2011-05-02", value: 249999.4 },
-    { time: "2011-06-01", value: 249999.45 },
-    { time: "2011-07-01", value: 249999.24 },
-    { time: "2011-08-01", value: 249999.0 },
-    { time: "2011-09-01", value: 22.77 },
-    { time: "2011-10-03", value: 249999.21 },
-    { time: "2011-11-01", value: 249990.4 },
-    { time: "2011-12-01", value: 249990.9 },
-    { time: "2012-01-02", value: 249999.84 },
-    { time: "2012-02-01", value: 250000.04 },
-    { time: "2012-03-01", value: 249999.9 },
-    { time: "2012-04-02", value: 250000.06 },
-    { time: "2012-05-01", value: 249999.63 },
-    { time: "2012-06-01", value: 250000.07 },
-    { time: "2012-07-02", value: 250000.3 },
-    { time: "2012-08-01", value: 250000.08 },
-    { time: "2012-09-03", value: 250000.27 },
-    { time: "2012-10-01", value: 250000.39 },
-    { time: "2012-11-01", value: 250000.06 },
-    { time: "2012-12-03", value: 250000.03 },
-    { time: "2013-01-01", value: 250000.26 },
-    { time: "2013-02-01", value: 250000.2 },
-    { time: "2013-03-01", value: 250000.3 },
-    { time: "2013-04-01", value: 250000.38 },
-    { time: "2013-05-01", value: 250000.22 },
-    { time: "2013-06-03", value: 249999.88 },
-    { time: "2013-07-01", value: 249999.98 },
-    { time: "2013-08-01", value: 249999.6 },
-    { time: "2013-09-02", value: 249999.65 },
-    { time: "2013-10-01", value: 249999.62 },
-    { time: "2013-11-01", value: 249999.65 },
-    { time: "2013-12-02", value: 249999.7 },
-    { time: "2014-01-01", value: 249999.98 },
-    { time: "2014-02-03", value: 249999.95 },
-    { time: "2014-03-03", value: 250000.45 },
-    { time: "2014-04-01", value: 250000.4 },
-    { time: "2014-05-01", value: 250000.51 },
-    { time: "2014-06-02", value: 250000.34 },
-    { time: "2014-07-01", value: 250000.3 },
-    { time: "2014-08-01", value: 250000.36 },
-    { time: "2014-09-01", value: 250000.16 },
-    { time: "2014-10-01", value: 250000.53 },
-    { time: "2014-11-03", value: 250000.4 },
-    { time: "2014-12-01", value: 250000.7 },
-    { time: "2015-01-01", value: 250000.95 },
-    { time: "2015-02-02", value: 250000.81 },
-    { time: "2015-03-02", value: 250000.63 },
-    { time: "2015-04-01", value: 250000.39 },
-    { time: "2015-05-01", value: 250000.62 },
-    { time: "2015-06-01", value: 250000.23 },
-    { time: "2015-07-01", value: 250000.47 },
-    { time: "2015-08-03", value: 250000.18 },
-    { time: "2015-09-01", value: 250000.3 },
-    { time: "2015-10-01", value: 250000.68 },
-    { time: "2015-11-02", value: 250000.63 },
-    { time: "2015-12-01", value: 250000.57 },
-    { time: "2016-01-01", value: 250000.55 },
-    { time: "2016-02-01", value: 250000.05 },
-    { time: "2016-03-01", value: 250000.61 },
-    { time: "2016-04-01", value: 250000.91 },
-    { time: "2016-05-02", value: 250000.84 },
-    { time: "2016-06-01", value: 250000.94 },
-    { time: "2016-07-01", value: 263940.19 },
-    { time: "2016-08-01", value: 263940.06 },
-    { time: "2016-09-01", value: 250000.65 },
-    { time: "2016-10-03", value: 250000.8 },
-    { time: "2016-11-01", value: 250000.06 },
-    { time: "2016-12-01", value: 250000.2 },
-    { time: "2017-01-02", value: 250000.7 },
-    { time: "2017-02-01", value: 250000.78 },
-    { time: "2017-03-01", value: 250000.9 },
-    { time: "2017-04-03", value: 263940.02 },
-    { time: "2017-05-01", value: 263940.02 },
-    { time: "2017-06-01", value: 263940.39 },
-    { time: "2017-07-03", value: 263940.3 },
-    { time: "2017-08-01", value: 263940.14 },
-    { time: "2017-09-01", value: 263940.39 },
-    { time: "2017-10-02", value: 263940.12 },
-    { time: "2017-11-01", value: 250000.81 },
-    { time: "2017-12-01", value: 250000.82 },
-    { time: "2018-01-01", value: 263940.06 },
-    { time: "2018-02-01", value: 250000.78 },
-    { time: "2018-03-01", value: 250000.75 },
-    { time: "2018-04-02", value: 250000.72 },
-    { time: "2018-05-01", value: 250000.75 },
-    { time: "2018-06-01", value: 263940.58 },
-    { time: "2018-07-02", value: 263940.14 },
-    { time: "2018-08-01", value: 250000.86 },
-    { time: "2018-09-03", value: 250000.67 },
-    { time: "2018-10-01", value: 250000.82 },
-    { time: "2018-11-01", value: 250000.41 },
-    { time: "2018-12-03", value: 250000.77 },
-    { time: "2019-01-01", value: 250000.35 },
-    { time: "2019-02-01", value: 250000.79 },
-    { time: "2019-03-01", value: 250000.77 },
-    { time: "2019-04-01", value: 250000.9 },
-    { time: "2019-05-01", value: 263940.23 },
-  ]
-
-  const threeMonthData = [
-    { time: "2019-02-25", value: 250000.86 },
-    { time: "2019-02-26", value: 250000.72 },
-    { time: "2019-02-27", value: 250000.73 },
-    { time: "2019-02-28", value: 250000.8 },
-    { time: "2019-03-01", value: 250000.77 },
-    { time: "2019-03-04", value: 250000.94 },
-    { time: "2019-03-05", value: 250000.67 },
-    { time: "2019-03-06", value: 250000.6 },
-    { time: "2019-03-07", value: 250000.54 },
-  ]
-
-  const yearData = [
-    { time: "2006-01-02", value: 249999.89 },
-    { time: "2007-01-01", value: 250000.5 },
-    { time: "2008-01-01", value: 249990.9 },
-    { time: "2009-01-01", value: 242040.9 },
-    { time: "2010-01-01", value: 222002.0 },
-    { time: "2011-01-03", value: 249990.73 },
-    { time: "2012-01-02", value: 249999.84 },
-    { time: "2013-01-01", value: 250000.26 },
-    { time: "2014-01-01", value: 249999.98 },
-    { time: "2015-01-01", value: 250000.95 },
-    { time: "2016-01-01", value: 250000.55 },
-    { time: "2017-01-02", value: 250000.7 },
-    { time: "2018-01-01", value: 2639400390.06 },
-    { time: "2019-01-01", value: 2639404930.23 },
-  ]
-
-  const seriesesData = new Map([
-    ["1D", dayData],
-    ["1W", weekData],
-    ["1M", monthData],
-    ["3M", threeMonthData],
-    ["1Y", yearData],
-  ])
+  const chartRef = useRef<IChartApi | null>(null)
+  const areaSeriesRef = useRef<any>(null)
+  const { theme } = useTheme()
+  const [selectedTheme, setSelectedTheme] = useState<string | null>(null)
+  useEffect(() => {
+    setSelectedTheme(theme as string)
+  }, [theme])
 
   useEffect(() => {
     if (chartContainerRef.current) {
-      const newChart = createChart(chartContainerRef.current, {
+      const chart = createChart(chartContainerRef.current, {
         layout: {
           attributionLogo: false,
-          textColor: "black",
+          textColor: isDesktop
+            ? "white"
+            : selectedTheme === "dark"
+              ? "white"
+              : "black",
           background: {
             type: ColorType.Solid,
             color: "transparent",
           },
           fontSize: 12,
-          fontFamily: "Lato",
+          fontFamily: "Inter",
         },
         grid: {
-          vertLines: { color: "rgba(42, 46, 57, 0.1)" },
-          horzLines: { color: "rgba(42, 46, 57, 0.1)" },
+          vertLines: { color: "rgba(42, 46, 57, 0.0)" },
+          horzLines: { color: "rgba(42, 46, 57, 0.0)" },
         },
-        height: 400,
+        height: 300,
         width: chartContainerRef.current.offsetWidth,
       })
-      setChart(newChart)
+      chartRef.current = chart
 
-      window.addEventListener("resize", () => {
-        if (newChart) {
-          newChart.applyOptions({
-            width: chartContainerRef.current?.offsetWidth,
+      const areaSeries = chart.addAreaSeries()
+      areaSeriesRef.current = areaSeries
+      areaSeries.setData(data)
+      chart.timeScale().fitContent()
+
+      const handleResize = () => {
+        if (chartRef.current && chartContainerRef.current) {
+          chartRef.current.applyOptions({
+            width: chartContainerRef.current.offsetWidth,
           })
         }
-      })
+      }
+
+      window.addEventListener("resize", handleResize)
 
       return () => {
-        window.removeEventListener("resize", () => {})
-        if (newChart) newChart.remove()
+        window.removeEventListener("resize", handleResize)
+        if (chartRef.current) {
+          chartRef.current.remove()
+          chartRef.current = null
+        }
+        areaSeriesRef.current = null
       }
     }
-  }, [])
-
-  const [lineSeries, setLineSeries] = useState<any>(null)
+  }, [isDesktop])
 
   useEffect(() => {
-    if (chart) {
-      if (lineSeries) {
-        chart.removeSeries(lineSeries)
-      }
-      const newLineSeries = chart.addAreaSeries()
-      newLineSeries.setData(seriesesData.get(interval) || [])
-      setLineSeries(newLineSeries)
+    if (areaSeriesRef.current) {
+      // Ensure data is sorted in ascending order
+      const sortedData = [...data].sort(
+        (a, b) => new Date(a.time).getTime() - new Date(b.time).getTime()
+      )
 
-      chart.timeScale().fitContent()
+      areaSeriesRef.current.setData(sortedData)
+      chartRef.current?.timeScale().fitContent()
     }
-  }, [chart, interval])
-
-  const handleIntervalChange = (newInterval: string) => {
-    setInterval(newInterval)
-  }
+  }, [data])
 
   return (
     <div>
-      <div ref={chartContainerRef} style={{ width: "100%", height: "400px" }} />
-      <Tabs defaultValue="1D" onValueChange={(e) => handleIntervalChange(e)}>
-        <TabsList className="-ml-1 bg-transparent">
-          <TabsTrigger value="1D" className="font-semibold">
-            1d
-          </TabsTrigger>
-          <TabsTrigger value="1W" className="font-semibold">
-            1w
-          </TabsTrigger>
-          <TabsTrigger value="1M" className="font-semibold">
-            1m
-          </TabsTrigger>
-          <TabsTrigger value="3M" className="font-semibold">
-            3m
-          </TabsTrigger>
-          <TabsTrigger value="1Y" className="font-semibold">
-            1yr
-          </TabsTrigger>
-        </TabsList>
-      </Tabs>
+      <div ref={chartContainerRef} style={{ width: "100%", height: "300" }} />
     </div>
   )
 }

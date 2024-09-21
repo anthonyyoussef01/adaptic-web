@@ -111,7 +111,6 @@ export default async function Home({
     yahooFinance.quoteCombine(symbol)
   )
   const results = await Promise.all(promises)
-
   const resultsWithTitles = results.map((result, index) => ({
     ...result,
     shortName: tickers[index].shortName,
@@ -136,7 +135,7 @@ export default async function Home({
         : "bg-neutral-500/10"
 
   return (
-    <div className="flex flex-col gap-y-4 md:gap-x-4 py-2">
+    <div className="flex flex-col gap-y-4 py-2 md:gap-x-4">
       <div className="flex flex-col gap-4 lg:flex-row">
         <div className="w-full lg:w-1/2">
           <Card className="relative flex h-full min-h-[15rem] flex-col justify-between overflow-hidden">

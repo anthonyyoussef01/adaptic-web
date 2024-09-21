@@ -62,18 +62,18 @@ export default async function News({ ticker }: { ticker: string }) {
           <div className="flex flex-col gap-2">
             {newsData.news.map((article) => (
               <Link
-                key={article.uuid}
+                key={article.id}
                 href={article.link}
                 prefetch={false}
                 className="flex flex-col gap-1"
               >
                 <span className="text-sm font-medium text-muted-foreground">
                   {article.publisher} -{" "}
-                  {timeAgo(article.providerPublishTime.toISOString())}
+                  {timeAgo(article.publishTime.toISOString())}
                 </span>
                 <span className="font-semibold">{article.title}</span>
                 <span className="text-sm font-medium text-muted-foreground">
-                  {article.published_at}
+                  {timeAgo(article.publishTime.toISOString())}
                 </span>
               </Link>
             ))}

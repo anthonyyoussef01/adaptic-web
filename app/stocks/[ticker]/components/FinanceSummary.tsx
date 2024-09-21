@@ -33,8 +33,14 @@ const keysToDisplay = [
   { key: "trailingEps", title: "EPS", section: "defaultKeyStatistics" },
 ]
 
+type FinanceSummaryData = {
+  [key: string]: {
+    [key: string]: any;
+  };
+};
+
 export default async function FinanceSummary({ ticker }: { ticker: string }) {
-  const financeSummaryData = await fetchQuoteSummary(ticker)
+  const financeSummaryData: FinanceSummaryData = await fetchQuoteSummary(ticker)
 
   return (
     <div className="grid grid-flow-col grid-rows-6 gap-4 md:grid-rows-3">

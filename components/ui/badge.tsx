@@ -18,6 +18,12 @@ const badgeVariants = cva(
         blue: "bg-blue-600 hover:bg-blue-500 border-transparent text-white",
         outline: "text-foreground",
       },
+      size: {
+        xs: "text-xs px-1 py-0.5",
+        sm: "text-xs px-2 py-1",
+        md: "text-sm px-3 py-1",
+        lg: "text-base px-4 py-2",
+      },
     },
     defaultVariants: {
       variant: "default",

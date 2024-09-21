@@ -43,7 +43,7 @@ export function AIInsights() {
               <div key={index} className="mb-2 rounded-lg border p-3">
                 <div className="flex items-center justify-between">
                   <span className="font-semibold">{insight.type}</span>
-                  <span className="text-sm text-gray-500">
+                  <span className="text-sm text-muted-foreground">
                     Confidence: {(insight.confidence * 100).toFixed(0)}%
                   </span>
                 </div>
@@ -63,7 +63,7 @@ export function AIInsights() {
                   {forecast.return > 0 ? "+" : ""}
                   {forecast.return.toFixed(2)}%
                 </span>
-                <span className="text-sm text-gray-500">
+                <span className="text-sm text-muted-foreground">
                   Confidence: {(forecast.confidence * 100).toFixed(0)}%
                 </span>
               </div>

@@ -144,9 +144,9 @@ export function Trades() {
   ]
 
   return (
-    <Card>
+    <Card className="relative z-10 rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl">
       <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle>Latest Trades</CardTitle>
+        <CardTitle>Trades</CardTitle>
         <Button
           variant="link"
           size="xs"
@@ -158,7 +158,7 @@ export function Trades() {
       </CardHeader>
       <CardContent>
         <Tabs defaultValue="all" onValueChange={(e) => setActiveTab(e)}>
-          <TabsList className="bg-transparent -ml-1">
+          <TabsList className="-ml-1 bg-transparent">
             <TabsTrigger value="all" className="font-semibold">
               All
             </TabsTrigger>
@@ -176,7 +176,7 @@ export function Trades() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <div className="mt-4 grid grid-cols-1 gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
           {trades
             .filter((trade) => {
               if (activeTab === "all") return true
@@ -184,11 +184,14 @@ export function Trades() {
             })
             .slice(0, 6)
             .map((trade, index) => (
-              <Card key={index} className="relative pb-14 shadow-sm">
+              <Card
+                key={index}
+                className="relative transform cursor-pointer pb-14 transition duration-200 ease-in-out hover:scale-[1.01] hover:shadow-xl hover:shadow-black/10"
+              >
                 <div className="flex justify-between">
                   <CardHeader className="flex w-full flex-row items-start justify-between">
-                    <CardTitle className="-mt-1 text-xl">
-                      <div className="flex items-center space-x-1.5 text-xl font-bold">
+                    <CardTitle className="-mt-1">
+                      <div className="flex items-center space-x-1.5 font-bold">
                         <Avatar size="xs" className="bg-white p-0.5">
                           <AvatarImage
                             src={trade.logo}
@@ -198,7 +201,7 @@ export function Trades() {
                           <AvatarFallback>{trade.assetName[0]}</AvatarFallback>
                         </Avatar>
                         <span>{trade.assetName}</span>
-                        <p className="pt-1 text-sm font-semibold text-gray-500">
+                        <p className="pt-1 text-sm font-semibold text-muted-foreground">
                           {trade.ticker}
                         </p>
                       </div>

@@ -87,7 +87,7 @@ export default async function StockChart({
               </span>
             </span>
             <span className="inline space-x-1 font-semibold text-muted-foreground">
-              {quote.hasPrePostMarketData && quote.postMarketPrice && (
+              {quote.hasOwnProperty('hasPrePostMarketData') && (quote as any).hasPrePostMarketData && quote.postMarketPrice && (
                 <>
                   <span>·</span>
                   <span>
@@ -112,7 +112,7 @@ export default async function StockChart({
                   </span>
                 </>
               )}
-              {quote.hasPrePostMarketData && quote.preMarketPrice && (
+              {quote.hasOwnProperty('hasPrePostMarketData') && (quote as any).hasPrePostMarketData && quote.preMarketPrice && (
                 <>
                   <span>·</span>
                   <span>

@@ -1,88 +1,261 @@
 import React from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Icons } from "@/components/ui/icons"
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
-
+import { Icons } from "@/components/ui/icons"
+import { cn } from "@/lib/utils"
 export function AssetAllocation() {
-  const [activeTab, setActiveTab] = React.useState("all")
+  const [activeTab, setActiveTab] = React.useState("asset")
 
   const allocationData = [
     {
       name: "Apple Inc.",
       symbol: "AAPL",
       type: "Stock",
-      amount: "$53,293",
-      percentage: 19.62,
+      amount: "$1,769,000",
+      geography: "USA",
+      exchange: "NASDAQ",
+      sector: "Technology",
       color: "#0071BC",
     },
     {
       name: "Bitcoin",
       symbol: "BTC",
       type: "Crypto",
-      amount: 0.264,
-      percentage: 19.62,
+      amount: "$724,000",
+      geography: "Decentralized",
+      exchange: "Alpaca",
+      sector: "Cryptocurrency",
       color: "#F7931A",
     },
     {
       name: "Ethereum",
       symbol: "ETH",
       type: "Crypto",
-      amount: 3.05,
-      percentage: 12.28,
+      amount: "$533,000",
+      geography: "Decentralized",
+      exchange: "Alpaca",
+      sector: "Cryptocurrency",
       color: "#627EEA",
     },
     {
       name: "Cardano",
       symbol: "ADA",
       type: "Crypto",
-      amount: 21390,
-      percentage: 16.1,
+      amount: "$56,000",
+      geography: "Decentralized",
+      exchange: "Alpaca",
+      sector: "Cryptocurrency",
       color: "#0033AD",
     },
     {
-      name: "Algorand",
-      symbol: "ALGO",
-      type: "Crypto",
-      amount: 44351,
-      percentage: 11.66,
-      color: "#222222",
+      name: "Tesla Inc.",
+      symbol: "TSLA",
+      type: "Stock",
+      amount: "$864,000",
+      geography: "USA",
+      exchange: "NASDAQ",
+      sector: "Technology",
+      color: "#CC0000",
     },
     {
-      name: "Polkadot",
-      symbol: "DOT",
-      type: "Crypto",
-      amount: 1096,
-      percentage: 11.24,
-      color: "#E6007A",
+      name: "Amazon.com Inc.",
+      symbol: "AMZN",
+      type: "Stock",
+      amount: "$1,461,000",
+      geography: "USA",
+      exchange: "NASDAQ",
+      sector: "Technology",
+      color: "#FF9900",
     },
     {
-      name: "Power Ledger",
-      symbol: "POWR",
-      type: "Crypto",
-      amount: 21017,
-      percentage: 10.97,
-      color: "#05BCAA",
+      name: "Microsoft Corporation",
+      symbol: "MSFT",
+      type: "Stock",
+      amount: "$1,159,000",
+      geography: "USA",
+      exchange: "NASDAQ",
+      sector: "Technology",
+      color: "#F35325",
     },
     {
-      name: "SolarCoin",
-      symbol: "SLR",
-      type: "Crypto",
-      amount: 104080,
-      percentage: 9.61,
-      color: "#FDB933",
+      name: "Nvidia Corporation",
+      symbol: "NVDA",
+      type: "Stock",
+      amount: "$1,659,000",
+      geography: "USA",
+      exchange: "NASDAQ",
+      sector: "Technology",
+      color: "#76B900",
     },
     {
-      name: "Chainlink",
-      symbol: "LINK",
-      type: "Crypto",
-      amount: 304,
-      percentage: 8.52,
-      color: "#2A5ADA",
+      name: "Palantir Technologies Inc.",
+      symbol: "PLTR",
+      type: "Stock",
+      amount: "$495,000",
+      geography: "USA",
+      exchange: "NYSE",
+      sector: "Technology",
+      color: "#000000",
+    },
+    {
+      name: "Coca-Cola Company",
+      symbol: "KO",
+      type: "Stock",
+      amount: "$80,000",
+      geography: "USA",
+      exchange: "NYSE",
+      sector: "FMCG",
+      color: "#FF0000",
     },
   ]
 
+  // Helper function to parse amount strings to numbers
+  const parseAmount = (amountStr: string) => {
+    return parseFloat(amountStr.replace(/[$,]/g, ""))
+  }
+
+  // Calculate total amount
+  const totalAmount = allocationData.reduce(
+    (total, asset) => total + parseAmount(asset.amount),
+    0
+  )
+
+  // Compute percentages for each asset
+  const allocationDataWithComputedPercentages = allocationData.map((asset) => {
+    const amount = parseAmount(asset.amount)
+    const percentage = (amount / totalAmount) * 100
+    return { ...asset, amount, percentage }
+  })
+
+  // Sort allocation data by percentage in descending order
+  const sortedAllocationData = [...allocationDataWithComputedPercentages].sort(
+    (a, b) => b.percentage - a.percentage
+  )
+
+  // Function to group data by a key (type, sector, geography)
+  function getGroupedData(allocationData: any[], groupByKey: string) {
+    const groups: { [key: string]: any } = {}
+    allocationData.forEach((asset) => {
+      const groupKey = asset[groupByKey]
+      if (!groups[groupKey]) {
+        groups[groupKey] = { groupKey, assets: [], totalAmount: 0 }
+      }
+      const amount = asset.amount // amount is already a number
+      groups[groupKey].assets.push(asset)
+      groups[groupKey].totalAmount += amount
+    })
+
+    // Compute percentages
+    Object.values(groups).forEach((group: any) => {
+      group.percentage = (group.totalAmount / totalAmount) * 100
+    })
+
+    // Convert groups object to array
+    const groupedDataArray = Object.values(groups)
+
+    // Sort by percentage descending
+    groupedDataArray.sort((a, b) => b.percentage - a.percentage)
+
+    return groupedDataArray
+  }
+
+  const classData = getGroupedData(
+    allocationDataWithComputedPercentages,
+    "type"
+  )
+  const sectorData = getGroupedData(
+    allocationDataWithComputedPercentages,
+    "sector"
+  )
+  const geographyData = getGroupedData(
+    allocationDataWithComputedPercentages,
+    "geography"
+  )
+
+  // Create a reusable component for allocation items
+  const AllocationItem = ({
+    title,
+    subtitle,
+    amount,
+    percentage,
+    icon,
+    color,
+    maxPercentage,
+    className,
+  }: {
+    title: string
+    subtitle: string
+    amount: number
+    percentage: number
+    icon: React.ReactNode
+    color: string
+    maxPercentage: number
+    className?: string
+  }) => {
+    // Normalize percentage for grid sizing
+    const minSpan = 1
+    const maxSpan = 6 // adjust as needed
+    const gridSpan = Math.max(
+      minSpan,
+      Math.round((percentage / maxPercentage) * maxSpan)
+    )
+
+    return (
+      <div
+        className={cn(
+          className && className,
+          "flex cursor-pointer flex-col justify-between rounded-xl p-3 transition-all duration-300 ease-in-out hover:scale-105"
+        )}
+        style={{
+          backgroundColor: color + "20", // Add 20% opacity to the color
+          borderLeft: `4px solid ${color}`,
+          gridColumn: `span ${gridSpan}`,
+          gridRow: `span ${gridSpan}`,
+        }}
+      >
+        <div className="">
+          <div className="flex items-center space-x-2">
+            {icon}
+            <span className="shrink-1 line-clamp-1 pr-2">{title}</span>
+          </div>
+          <span className="text-xs text-muted-foreground">{subtitle}</span>
+        </div>
+        {/* <div className="mt-2 text-lg font-bold">${amount.toLocaleString()}</div> */}
+        <div className="mt-1 text-lg font-bold">{percentage.toFixed(2)}%</div>
+      </div>
+    )
+  }
+
+  // Function to render grid content
+  const renderGridContent = (
+    data: any[],
+    getIcon: Function,
+    getColor: Function,
+    getSubtitle: Function
+  ) => {
+    // Find the maximum percentage in the data set for normalization
+    const maxPercentage = Math.max(...data.map((item) => item.percentage))
+
+    return (
+      <div className="mt-4 grid w-full gap-4 max-grid-auto">
+        {data.map((item) => (
+          <AllocationItem
+            key={item.groupKey || item.symbol}
+            title={item.groupKey || item.name}
+            subtitle={getSubtitle(item)}
+            amount={item.totalAmount || item.amount}
+            percentage={item.percentage}
+            icon={getIcon(item.groupKey || item.type)}
+            color={getColor(item)}
+            maxPercentage={maxPercentage}
+          />
+        ))}
+      </div>
+    )
+  }
+
+  // Define functions to get icons and colors for different tabs
   const getAssetTypeIcon = (type: string) => {
     switch (type) {
       case "Crypto":
@@ -98,21 +271,104 @@ export function AssetAllocation() {
     }
   }
 
-  // Sort allocation data by percentage in descending order
-  const sortedAllocationData = [...allocationData].sort(
-    (a, b) => b.percentage - a.percentage
-  )
+  const getSectorIcon = (sector: string) => {
+    switch (sector) {
+      case "Technology":
+        return <Icons.cpu className="h-4 w-4" />
+      case "Cryptocurrency":
+        return <Icons.crypto className="h-4 w-4" />
+      case "FMCG":
+        return <Icons.shoppingCart className="h-4 w-4" />
+      default:
+        return <Icons.help className="h-4 w-4" />
+    }
+  }
+
+  const getGeographyIcon = (geography: string) => {
+    switch (geography) {
+      case "USA":
+        return <Icons.usa className="h-4 w-4" />
+      case "Decentralized":
+        return <Icons.globe className="h-4 w-4" />
+      default:
+        return <Icons.help className="h-4 w-4" />
+    }
+  }
+
+  const sectorColors: { [key: string]: string } = {
+    Technology: "#0071BC",
+    Cryptocurrency: "#F7931A",
+    FMCG: "#FF0000",
+  }
+
+  const geographyColors: { [key: string]: string } = {
+    USA: "#3C3B6E",
+    Decentralized: "#00BFFF",
+  }
+
+  const getSubtitleForItem = (item: any) => {
+    if (activeTab === "asset") {
+      return item.symbol
+    } else {
+      return `${item.assets.length} ${
+        item.assets.length === 1 ? "asset" : "assets"
+      }`
+    }
+  }
+
+  const getIconForItem = (key: string) => {
+    if (activeTab === "asset") {
+      return getAssetTypeIcon(key)
+    } else if (activeTab === "class") {
+      return getAssetTypeIcon(key)
+    } else if (activeTab === "sector") {
+      return getSectorIcon(key)
+    } else if (activeTab === "geography") {
+      return getGeographyIcon(key)
+    } else {
+      return <Icons.help className="h-4 w-4" />
+    }
+  }
+
+  const getDataForActiveTab = () => {
+    switch (activeTab) {
+      case "asset":
+        return sortedAllocationData
+      case "class":
+        return classData
+      case "sector":
+        return sectorData
+      case "geography":
+        return geographyData
+      default:
+        return []
+    }
+  }
+
+  const getColor = (item: any) => {
+    if (activeTab === "asset") {
+      return item.color
+    } else if (activeTab === "class") {
+      return item.assets[0].color
+    } else if (activeTab === "sector") {
+      return sectorColors[item.groupKey] || "#cccccc"
+    } else if (activeTab === "geography") {
+      return geographyColors[item.groupKey] || "#cccccc"
+    } else {
+      return "#cccccc"
+    }
+  }
 
   return (
-    <Card className="rounded-3xl shadow-lg">
+    <Card className="relative z-10 rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl">
       <CardHeader className="flex flex-row items-center justify-between pb-3">
-        <CardTitle className="pb-1">Current Allocation</CardTitle>
+        <CardTitle className="pb-1">Allocation</CardTitle>
         <Button variant="outline" size="sm" className="text-xs">
           <Icons.refresh className="mr-1 h-3 w-3" /> Rebalance
         </Button>
       </CardHeader>
       <CardContent>
-        <Tabs defaultValue="asset" onValueChange={(e) => setActiveTab(e)}>
+        <Tabs value={activeTab} onValueChange={(e) => setActiveTab(e)}>
           <TabsList className="-ml-1 bg-transparent">
             <TabsTrigger value="asset" className="font-semibold">
               By Asset
@@ -128,40 +384,13 @@ export function AssetAllocation() {
             </TabsTrigger>
           </TabsList>
         </Tabs>
-        <div
-          className="mt-4 grid gap-4"
-          style={{
-            gridTemplateColumns: "repeat(auto-fit, minmax(80px, 1fr))",
-            gridAutoRows: "minmax(40px, auto)",
-          }}
-        >
-          {sortedAllocationData.map((asset) => (
-            <div
-              key={asset.symbol}
-              className="flex flex-col justify-between rounded-xl p-3 transition-all duration-300 ease-in-out hover:scale-105"
-              style={{
-                backgroundColor: asset.color + "20", // Add 20% opacity to the color
-                borderLeft: `4px solid ${asset.color}`,
-                gridColumn: `span ${Math.max(1, Math.round(asset.percentage / 5))}`,
-                gridRow: `span ${Math.max(1, Math.round(asset.percentage / 5))}`,
-              }}
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center space-x-2">
-                  {getAssetTypeIcon(asset.type)}
-                  <span className="font-semibold">{asset.name}</span>
-                </div>
-                <span className="text-xs text-gray-500">{asset.symbol}</span>
-              </div>
-              <div className="mt-2 text-lg font-bold">
-                {asset.amount.toLocaleString()}
-              </div>
-              <div className="mt-1 text-sm text-gray-500">
-                {asset.percentage.toFixed(2)}%
-              </div>
-            </div>
-          ))}
-        </div>
+
+        {renderGridContent(
+          getDataForActiveTab(),
+          getIconForItem,
+          getColor,
+          getSubtitleForItem
+        )}
       </CardContent>
     </Card>
   )

@@ -2,9 +2,11 @@
 
 import { CellContext, ColumnDef } from "@tanstack/react-table"
 
-import type { ScreenerQuote } from "@/node_modules/yahoo-finance2/dist/esm/src/modules/screener"
+import type { ScreenerResult } from "@/node_modules/yahoo-finance2/dist/esm/src/modules/screener"
 import { cn } from "@/lib/utils"
 import Link from "next/link"
+
+type ScreenerQuote = ScreenerResult["quotes"][0]
 
 export const columns: ColumnDef<ScreenerQuote>[] = [
   {

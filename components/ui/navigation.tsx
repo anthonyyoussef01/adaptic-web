@@ -29,41 +29,39 @@ export default function Navigation() {
   console.log(pathname, "pathname")
 
   return (
-    <header className="max-w-8xl sticky top-0 z-40 mx-auto w-full bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
-      <div className="container">
-        <div className="flex w-full flex-row justify-between py-4">
-          <div className="flex items-center space-x-6">
-            <Logo />
-            <div>
-              {pathname !== "/" &&
-                pathname !== "/markets" &&
-                pathname !== "/screener" && <GoBack />}
-            </div>
+    <header className="max-w-9xl sticky top-0 z-40 mx-auto w-full bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+      <div className="flex w-full flex-row justify-between py-4">
+        <div className="flex items-center space-x-6">
+          <Logo className="text-indigo-700 transition duration-200 hover:scale-105 hover:text-indigo-800 dark:hover:text-indigo-500" />
+          <div>
+            {pathname !== "/" &&
+              pathname !== "/markets" &&
+              pathname !== "/screener" && <GoBack />}
           </div>
-          <div className="flex flex-row items-center gap-2">
-            <NavigationMenu>
-              <NavigationMenuList>
-                {NAVIGATION.map((item) => (
-                  <NavigationMenuItem key={item.title}>
-                    <Link href={item.href} legacyBehavior passHref>
-                      <NavigationMenuLink
-                        className={cn(
-                          navigationMenuTriggerStyle(),
-                          pathname === item.href &&
-                            "pointer-events-none bg-accent text-accent-foreground"
-                        )}
-                      >
-                        {item.title}
-                      </NavigationMenuLink>
-                    </Link>
-                  </NavigationMenuItem>
-                ))}
-              </NavigationMenuList>
-            </NavigationMenu>
-            <CommandMenu />
+        </div>
+        <div className="flex flex-row items-center gap-2">
+          <NavigationMenu>
+            <NavigationMenuList>
+              {NAVIGATION.map((item) => (
+                <NavigationMenuItem key={item.title}>
+                  <Link href={item.href} legacyBehavior passHref>
+                    <NavigationMenuLink
+                      className={cn(
+                        navigationMenuTriggerStyle(),
+                        pathname === item.href &&
+                          "pointer-events-none bg-accent text-accent-foreground"
+                      )}
+                    >
+                      {item.title}
+                    </NavigationMenuLink>
+                  </Link>
+                </NavigationMenuItem>
+              ))}
+            </NavigationMenuList>
+          </NavigationMenu>
+          <CommandMenu />
 
-            <ThemeToggle />
-          </div>
+          <ThemeToggle />
         </div>
       </div>
     </header>

@@ -1,8 +1,7 @@
 import { unstable_noStore as noStore } from "next/cache"
 import type {
   ScreenerOptions,
-  PredefinedScreenerModules,
-  ScreenerResult,
+  ScreenerResult
 } from "@/node_modules/yahoo-finance2/dist/esm/src/modules/screener"
 import yahooFinance from "yahoo-finance2"
 
@@ -14,7 +13,7 @@ export async function fetchScreenerStocks(query: string, count?: number) {
   // PAGINATION IS HANDLED BY TENSTACK TABLE
 
   const queryOptions: ScreenerOptions = {
-    scrIds: query as PredefinedScreenerModules,
+    scrIds: query as ScreenerOptions["scrIds"],
     count: count ? count : ITEMS_PER_PAGE,
     region: "US",
     lang: "en-US",

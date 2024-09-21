@@ -10,6 +10,13 @@ import { AssetAllocation } from "./allocation"
 import PortfolioOverview from "./portfolio-overview"
 import { AIInsights } from "./ai-insights"
 import { Trades } from "@/components/dashboard/trades"
+import { CardDescription } from "../ui/card copy"
+import {
+  MarketSentiment,
+  NewsArticle,
+} from "@/components/markets/market-sentiment"
+import PerformanceMetrics from "@/components/dashboard/performance-metrics"
+
 // Utility functions
 const formatCurrency = (value: number) => {
   return new Intl.NumberFormat("en-US", {
@@ -158,21 +165,24 @@ const alertsData = [
 const newsData = [
   {
     id: 1,
-    title: "AAPL announces new product line.",
+    title: "AAPL announces new product line",
     sentiment: "Positive",
     source: "Bloomberg",
+    logo: "https://logo.clearbit.com/bloomberg.com",
   },
   {
     id: 2,
-    title: "Discussion on TSLA options strategies.",
+    title: "Discussion on TSLA options strategies",
     sentiment: "Neutral",
     source: "Reddit",
+    logo: "https://logo.clearbit.com/reddit.com",
   },
   {
     id: 3,
-    title: "Market volatility expected due to economic data.",
+    title: "Market volatility expected due to economic data",
     sentiment: "Negative",
     source: "CNBC",
+    logo: "https://logo.clearbit.com/cnbc.com",
   },
 ]
 
@@ -193,7 +203,19 @@ const COLORS = [
   "#FF8042",
 ]
 
-export default function Dashboard() {
+interface DashboardProps {
+  news: NewsArticle[]
+  marketSentiment: string
+  sentimentColor: string
+  sentimentBackground: string
+}
+
+export default function Dashboard({
+  news,
+  marketSentiment,
+  sentimentColor,
+  sentimentBackground,
+}: DashboardProps) {
   const [selectedTimeframe, setSelectedTimeframe] = useState("1M")
   const [aiRecommendations, setAiRecommendations] = useState(
     initialAiRecommendations
@@ -283,15 +305,25 @@ export default function Dashboard() {
   return (
     <Suspense fallback={<div>Loading...</div>}>
       <div className="mx-auto w-full space-y-6">
-        <h1 className="text-2xl font-bold">Dashboard</h1>
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Main Content */}
           <div className="space-y-6 lg:col-span-2">
             {/* Portfolio Overview */}
             <PortfolioOverview />
 
+            {/* Metrics */}
+            <PerformanceMetrics />
+
+            {/* Trades */}
+            <div className="w-full">
+              <Trades />
+            </div>
+
+            {/* Asset Allocation */}
+            <AssetAllocation />
+
             {/* Current Positions */}
-            {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
+            {/* <Card className="rounded-3xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Current Positions</CardTitle>
               <Button variant="link" size="xs">
@@ -312,7 +344,7 @@ export default function Dashboard() {
                       </Avatar>
                       <div>
                         <p className="font-semibold">{position.name}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {position.symbol}
                         </p>
                       </div>
@@ -339,7 +371,7 @@ export default function Dashboard() {
           </Card> */}
 
             {/* AI Recommendations */}
-            {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
+            {/* <Card className="rounded-3xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>AI Recommendations</CardTitle>
               <Button variant="link" size="xs">
@@ -390,7 +422,7 @@ export default function Dashboard() {
           {/* Right Sidebar */}
           <div className="space-y-6">
             {/* Trading Activity */}
-            {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
+            {/* <Card className="rounded-3xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Trading Activity</CardTitle>
               <Button variant="link" size="xs">
@@ -416,7 +448,7 @@ export default function Dashboard() {
                       {trade.action} {trade.amount} @{" "}
                       {formatCurrency(trade.price)}
                     </div>
-                    <div className="text-gray-500">
+                    <div className="text-muted-foreground">
                       {new Date(trade.timestamp).toLocaleTimeString()}
                     </div>
                   </div>
@@ -426,7 +458,7 @@ export default function Dashboard() {
           </Card> */}
 
             {/* Alerts and Notifications */}
-            {/* <Card className="rounded-2xl shadow-2xl shadow-black/10">
+            {/* <Card className="rounded-3xl shadow-2xl shadow-black/10">
             <CardHeader className="flex flex-row items-center justify-between">
               <CardTitle>Notifications</CardTitle>
               <Button variant="link" size="xs">
@@ -454,41 +486,15 @@ export default function Dashboard() {
             </CardContent>
           </Card> */}
 
-            {/* Market Sentiment */}
-            <Card className="rounded-2xl shadow-2xl shadow-black/10">
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Market Sentiment</CardTitle>
-                <Button variant="link" size="xs">
-                  View All
-                </Button>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  {newsData.map((news) => (
-                    <div key={news.id} className="rounded-lg border p-2">
-                      <p className="font-semibold">{news.title}</p>
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-gray-500">{news.source}</span>
-                        <Badge
-                          variant={
-                            news.sentiment === "Positive"
-                              ? "default"
-                              : news.sentiment === "Negative"
-                                ? "destructive"
-                                : "secondary"
-                          }
-                        >
-                          {news.sentiment}
-                        </Badge>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </CardContent>
-            </Card>
+            <MarketSentiment
+              sentimentColor={sentimentColor}
+              sentimentBackground={sentimentBackground}
+              newsData={news as any}
+              marketSentiment={marketSentiment}
+            />
 
             {/* Major Events */}
-            <Card className="rounded-2xl shadow-2xl shadow-black/10">
+            <Card className="rounded-none shadow-2xl shadow-black/10 sm:rounded-3xl">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Major Events</CardTitle>
                 <Button variant="link" size="xs">
@@ -504,7 +510,7 @@ export default function Dashboard() {
                     >
                       <div>
                         <p className="font-semibold">{event.event}</p>
-                        <p className="text-sm text-gray-500">
+                        <p className="text-sm text-muted-foreground">
                           {new Date(event.date).toLocaleDateString()}
                         </p>
                       </div>
@@ -516,13 +522,6 @@ export default function Dashboard() {
             </Card>
           </div>
         </div>
-        {/* Trades */}
-        <div className="w-full">
-          <Trades />
-        </div>
-
-        {/* Asset Allocation */}
-        <AssetAllocation />
       </div>
     </Suspense>
   )
