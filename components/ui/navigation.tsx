@@ -32,7 +32,7 @@ export default function Navigation() {
     <header className="max-w-9xl sticky top-0 z-40 mx-auto w-full bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex w-full flex-row justify-between py-4">
         <div className="flex items-center space-x-6">
-          <Logo className="dark:hover:indigo-500 h-9 md:h-8 fill-indigo-600 text-black transition duration-200 hover:scale-[1.01] hover:text-black/90 dark:fill-indigo-600 dark:text-green-300" />
+          <Logo className="dark:hover:fill-indigo-500 h-9 md:h-8 fill-indigo-400 text-black transition duration-200 hover:scale-[1.01] hover:text-black/90 dark:fill-indigo-600 dark:text-green-300" />
           <div>
             {pathname !== "/" &&
               pathname !== "/markets" &&
