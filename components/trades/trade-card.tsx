@@ -196,7 +196,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
       </div>
 
       {/* Card Content */}
-      <CardContent className="-mt-1 space-y-2 lg:px-3">
+      <CardContent className="-mt-1 space-y-3 lg:px-3">
         <p className="ellipsis-2 line-clamp-2 text-sm">
           <span className="font-bold">Signal:</span> {trade.analysis}
         </p>
@@ -206,7 +206,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
           <Badge
             variant="outline"
             size="sm"
-            className="mt-2 flex w-fit items-center space-x-1 py-1"
+            className="my-2 flex w-fit items-center space-x-1 py-1"
           >
             <Icons.steps className="-ml-0.5 h-3 w-3 text-muted-foreground" />
 
@@ -233,13 +233,13 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
         <div className="grid grid-cols-4 gap-4">
           <div>
             <p className="text-sm text-muted-foreground">Entry</p>
-            <p className="text-base font-bold">
+            <p className="text-sm sm:text-base font-bold">
               {formatCurrency(averageBuyPrice)}
             </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Quantity</p>
-            <p className="text-base font-bold">
+            <p className="text-sm sm:text-base font-bold">
               {totalQty.toLocaleString()}{" "}
               <span className="text-xs font-normal">
                 {trade.class === "Shares"
@@ -252,13 +252,13 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Take Profit</p>
-            <p className="text-base font-bold">
+            <p className="text-sm sm:text-base font-bold">
               {targetPrice !== null ? formatCurrency(targetPrice) : "Varies"}
             </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Stop Loss</p>
-            <p className="text-base font-bold">
+            <p className="text-sm sm:text-base font-bold">
               {stopLoss !== null ? formatCurrency(stopLoss) : "Varies"}
             </p>
           </div>
@@ -267,7 +267,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
         <div className="grid grid-cols-3 gap-4">
           <div className="">
             <p className="text-sm text-muted-foreground">Strategy</p>
-            <p className="text-base font-bold">{trade.strategy}</p>
+            <p className="text-sm sm:text-base font-bold">{trade.strategy}</p>
           </div>
           {/* Target Profit */}
           <div>
@@ -276,7 +276,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                 Target <span className="text-xs">(Net Profit)</span>
               </p>
             </div>
-            <p className="text-base font-bold">
+            <p className="text-sm sm:text-base font-bold">
               {formatCurrency(targetProfit)}{" "}
               <span className="pt-0.5 text-xs font-semibold">
                 ({formatPercentage(targetProfit / totalBuyAmount)})
@@ -301,7 +301,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                       : currentProfit) > 0
                       ? "text-teal-700 dark:text-teal-400"
                       : "text-red-700 dark:text-red-400",
-                    "text-base font-bold"
+                    "text-sm sm:text-base font-bold"
                   )}
                 >
                   {formatCurrency(

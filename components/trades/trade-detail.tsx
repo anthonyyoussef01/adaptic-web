@@ -238,13 +238,13 @@ export function TradeDetailModal({
         <div className="grid grid-cols-3 gap-4 md:grid-cols-4">
           <div>
             <p className="text-sm text-muted-foreground">Entry</p>
-            <p className="text-base font-bold">
+            <p className="text-sm font-bold sm:text-base">
               {formatCurrency(averageBuyPrice)}
             </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Quantity</p>
-            <p className="text-base font-bold">
+            <p className="text-sm font-bold sm:text-base">
               {totalQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
               <span className="text-xs font-normal">
                 {trade.class === "Shares"
@@ -257,19 +257,19 @@ export function TradeDetailModal({
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Take Profit</p>
-            <p className="text-base font-bold">
+            <p className="text-sm font-bold sm:text-base">
               {targetPrice !== null ? formatCurrency(targetPrice) : "Varies"}
             </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Stop Loss</p>
-            <p className="text-base font-bold">
+            <p className="text-sm font-bold sm:text-base">
               {stopLoss !== null ? formatCurrency(stopLoss) : "Varies"}
             </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Strategy</p>
-            <p className="text-base font-bold">{trade.strategy}</p>
+            <p className="text-sm font-bold sm:text-base">{trade.strategy}</p>
           </div>
 
           {/* Fees */}
@@ -279,7 +279,7 @@ export function TradeDetailModal({
               className={cn(
                 totalFees !== 0 && "text-red-700 dark:text-red-400",
 
-                "text-base font-bold"
+                "text-sm font-bold sm:text-base"
               )}
             >
               {" "}
@@ -294,7 +294,7 @@ export function TradeDetailModal({
                 Target <span className="text-xs">(Net Profit)</span>
               </p>
             </div>
-            <p className="text-base font-bold">
+            <p className="text-sm font-bold sm:text-base">
               {formatCurrency(targetProfit)}{" "}
               <span className="pt-0.5 text-xs font-semibold">
                 ({formatPercentage(targetProfit / totalBuyAmount)} )
@@ -320,7 +320,7 @@ export function TradeDetailModal({
                       : currentProfit) > 0
                       ? "text-teal-700 dark:text-teal-400"
                       : "text-red-700 dark:text-red-400",
-                    "text-base font-bold"
+                    "text-sm font-bold sm:text-base"
                   )}
                 >
                   {formatCurrency(
@@ -422,7 +422,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Hedge Type
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {step.hedgeType.charAt(0).toUpperCase() +
                                   step.hedgeType.slice(1)}
                               </p>
@@ -433,7 +433,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Hedge Price
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {formatCurrency(step.hedgePrice)}
                               </p>
                             </div>
@@ -443,7 +443,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Quantity
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {step.qty.toLocaleString()}
                               </p>
                             </div>
@@ -453,7 +453,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Execution Time
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {new Date(step.executionTime).toLocaleString()}
                               </p>
                             </div>
@@ -468,7 +468,7 @@ export function TradeDetailModal({
                                   stepFee && stepFee?.fee > 0
                                     ? "text-red-700 dark:text-red-400"
                                     : "text-green-700 dark:text-green-400",
-                                  "text-base font-bold"
+                                  "text-sm font-bold sm:text-base"
                                 )}
                               >
                                 {formatCurrency(-+stepFee.fee)}
@@ -483,7 +483,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Buy Price
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {formatCurrency(step.buyPrice)}
                               </p>
                             </div>
@@ -493,7 +493,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Sell Price
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {formatCurrency(step.takeProfitPrice)}
                               </p>
                             </div>
@@ -501,9 +501,9 @@ export function TradeDetailModal({
                           {step.targetPrice && (
                             <div>
                               <p className="text-sm text-muted-foreground">
-                                Take Profit Price
+                                Take Profit
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {formatCurrency(step.targetPrice)}
                               </p>
                             </div>
@@ -513,7 +513,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Stop Loss
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {formatCurrency(step.stopLoss)}
                               </p>
                             </div>
@@ -523,7 +523,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Quantity
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {step.qty.toLocaleString()}
                               </p>
                             </div>
@@ -533,7 +533,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Side
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {step.side.charAt(0).toUpperCase() +
                                   step.side.slice(1)}
                               </p>
@@ -544,7 +544,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Order Type
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {step.type.charAt(0).toUpperCase() +
                                   step.type.slice(1)}
                               </p>
@@ -555,7 +555,7 @@ export function TradeDetailModal({
                               <p className="text-sm text-muted-foreground">
                                 Execution Time
                               </p>
-                              <p className="text-base font-bold">
+                              <p className="text-sm font-bold sm:text-base">
                                 {new Date(step.executionTime).toLocaleString()}
                               </p>
                             </div>
@@ -570,7 +570,7 @@ export function TradeDetailModal({
                                   stepFee && stepFee?.fee > 0
                                     ? "text-red-700 dark:text-red-400"
                                     : "text-green-700 dark:text-green-400",
-                                  "text-base font-bold"
+                                  "text-sm font-bold sm:text-base"
                                 )}
                               >
                                 {formatCurrency(-+stepFee.fee)}
