@@ -264,7 +264,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
           </div>
         </div>
 
-        <div className="grid grid-flow-col-dense grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           <div className="">
             <p className="text-sm text-muted-foreground">Strategy</p>
             <p className="text-base font-bold">{trade.strategy}</p>
