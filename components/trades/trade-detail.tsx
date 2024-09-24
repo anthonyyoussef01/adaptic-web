@@ -256,7 +256,7 @@ export function TradeDetailModal({
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Take Profit</p>
+            <p className="text-sm text-muted-foreground">Target Price</p>
             <p className="text-sm font-bold sm:text-base">
               {targetPrice !== null ? formatCurrency(targetPrice) : "Varies"}
             </p>
@@ -286,6 +286,15 @@ export function TradeDetailModal({
               {formatCurrency(-+totalFees)}
             </p>
           </div>
+          {/* Strike Price */}
+          {trade.strikePrice && (
+            <div>
+              <p className="text-sm text-muted-foreground">Strike Price</p>
+              <p className="text-sm font-bold sm:text-base">
+                {formatCurrency(trade.strikePrice)}
+              </p>
+            </div>
+          )}
 
           {/* Target Profit */}
           <div>
@@ -302,13 +311,13 @@ export function TradeDetailModal({
             </p>
           </div>
 
-          {/* Current Profit */}
-
+          {/* Current / Realised Profit */}
           {aggregatedStatus !== "Pending" && (
             <div className="shrink-0">
               <div className="flex items-end space-x-1.5">
                 <p className="text-sm text-muted-foreground">
                   {aggregatedStatus === "Closed" ? "" : "Current"} P/L{" "}
+                  {aggregatedStatus === "Closed" ? "Outcome" : ""}{" "}
                   <span className="text-xs">(Net)</span>
                 </p>
               </div>
@@ -488,26 +497,29 @@ export function TradeDetailModal({
                               </p>
                             </div>
                           )}
-                          {step.takeProfitPrice && (
-                            <div>
-                              <p className="text-sm text-muted-foreground">
-                                Sell Price
-                              </p>
-                              <p className="text-sm font-bold sm:text-base">
-                                {formatCurrency(step.takeProfitPrice)}
-                              </p>
-                            </div>
-                          )}
+
                           {step.targetPrice && (
                             <div>
                               <p className="text-sm text-muted-foreground">
-                                Take Profit
+                                Target Price
                               </p>
                               <p className="text-sm font-bold sm:text-base">
                                 {formatCurrency(step.targetPrice)}
                               </p>
                             </div>
                           )}
+                          {(step.status === "Closed" ||
+                            step.status === "Executed") &&
+                            step.strikePrice && (
+                              <div>
+                                <p className="text-sm text-muted-foreground">
+                                  Strike Price
+                                </p>
+                                <p className="text-sm font-bold sm:text-base">
+                                  {formatCurrency(step.strikePrice)}
+                                </p>
+                              </div>
+                            )}
                           {step.stopLoss && (
                             <div>
                               <p className="text-sm text-muted-foreground">

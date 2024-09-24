@@ -6,7 +6,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { MoreHorizontal, Edit3, Eye, LogOut, X } from "lucide-react"
+import { MoreHorizontal, Edit2, Eye, LogOut, X } from "lucide-react"
 
 interface Trade {
   status: string
@@ -50,7 +50,7 @@ export const TradeMenu: React.FC<TradeMenuProps> = ({
         {trade.status === "Pending" && (
           <>
             <DropdownMenuItem onClick={onEdit}>
-              <Edit3 className="mr-2 h-4 w-4" />
+              <Edit2 className="mr-2 h-4 w-4" />
               Edit
             </DropdownMenuItem>
             <DropdownMenuItem onClick={onCancel}>
@@ -58,12 +58,6 @@ export const TradeMenu: React.FC<TradeMenuProps> = ({
               Cancel
             </DropdownMenuItem>
           </>
-        )}
-        {(trade.status === "Pending" || trade.status === "Partial") && (
-          <DropdownMenuItem onClick={onCancel}>
-            <X className="mr-2 h-4 w-4" />
-            Cancel
-          </DropdownMenuItem>
         )}
         {(trade.status === "Closed" || trade.status === "Executed") && (
           <DropdownMenuItem onClick={onViewDetails}>
