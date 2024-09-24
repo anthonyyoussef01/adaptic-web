@@ -2,9 +2,20 @@
 
 import { Dispatch, SetStateAction } from "react"
 import { FocusScope } from "@radix-ui/react-focus-scope"
-import { Drawer } from "vaul"
+import {
+  Drawer,
+  DrawerPortal,
+  DrawerOverlay,
+  DrawerTrigger,
+  DrawerClose,
+  DrawerContent,
+  DrawerHeader,
+  DrawerFooter,
+  DrawerTitle,
+  DrawerDescription,
+} from "@/components/ui/drawer"
 
-type FocusScopeProps = React.ComponentPropsWithoutRef<typeof FocusScope>;
+type FocusScopeProps = React.ComponentPropsWithoutRef<typeof FocusScope>
 
 import {
   Dialog,
@@ -58,7 +69,7 @@ export function Modal({
 
   if (isMobile && !desktopOnly) {
     return (
-      <Drawer.Root
+      <Drawer
         open={setShowModal ? showModal : true}
         onOpenChange={(open) => {
           if (!open) {
@@ -66,23 +77,16 @@ export function Modal({
           }
         }}
       >
-        <Drawer.Overlay className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" />
-        <Drawer.Portal>
-          <Drawer.Content
-            className={cn(
-              "fixed inset-x-0 bottom-0 z-50 mt-24 rounded-t-[10px] border bg-background",
-              className
-            )}
+        <DrawerOverlay className="fixed inset-0 z-40 bg-background/80 backdrop-blur-sm" />
+        <DrawerPortal>
+          <DrawerContent
+            className={cn(className && className)}
             onOpenAutoFocus={onOpenAutoFocus || ((e) => e.preventDefault())}
           >
-            <div className="sticky top-0 z-20 flex w-full items-center justify-center bg-inherit">
-              <div className="my-3 h-1.5 w-16 rounded-full bg-muted-foreground/20" />
-            </div>
             {children}
-          </Drawer.Content>
-          <Drawer.Overlay />
-        </Drawer.Portal>
-      </Drawer.Root>
+          </DrawerContent>
+        </DrawerPortal>
+      </Drawer>
     )
   }
   return (

@@ -76,7 +76,7 @@ export function TradeDetailModal({
       setShowModal={onClose}
     >
       {/* **Header** */}
-      <div className="mt-0 flex w-full flex-row items-start justify-between px-3 md:-mt-1 lg:px-4">
+      <div className="flex w-full flex-row items-start justify-between px-3 lg:px-4">
         <div>
           <div className="flex items-start space-x-1.5 font-bold">
             <Avatar
