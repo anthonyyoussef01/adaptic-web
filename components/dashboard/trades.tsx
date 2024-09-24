@@ -12,8 +12,6 @@ import {
 } from "@/components/ui/pagination"
 import { TradeCard } from "@/components/trades/trade-card"
 import { TradeDetailModal } from "@/components/trades/trade-detail"
-import { exec } from "child_process"
-// ... other imports
 
 export function Trades() {
   const [activeTab, setActiveTab] = React.useState("all")
@@ -44,7 +42,7 @@ export function Trades() {
       ticker: "AAPL",
       logo: "https://logo.clearbit.com/apple.com",
       class: "Shares",
-      status: "Staged",
+      status: "Pending",
       buyPrice: 178.0,
       currentPrice: 180.0,
       qty: 500,
@@ -59,45 +57,39 @@ export function Trades() {
         {
           sequence: 1,
           action: "enter",
-          details: {
-            buyPrice: 178.0,
-            qty: 300,
-            side: "buy",
-            type: "market",
-            stopLoss: 170.0,
-            targetPrice: 190.0,
-            note: "Buying 300 shares of AAPL as part of a growth strategy. Stop loss at $170, target price at $190.",
-            executionTime: null,
-          },
-          status: "Planned",
+          buyPrice: 178.0,
+          qty: 300,
+          side: "buy",
+          type: "market",
+          stopLoss: 170.0,
+          targetPrice: 190.0,
+          note: "Buying 300 shares of AAPL as part of a growth strategy. Stop loss at $170, target price at $190.",
+          executionTime: null,
+          status: "Pending",
         },
         {
           sequence: 2,
           action: "enter",
-          details: {
-            buyPrice: 175.0,
-            qty: 200,
-            side: "buy",
-            type: "limit", // Placing another limit order for scaling in
-            stopLoss: 170.0,
-            targetPrice: 190.0,
-            note: "Buying an additional 200 shares of AAPL if it dips to $175.",
-            executionTime: null,
-          },
-          status: "Planned",
+          buyPrice: 175.0,
+          qty: 200,
+          side: "buy",
+          type: "limit",
+          stopLoss: 170.0,
+          targetPrice: 190.0,
+          note: "Buying an additional 200 shares of AAPL if it dips to $175.",
+          executionTime: null,
+          status: "Pending",
         },
         {
           sequence: 3,
           action: "exit",
-          details: {
-            targetPrice: 190.0,
-            qty: 500,
-            side: "sell",
-            type: "limit",
-            note: "Selling 500 shares of AAPL at target price of $190.",
-            executionTime: null,
-          },
-          status: "Planned",
+          targetPrice: 190.0,
+          qty: 500,
+          side: "sell",
+          type: "limit",
+          note: "Selling 500 shares of AAPL at target price of $190.",
+          executionTime: null,
+          status: "Pending",
         },
       ],
     },
@@ -107,7 +99,7 @@ export function Trades() {
       logo: "https://logo.clearbit.com/bitcoin.org",
       class: "Crypto",
       status: "Open",
-      executedAt: "20240920T123000",
+      executedAt: "2024-09-20T12:30:00Z",
       buyPrice: 26500.0,
       currentPrice: 28000.0,
       qty: 1.5,
@@ -122,30 +114,27 @@ export function Trades() {
         {
           sequence: 1,
           action: "enter",
-          details: {
-            buyPrice: 26500.0,
-            currentPrice: 28000.0,
-            qty: 1.5,
-            side: "buy",
-            type: "bracket",
-            stopLoss: 24000.0,
-            targetPrice: 30000.0,
-            note: "Buying 1.5 BTC. Stop loss set at $24000, take profit at $30000.",
-            executionTime: "2024-09-20T12:30:00Z",
-          },
-          status: "Completed",
+          buyPrice: 26500.0,
+          currentPrice: 28000.0,
+          qty: 1.5,
+          side: "buy",
+          type: "bracket",
+          stopLoss: 24000.0,
+          targetPrice: 30000.0,
+          takeProfitPrice: 29394.0,
+          note: "Buying 1.5 BTC. Stop loss set at $24000, take profit at $30000.",
+          executionTime: "2024-09-20T12:30:00Z",
+          status: "Executed",
         },
         {
           sequence: 2,
           action: "hedge",
-          details: {
-            hedgeType: "put",
-            hedgePrice: 24000.0,
-            qty: 1,
-            note: "Hedging with a put option in case of a price drop.",
-            executionTime: null,
-          },
-          status: "Staged",
+          hedgeType: "put",
+          hedgePrice: 24000.0,
+          qty: 1,
+          note: "Hedging with a put option in case of a price drop.",
+          executionTime: null,
+          status: "Pending",
         },
       ],
     },
@@ -164,6 +153,7 @@ export function Trades() {
         "Microsoft's strong cloud services growth and recent acquisitions make it a solid choice for long-term investors.",
       projectedProfit: 1000.0,
       confidence: "85%",
+      strategy: "Value",
     },
     {
       assetName: "Nvidia, Inc.",
@@ -171,16 +161,18 @@ export function Trades() {
       logo: "https://logo.clearbit.com/nvidia.com",
       class: "Call Option",
       status: "Closed",
-      executedAt: "20240924T104005",
+      executedAt: "2024-09-24T10:40:05Z",
       buyPrice: 485.0,
       currentPrice: 500.0,
       qty: 2,
       targetPrice: 510.0,
+      takeProfitPrice: 520.0,
       stopLoss: 460.0,
       analysis:
         "Nvidia’s dominance in the AI hardware space and strong earnings growth have made it a tech stock favorite this year.",
       projectedProfit: 5000.0,
       confidence: "90%",
+      strategy: "Growth",
     },
     {
       assetName: "Tesla Inc.",
@@ -188,7 +180,7 @@ export function Trades() {
       logo: "https://logo.clearbit.com/tesla.com",
       class: "Put Option",
       status: "Open",
-      executedAt: "20240918T100000",
+      executedAt: "2024-09-18T10:00:00Z",
       buyPrice: 245.0,
       currentPrice: 240.0,
       qty: 50,
@@ -203,29 +195,25 @@ export function Trades() {
         {
           sequence: 1,
           action: "enter",
-          details: {
-            buyPrice: 245.0,
-            qty: 50,
-            side: "buy",
-            type: "market",
-            stopLoss: 255.0,
-            targetPrice: 230.0,
-            note: "Buying 4 Tesla put options to profit from a potential price drop.",
-            executionTime: "2024-09-18T10:00:00Z",
-          },
+          buyPrice: 245.0,
+          qty: 50,
+          side: "buy",
+          type: "market",
+          stopLoss: 255.0,
+          targetPrice: 230.0,
+          note: "Buying 50 Tesla put options to profit from a potential price drop.",
+          executionTime: "2024-09-18T10:00:00Z",
           status: "Open",
         },
         {
           sequence: 2,
           action: "hedge",
-          details: {
-            hedgeType: "call",
-            hedgePrice: 255.0,
-            qty: 2,
-            note: "Hedging with 2 call options in case the Tesla price rises.",
-            executionTime: null,
-          },
-          status: "Planned",
+          hedgeType: "call",
+          hedgePrice: 255.0,
+          qty: 2,
+          note: "Hedging with 2 call options in case the Tesla price rises.",
+          executionTime: null,
+          status: "Pending",
         },
       ],
     },
@@ -234,7 +222,7 @@ export function Trades() {
       ticker: "PLTR",
       logo: "https://logo.clearbit.com/palantir.com",
       class: "Call Option",
-      status: "Staged",
+      status: "Pending",
       buyPrice: 16.5,
       currentPrice: 18.0,
       qty: 100,
@@ -244,6 +232,7 @@ export function Trades() {
         "Palantir's strong positioning in the AI space and inclusion in the S&P 500 make it a compelling buy, despite market sensitivity.",
       projectedProfit: 5500.0,
       confidence: "80%",
+      strategy: "Growth",
     },
     {
       assetName: "Amazon.com Inc.",
@@ -251,7 +240,7 @@ export function Trades() {
       logo: "https://logo.clearbit.com/amazon.com",
       class: "Shares",
       status: "Open",
-      executedAt: "20240925T090000",
+      executedAt: "2024-09-25T09:00:00Z",
       buyPrice: 135.0,
       currentPrice: 140.0,
       qty: 50,
@@ -261,6 +250,7 @@ export function Trades() {
         "Amazon's push into AI-driven cloud services and continued e-commerce dominance are expected to drive long-term growth.",
       projectedProfit: 7500.0,
       confidence: "85%",
+      strategy: "Growth",
     },
     {
       assetName: "Ethereum",
@@ -268,24 +258,26 @@ export function Trades() {
       logo: "https://logo.clearbit.com/ethereum.org",
       class: "Crypto",
       status: "Closed",
-      executedAt: "20240922T110000",
+      executedAt: "2024-09-22T11:00:00Z",
       buyPrice: 1600.0,
       currentPrice: 1800.0,
       qty: 100,
       targetPrice: 2000.0,
+      takeProfitPrice: 1968.0,
       stopLoss: 1500.0,
       analysis:
         "Ethereum’s upcoming protocol upgrades and growing DeFi applications make it a solid choice for long-term investors.",
       projectedProfit: 40000.0,
       confidence: "78%",
+      strategy: "Growth",
     },
     {
       assetName: "Alphabet Inc.",
       ticker: "GOOGL",
-      logo: "https://logo.clearbit.com/abc.xyz/",
+      logo: "https://logo.clearbit.com/abc.xyz",
       class: "Shares",
       status: "Partial",
-      executedAt: "20240921T100000",
+      executedAt: "2024-09-21T10:00:00Z",
       buyPrice: 1800.0,
       currentPrice: 1900.0,
       qty: 25,
@@ -296,23 +288,26 @@ export function Trades() {
         "Google's strong ad revenue growth and cloud services expansion make it a solid choice for long-term investors.",
       projectedProfit: 5000.0,
       confidence: "90%",
+      strategy: "Growth",
     },
     {
       assetName: "Facebook, Inc.",
       ticker: "FB",
       logo: "https://logo.clearbit.com/facebook.com",
       class: "Shares",
-      status: "Cancelled",
-      executedAt: "20240919T093000",
+      status: "Closed",
+      executedAt: "2024-09-19T09:30:00Z",
       buyPrice: 250.0,
       currentPrice: 260.0,
       qty: 1000,
       targetPrice: 300.0,
+      takeProfitPrice: 292.0,
       stopLoss: 200.0,
       analysis:
         "Facebook's strong user growth and expansion into new markets make it a solid choice for long-term investors.",
       projectedProfit: 5000.0,
       confidence: "85%",
+      strategy: "Growth",
     },
   ]
 
@@ -335,9 +330,6 @@ export function Trades() {
             <TabsTrigger value="all" className="font-semibold">
               All
             </TabsTrigger>
-            <TabsTrigger value="staged" className="font-semibold">
-              Staged
-            </TabsTrigger>
             <TabsTrigger value="pending" className="font-semibold">
               Pending
             </TabsTrigger>
@@ -346,9 +338,6 @@ export function Trades() {
             </TabsTrigger>
             <TabsTrigger value="open" className="font-semibold">
               Open
-            </TabsTrigger>
-            <TabsTrigger value="cancelled" className="font-semibold">
-              Cancelled
             </TabsTrigger>
             <TabsTrigger value="closed" className="font-semibold">
               Closed

@@ -58,41 +58,29 @@ export function ArticleCard({
       className="transform cursor-pointer rounded-2xl transition duration-200 ease-in-out hover:scale-[1.01] hover:shadow-xl hover:shadow-black/10"
       onClick={(e) => handleRedirectToLink(e, url, "_blank", false)}
     >
-      <CardHeader className="space-y-1 font-semibold lg:px-3 lg:py-3">
-        <CardTitle className="line-clamp-2 leading-5">
-          {title}{" "}
-          <span className="pl-1 text-xs text-muted-foreground">
-            {getTimeAgo(timePublished)}
-          </span>
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="space-y-2 lg:px-3 lg:pb-2">
+      <CardHeader className="space-y-2 px-0 pb-3 pt-0 font-semibold">
         {bannerImage && (
           <Image
             src={bannerImage}
             alt={title}
             width={400}
-            height={128}
-            className="h-32 w-full rounded-lg object-cover"
+            height={140}
+            className="h-36 w-full rounded-t-lg object-cover"
             loader={({ src }) => src}
           />
         )}
+        <CardTitle className="line-clamp-2 px-3 pt-3 leading-6">
+          {title}
+        </CardTitle>
+        <span className="px-3 text-xs text-muted-foreground">
+          {getTimeAgo(timePublished)}
+        </span>
+      </CardHeader>
+      <CardContent className="space-y-2 lg:px-3 lg:pb-2">
         <span className="line-clamp-3 text-sm text-muted-foreground">
           {summary}
         </span>
-
-        <span className="flex items-center space-x-1.5">
-          <Avatar className="bg-white p-[1px]" size="xs">
-            <AvatarImage src={logo} alt={source} className="rounded-full" />
-            <AvatarFallback>{source.charAt(0)}</AvatarFallback>
-          </Avatar>
-          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-            {source}
-          </span>
-        </span>
-      </CardContent>
-      <CardFooter className="flex items-center justify-between text-sm lg:px-3 lg:pb-3">
-        <span className="ellipsis-1 line-clamp-1 flex overflow-hidden whitespace-nowrap">
+        <span className="space-y-0 pt-2 leading-5">
           {topics &&
             topics.length > 0 &&
             topics
@@ -108,22 +96,34 @@ export function ArticleCard({
               )
               .slice(0, 3)
               .map((topic, index) => (
-                <div
+                <span
                   key={index}
                   onClick={(e) =>
                     handleRedirectToLink(
-                      e,
+                      e as React.MouseEvent<HTMLDivElement, MouseEvent>,
                       `/news/topics/${topic.topic.toLowerCase().replace(" ", "-")}`,
                       undefined,
                       true
                     )
                   }
-                  className="inline-flex cursor-pointer pr-2 text-[10.5px] font-semibold uppercase tracking-wider text-teal-500 underline dark:text-teal-400"
+                  className="cursor-pointer whitespace-nowrap pr-2 text-[10.5px] font-semibold uppercase tracking-wider text-teal-500 underline dark:text-teal-400"
                 >
                   #{topic.topic}
-                </div>
+                </span>
               ))}
         </span>
+      </CardContent>
+      <CardFooter className="flex items-center justify-between px-3 pb-3 text-sm">
+        <span className="flex items-center space-x-1.5">
+          <Avatar className="bg-white p-[1px]" size="xs">
+            <AvatarImage src={logo} alt={source} className="rounded-full" />
+            <AvatarFallback>{source.charAt(0)}</AvatarFallback>
+          </Avatar>
+          <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+            {source}
+          </span>
+        </span>
+
         <Badge variant="outline" className="w-fit shrink-0" size="xs">
           <span className="flex items-center space-x-1">
             {sentiment === "Bullish" ? (

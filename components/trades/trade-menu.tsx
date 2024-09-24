@@ -35,7 +35,7 @@ export const TradeMenu: React.FC<TradeMenuProps> = ({
         <Button
           variant="ghost"
           size="xs"
-          className="flex -ml-1 h-6 w-6 items-center justify-center rounded-full px-1"
+          className="-ml-1 flex h-6 w-6 items-center justify-center rounded-full px-1"
         >
           <MoreHorizontal className="h-3.5 w-3.5" />
         </Button>
@@ -47,7 +47,7 @@ export const TradeMenu: React.FC<TradeMenuProps> = ({
             Close out
           </DropdownMenuItem>
         )}
-        {trade.status === "Staged" && (
+        {trade.status === "Pending" && (
           <>
             <DropdownMenuItem onClick={onEdit}>
               <Edit3 className="mr-2 h-4 w-4" />
@@ -65,7 +65,7 @@ export const TradeMenu: React.FC<TradeMenuProps> = ({
             Cancel
           </DropdownMenuItem>
         )}
-        {(trade.status === "Closed" || trade.status === "Cancelled") && (
+        {(trade.status === "Closed" || trade.status === "Executed") && (
           <DropdownMenuItem onClick={onViewDetails}>
             <Eye className="mr-2 h-4 w-4" />
             View Details

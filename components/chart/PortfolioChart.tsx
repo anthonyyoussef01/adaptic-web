@@ -70,7 +70,7 @@ export function PortfolioChart({ data, isDesktop }: PortfolioChartProps) {
         areaSeriesRef.current = null
       }
     }
-  }, [isDesktop])
+  }, [isDesktop, data])
 
   useEffect(() => {
     if (areaSeriesRef.current) {

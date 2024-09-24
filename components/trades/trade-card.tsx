@@ -1,3 +1,5 @@
+// trade-card.tsx
+
 import React from "react"
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -14,6 +16,11 @@ import {
   formatCurrency,
   formatPercentage,
   determineTradeStatus,
+  calculateAggregatedTradeData,
+  calculateTargetProfit,
+  calculateCurrentProfit,
+  calculateRealisedProfit,
+  calculateTotalFees,
 } from "@/lib/utils"
 import { TradeMenu } from "./trade-menu"
 
@@ -23,71 +30,27 @@ interface TradeCardProps {
 }
 
 export function TradeCard({ trade, onClick }: TradeCardProps) {
+  // Calculate Total Fees
+  const { totalFees, individualFees } = calculateTotalFees(trade)
+
   // **Determine Trade Status**
   const aggregatedStatus = determineTradeStatus(trade)
 
   // **Aggregate Calculations for Multi-Step Trades**
-  let totalQty = trade.qty || 0
-  let averageBuyPrice = trade.buyPrice || 0
-  let targetPrice = trade.targetPrice || 0
-  let stopLoss = trade.stopLoss || 0
-
-  if (trade.steps && trade.steps.length > 1) {
-    // Filter out steps without necessary details
-    const validSteps = trade.steps.filter(
-      (step: any) => step.details.qty && step.details.buyPrice
-    )
-
-    // Calculate total quantity
-    totalQty = validSteps.reduce(
-      (sum: number, step: any) => sum + step.details.qty,
-      0
-    )
-
-    // Calculate weighted average buy price
-    const totalCost = validSteps.reduce(
-      (sum: number, step: any) =>
-        sum + step.details.buyPrice * step.details.qty,
-      0
-    )
-
-    averageBuyPrice = totalQty ? totalCost / totalQty : 0
-
-    // Determine if targetPrice and stopLoss are consistent
-    const targetPrices = new Set(
-      validSteps
-        .map((step: any) => step.details.targetPrice)
-        .filter((price: number) => price !== undefined && price !== null)
-    )
-    targetPrice = targetPrices.size === 1 ? Array.from(targetPrices)[0] : null
-
-    const stopLosses = new Set(
-      validSteps
-        .map((step: any) => step.details.stopLoss)
-        .filter((price: number) => price !== undefined && price !== null)
-    )
-    stopLoss = stopLosses.size === 1 ? Array.from(stopLosses)[0] : null
-  }
+  const aggregatedData = calculateAggregatedTradeData(trade)
+  const { totalQty, averageBuyPrice, targetPrice, stopLoss, totalBuyAmount } =
+    aggregatedData
 
   // **Calculations**
-  const targetProfit =
-    trade.class === "Put Option"
-      ? averageBuyPrice * totalQty - (targetPrice || 0) * totalQty
-      : (targetPrice || 0) * totalQty - averageBuyPrice * totalQty
-  const totalBuyAmount = averageBuyPrice * totalQty
-  const totalCurrentAmount = trade.currentPrice * totalQty
-  const currentProfit =
-    trade.class === "Put Option"
-      ? totalBuyAmount - totalCurrentAmount
-      : totalCurrentAmount - totalBuyAmount
+  const targetProfit = calculateTargetProfit(trade, aggregatedData)
+  const currentProfit = calculateCurrentProfit(trade, aggregatedData)
+  const realisedProfit = calculateRealisedProfit(trade, aggregatedData)
 
   // **Multi-leg trade progress**
   const stepsCompleted =
     trade.steps?.filter(
       (step: { status: string }) =>
-        step.status === "Executed" ||
-        step.status === "Cancelled" ||
-        step.status === "Completed"
+        step.status === "Executed" || step.status === "Closed"
     ).length || 0
   const stepsTotal = trade.steps ? trade.steps.length : 0
 
@@ -97,70 +60,93 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
       className="relative transform cursor-pointer pb-0 transition duration-200 ease-in-out hover:scale-[1.01] hover:shadow-xl hover:shadow-black/10"
     >
       {/* Card Header */}
-      <div className="flex justify-between">
-        <CardHeader className="flex w-full flex-row items-start justify-between lg:px-3">
-          <CardTitle className="-mt-1">
-            <div className="flex items-center space-x-1.5 font-bold">
-              <Avatar size="sm" className="bg-white p-1">
-                <AvatarImage
-                  src={trade.logo}
-                  alt={trade.assetName}
-                  className="rounded-full"
-                />
-                <AvatarFallback>{trade.assetName[0]}</AvatarFallback>
-              </Avatar>
-              <div>
-                <div className="flex items-center space-x-1.5">
-                  <span>{trade.ticker}</span>
-                  <p className="text-sm font-semibold text-muted-foreground">
-                    · {trade.assetName}
-                  </p>
-                </div>
-
-                <div className="flex items-center space-x-1.5 ">
-                  <span className="text-sm font-semibold">
-                    {formatCurrency(trade.currentPrice)}
-                  </span>
-                  {trade.status !== "Staged" &&
-                    trade.status !== "Pending" &&
-                    trade.status !== "Cancelled" &&
-                    trade.status !== "Closed" && (
-                      <div
-                        className={cn(
-                          trade.currentPrice > averageBuyPrice
-                            ? "text-teal-700 dark:text-teal-400"
-                            : "text-red-700 dark:text-red-400",
-                          "pt-0.5 text-xs"
-                        )}
-                      >
-                        {trade.currentPrice > averageBuyPrice ? "+" : ""}
-                        {formatCurrency(trade.currentPrice - averageBuyPrice)} (
-                        {formatPercentage(
-                          (trade.currentPrice - averageBuyPrice) /
-                            averageBuyPrice
-                        )}
-                        )
-                      </div>
-                    )}
+      <div className="flex w-full justify-between">
+        <CardHeader className="w-full -space-y-3 lg:px-3">
+          <div className="flex w-full flex-row items-start justify-between">
+            <CardTitle className="w-fit">
+              <div className="flex items-start space-x-1.5 font-bold">
+                <Avatar size="sm" className="bg-white p-1">
+                  <AvatarImage
+                    src={trade.logo}
+                    alt={trade.assetName}
+                    className="rounded-full"
+                  />
+                  <AvatarFallback>{trade.assetName[0]}</AvatarFallback>
+                </Avatar>
+                <div>
+                  <div className="flex items-center space-x-1.5">
+                    <span className="ellipsis-1 line-clamp-1 max-w-fit leading-5 sm:max-w-64">
+                      {trade.assetName}
+                    </span>
+                    <p className="whitespace-nowrap text-sm font-semibold text-muted-foreground">
+                      · {trade.ticker}
+                    </p>
+                  </div>
                 </div>
               </div>
-            </div>
-          </CardTitle>
+            </CardTitle>
 
-          <div className="flex items-center space-x-2">
+            <div className="flex items-center space-x-2">
+              {/* Status Badge */}
+              <TooltipProvider>
+                <Tooltip>
+                  <TooltipTrigger>
+                    <Badge
+                      variant={
+                        aggregatedStatus === "Pending"
+                          ? "outline"
+                          : aggregatedStatus === "Open"
+                            ? "green"
+                            : aggregatedStatus === "Partial"
+                              ? "blue"
+                              : "default"
+                      }
+                      animate={aggregatedStatus === "Open"}
+                      className="h-6 px-2 text-[10px]"
+                    >
+                      {aggregatedStatus.toUpperCase()}
+                      {aggregatedStatus === "Partial" &&
+                        " (" + trade.fulfilled + ")"}
+                    </Badge>
+                  </TooltipTrigger>
+                  <TooltipContent className="z-10 mb-2 mr-4">
+                    <p className="text-semibold text-sm">
+                      {aggregatedStatus === "Open"
+                        ? "This trade has an open position or has had a leg executed"
+                        : aggregatedStatus === "Pending"
+                          ? "This trade is pending and ready to be executed at market open"
+                          : aggregatedStatus === "Partial"
+                            ? "This trade has been partially executed"
+                            : "This trade is closed"}
+                    </p>
+                  </TooltipContent>
+                </Tooltip>
+              </TooltipProvider>
+
+              {/* Trade Menu */}
+              <TradeMenu
+                trade={trade}
+                onEdit={() => console.log("Edit clicked")}
+                onCancel={() => console.log("Cancel clicked")}
+                onCloseOut={() => console.log("Close out clicked")}
+                onViewDetails={() => console.log("View Details clicked")}
+              />
+            </div>
+          </div>
+          <div className="-mt-1 flex items-center space-x-1.5 pl-9">
             {/* Asset Class Icon with Tooltip */}
             <TooltipProvider>
               <Tooltip>
                 <TooltipTrigger>
                   {trade.class === "Shares" ? (
-                    <Icons.stock className="mr-1 size-3" />
+                    <Icons.stock className="size-3" />
                   ) : trade.class === "Crypto" ? (
-                    <Icons.crypto className="mr-1 size-3" />
+                    <Icons.crypto className="size-3" />
                   ) : trade.class === "Call Option" ? (
-                    <Icons.call className="mr-1 size-3 text-teal-700 dark:text-teal-400" />
+                    <Icons.call className="h-3" />
                   ) : (
                     trade.class === "Put Option" && (
-                      <Icons.put className="mr-1 size-3 text-red-700 dark:text-red-400" />
+                      <Icons.put className="h-3" />
                     )
                   )}
                   <p className="sr-only">{trade.class}</p>
@@ -173,10 +159,10 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                     ) : trade.class === "Crypto" ? (
                       <Icons.crypto className="size-3" />
                     ) : trade.class === "Call Option" ? (
-                      <Icons.call className="size-3 text-teal-700 dark:text-teal-400" />
+                      <Icons.call className="h-3" />
                     ) : (
                       trade.class === "Put Option" && (
-                        <Icons.put className="size-3 text-red-700 dark:text-red-400" />
+                        <Icons.put className="h-3" />
                       )
                     )}
                     <p className="text-semibold text-sm">{trade.class}</p>
@@ -184,57 +170,27 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
-            {/* Status Badge */}
-            <TooltipProvider>
-              <Tooltip>
-                <TooltipTrigger>
-                  <Badge
-                    variant={
-                      aggregatedStatus === "Staged"
-                        ? "outline"
-                        : aggregatedStatus === "Open"
-                          ? "green"
-                          : aggregatedStatus === "Pending"
-                            ? "yellow"
-                            : aggregatedStatus === "Cancelled"
-                              ? "destructive"
-                              : aggregatedStatus === "Partial"
-                                ? "blue"
-                                : "default"
-                    }
-                    animate={trade.status === "Open"}
-                    className="h-5 px-2 text-[10px]"
-                  >
-                    {trade.status.toUpperCase()}{" "}
-                    {trade.status === "Partial" && "(" + trade.fulfilled + ")"}
-                  </Badge>
-                </TooltipTrigger>
-                <TooltipContent className="z-10 mb-2 mr-4">
-                  <p className="text-semibold text-sm">
-                    {trade.status === "Open"
-                      ? "This trade has an open position or has had a leg executed"
-                      : trade.status === "Staged"
-                        ? "This trade is staged and ready to be executed"
-                        : trade.status === "Pending"
-                          ? "This trade is pending execution"
-                          : trade.status === "Cancelled"
-                            ? "This trade has been cancelled"
-                            : trade.status === "Partial"
-                              ? "This trade has been partially executed"
-                              : "This trade is closed"}
-                  </p>
-                </TooltipContent>
-              </Tooltip>
-            </TooltipProvider>
-
-            {/* Trade Menu */}
-            <TradeMenu
-              trade={trade}
-              onEdit={() => console.log("Edit clicked")}
-              onCancel={() => console.log("Cancel clicked")}
-              onCloseOut={() => console.log("Close out clicked")}
-              onViewDetails={() => console.log("View Details clicked")}
-            />
+            <span className="text-sm font-semibold">
+              {formatCurrency(trade.currentPrice)}
+            </span>
+            {aggregatedStatus !== "Pending" &&
+              aggregatedStatus !== "Closed" && (
+                <div
+                  className={cn(
+                    trade.currentPrice > averageBuyPrice
+                      ? "text-teal-700 dark:text-teal-400"
+                      : "text-red-700 dark:text-red-400",
+                    "pt-0.5 text-xs"
+                  )}
+                >
+                  {trade.currentPrice > averageBuyPrice ? "+" : ""}
+                  {formatCurrency(trade.currentPrice - averageBuyPrice)} (
+                  {formatPercentage(
+                    (trade.currentPrice - averageBuyPrice) / averageBuyPrice
+                  )}
+                  )
+                </div>
+              )}
           </div>
         </CardHeader>
       </div>
@@ -250,7 +206,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
           <Badge
             variant="outline"
             size="sm"
-            className="mt-2 flex w-fit items-center space-x-1"
+            className="mt-2 flex w-fit items-center space-x-1 py-1"
           >
             <Icons.steps className="-ml-0.5 h-3 w-3 text-muted-foreground" />
 
@@ -282,10 +238,9 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Volume</p>
+            <p className="text-sm text-muted-foreground">Quantity</p>
             <p className="text-base font-bold">
-              {/* Format qty with comma separator */}
-              {totalQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
+              {totalQty.toLocaleString()}{" "}
               <span className="text-xs font-normal">
                 {trade.class === "Shares"
                   ? "shares"
@@ -296,7 +251,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Target</p>
+            <p className="text-sm text-muted-foreground">Take Profit</p>
             <p className="text-base font-bold">
               {targetPrice !== null ? formatCurrency(targetPrice) : "Varies"}
             </p>
@@ -309,52 +264,69 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
-          {/* Target Profit, Current P/L, including % and $ values for each */}
+        <div className="grid grid-flow-col-dense grid-cols-3 gap-4">
+          <div className="">
+            <p className="text-sm text-muted-foreground">Strategy</p>
+            <p className="text-base font-bold">{trade.strategy}</p>
+          </div>
+          {/* Target Profit */}
           <div>
             <div className="flex items-center space-x-1.5">
               <p className="text-sm text-muted-foreground">
-                Target <span className="text-xs">(Net Profit, Incl. Fees)</span>
+                Target <span className="text-xs">(Net Profit)</span>
               </p>
             </div>
             <p className="text-base font-bold">
               {formatCurrency(targetProfit)}{" "}
               <span className="pt-0.5 text-xs font-semibold">
-                ({formatPercentage(targetProfit / totalBuyAmount)} )
+                ({formatPercentage(targetProfit / totalBuyAmount)})
               </span>
             </p>
           </div>
 
-          {trade.status !== "Staged" && trade.status !== "Pending" && (
-            <div>
+          {/* Current Profit */}
+          {aggregatedStatus !== "Pending" && (
+            <div className="shrink-0">
               <div className="flex items-end space-x-1.5">
                 <p className="text-sm text-muted-foreground">
-                  Current P/L <span className="text-xs">(Incl. Fees)</span>
+                  {aggregatedStatus === "Closed" ? "" : "Current"} P/L{" "}
+                  <span className="text-xs">(Net)</span>
                 </p>
               </div>
               <div className="flex items-center space-x-1.5">
                 <p
                   className={cn(
-                    // if targetProfit is positive, show teal, else red
-                    currentProfit > 0
+                    (aggregatedStatus === "Closed"
+                      ? realisedProfit
+                      : currentProfit) > 0
                       ? "text-teal-700 dark:text-teal-400"
                       : "text-red-700 dark:text-red-400",
                     "text-base font-bold"
                   )}
                 >
-                  {formatPercentage(
-                    (totalCurrentAmount - totalBuyAmount) / totalBuyAmount
+                  {formatCurrency(
+                    aggregatedStatus === "Closed"
+                      ? realisedProfit
+                      : currentProfit
                   )}
                 </p>
                 <span
                   className={cn(
-                    currentProfit > 0
+                    (aggregatedStatus === "Closed"
+                      ? realisedProfit
+                      : currentProfit) > 0
                       ? "text-teal-700 dark:text-teal-400"
                       : "text-red-700 dark:text-red-400",
                     "pt-0.5 text-xs font-semibold"
                   )}
                 >
-                  ({formatCurrency(totalCurrentAmount - totalBuyAmount)})
+                  (
+                  {formatPercentage(
+                    (aggregatedStatus === "Closed"
+                      ? realisedProfit
+                      : currentProfit) / totalBuyAmount
+                  )}
+                  )
                 </span>
               </div>
             </div>
