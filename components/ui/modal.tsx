@@ -93,7 +93,7 @@ export function Modal({
         onOpenAutoFocus={(e) => e.preventDefault()}
         onCloseAutoFocus={(e) => e.preventDefault()}
         className={cn(
-          "overflow-hidden p-0 md:max-w-md md:rounded-lg md:border",
+          "overflow-hidden md:max-w-5xl md:rounded-lg md:border",
           className
         )}
       >

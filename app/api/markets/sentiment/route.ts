@@ -30,7 +30,7 @@ export const POST = async (request: NextRequest) => {
   }
 
   // Fetch data from Alpha Vantage API
-  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=${SYMBOL}&apikey=${API_KEY}`;
+  const url = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&entitlement=realtime&symbol=${SYMBOL}&apikey=${API_KEY}`;
 
   try {
     const response = await fetch(url);

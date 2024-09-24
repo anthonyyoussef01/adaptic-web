@@ -48,7 +48,7 @@ export const POST = async (request: NextRequest) => {
       return `${date}T${time}`
     }
 
-    const url = `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${strinfiedTickers}&time_from=${get24hAgo()}&apikey=${API_KEY}`
+    const url = `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&entitlement=realtime&tickers=${strinfiedTickers}&time_from=${get24hAgo()}&apikey=${API_KEY}`
 
     try {
       const response = await fetch(url)

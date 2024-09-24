@@ -8,13 +8,16 @@ import {
   ArrowRight,
   ArrowLeft,
   ArrowDown,
+  Check,
   ArrowUp,
+
   RefreshCw,
   Download,
   Link,
   MapPin,
   LineChart,
   BarChart,
+  CandlestickChart,
   Bell,
   DollarSign,
   Menu,
@@ -25,6 +28,8 @@ import {
   TrendingUp,
   TrendingDown,
   Calendar,
+  Flag,
+  Route,
   HelpCircle,
   Shield,
   Activity,
@@ -47,10 +52,66 @@ export const Icons = {
   arrowUp: ArrowUp,
   download: Download,
   link: Link,
+  check: Check,
+  steps: Route,
+  flag: Flag,
   mapPin: MapPin,
   lineChart: LineChart,
   stock: LineChart,
+  call: ({ ...props }: LucideProps) => (
+    <svg
+      viewBox="0 0 28 28"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fab"
+      data-icon="call-option"
+      role="img"
+      fill="currentColor"
+      {...props}
+    >
+      <g>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M5 0H23C25.7614 0 28 2.23858 28 5V23C28 25.7614 25.7614 28 23 28H5C2.23858 28 0 25.7614 0 23V5C0 2.23858 2.23858 0 5 0ZM5 2C3.34315 2 2 3.34315 2 5V23C2 24.6569 3.34315 26 5 26H23C24.6569 26 26 24.6569 26 23V5C26 3.34315 24.6569 2 23 2H5Z"
+          fill="currentColor"
+        />
+        <path
+          d="M11 21V14.5385H7L14 7L21 14.5385H17V21H11Z"
+          fill="currentColor"
+        />
+      </g>
+    </svg>
+  ),
+  put: ({ ...props }: LucideProps) => (
+    <svg
+      viewBox="0 0 28 28"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden="true"
+      focusable="false"
+      data-prefix="fab"
+      data-icon="call-option"
+      role="img"
+      fill="currentColor"
+      {...props}
+    >
+      <g>
+        <path
+          fillRule="evenodd"
+          clipRule="evenodd"
+          d="M5 0H23C25.7614 0 28 2.23858 28 5V23C28 25.7614 25.7614 28 23 28H5C2.23858 28 0 25.7614 0 23V5C0 2.23858 2.23858 0 5 0ZM5 2C3.34315 2 2 3.34315 2 5V23C2 24.6569 3.34315 26 5 26H23C24.6569 26 26 24.6569 26 23V5C26 3.34315 24.6569 2 23 2H5Z"
+          fill="currentColor"
+        />
+        <path
+          d="M11 7V13.4615H7L14 21L21 13.4615H17V7H11Z"
+          fill="currentColor"
+        />
+      </g>
+    </svg>
+  ),
   barChart: BarChart,
+  candlestickChart: CandlestickChart,
   bell: Bell,
   menu: Menu,
   dollarSign: DollarSign,

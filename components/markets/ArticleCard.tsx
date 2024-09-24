@@ -9,7 +9,7 @@ import Link from "next/link"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Icons } from "@/components/ui/icons"
-import { cn } from "@/lib/utils"
+import { cn, getTimeAgo } from "@/lib/utils"
 import Image from "next/image" // Import Image for optimized images
 
 type ArticleCardProps = {
@@ -24,38 +24,6 @@ type ArticleCardProps = {
   source: string
   sentiment: string
   mini?: boolean
-}
-
-function convertStringToTimeAgo(dateString: string) {
-  // Convert '20240919T102005' to '2024-09-19T10:20:05' format
-  const date = new Date(
-    dateString.replace(
-      /(\d{4})(\d{2})(\d{2})T(\d{2})(\d{2})(\d{2})/,
-      "$1-$2-$3T$4:$5:$6"
-    )
-  )
-  const now = new Date()
-  const diff = now.getTime() - date.getTime()
-  const seconds = Math.floor(diff / 1000)
-  const minutes = Math.floor(seconds / 60)
-  const hours = Math.floor(minutes / 60)
-  const days = Math.floor(hours / 24)
-  const months = Math.floor(days / 30)
-  const years = Math.floor(months / 12)
-
-  if (years > 0) {
-    return years === 1 ? "1 year ago" : `${years} years ago`
-  } else if (months > 0) {
-    return months === 1 ? "1 month ago" : `${months} months ago`
-  } else if (days > 0) {
-    return days === 1 ? "1 day ago" : `${days} days ago`
-  } else if (hours > 0) {
-    return hours === 1 ? "1 hr ago" : `${hours} hrs ago`
-  } else if (minutes > 0) {
-    return minutes === 1 ? "1 min ago" : `${minutes} mins ago`
-  } else {
-    return "A few seconds ago"
-  }
 }
 
 function handleRedirectToLink(
@@ -90,15 +58,15 @@ export function ArticleCard({
       className="transform cursor-pointer rounded-2xl transition duration-200 ease-in-out hover:scale-[1.01] hover:shadow-xl hover:shadow-black/10"
       onClick={(e) => handleRedirectToLink(e, url, "_blank", false)}
     >
-      <CardHeader className="space-y-1 font-semibold lg:px-3 lg:pt-3">
-        <CardTitle className="line-clamp-2 leading-6">
+      <CardHeader className="space-y-1 font-semibold lg:px-3 lg:py-3">
+        <CardTitle className="line-clamp-2 leading-5">
           {title}{" "}
           <span className="pl-1 text-xs text-muted-foreground">
-            {convertStringToTimeAgo(timePublished)}
+            {getTimeAgo(timePublished)}
           </span>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-2 lg:px-3">
+      <CardContent className="space-y-2 lg:px-3 lg:pb-2">
         {bannerImage && (
           <Image
             src={bannerImage}

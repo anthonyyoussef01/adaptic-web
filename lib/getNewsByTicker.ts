@@ -34,7 +34,7 @@ export const getNewsByTicker = async (tickers: string[]): Promise<NewsArticle[]>
 
   const timeFrom = get24hAgo();
 
-  const url = `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${stringifiedTickers}&time_from=${timeFrom}&apikey=${API_KEY}`;
+  const url = `https://www.alphavantage.co/query?function=NEWS_SENTIMENT&tickers=${stringifiedTickers}&entitlement=realtime&time_from=${timeFrom}&apikey=${API_KEY}`;
 
   try {
     const response = await fetch(url);
