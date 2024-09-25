@@ -56,7 +56,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
   const stepsCompleted =
     trade.steps?.filter(
       (step: { status: string }) =>
-        step.status === "Executed" || step.status === "Closed"
+        step.status === "Executed" || step.status === "Completed"
     ).length || 0
   const stepsTotal = trade.steps ? trade.steps.length : 0
 
@@ -67,7 +67,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
     >
       {/* Card Header */}
       <div className="flex w-full justify-between">
-        <CardHeader className="relative mt-0 flex w-full flex-row items-center justify-between px-3 py-2.5 lg:px-3 lg:py-2.5">
+        <CardHeader className="relative mt-0 flex w-full flex-row items-center justify-between px-3 pb-2.5 pt-3 lg:px-3 lg:pb-2.5 lg:pt-3">
           <CardTitle className="font-bold">
             <div className="flex items-center space-x-2.5">
               <Avatar size="sm" className="bg-white p-1">
@@ -139,7 +139,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                     {formatCurrency(trade.currentPrice)}
                   </span>
                   {aggregatedStatus !== "Staged" &&
-                    aggregatedStatus !== "Closed" && (
+                    aggregatedStatus !== "Completed" && (
                       <div
                         className={cn(
                           trade.currentPrice > averageBuyPrice
@@ -185,7 +185,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                   >
                     {aggregatedStatus.toUpperCase()}
                     {aggregatedStatus === "Partial" &&
-                      "(" + trade.fulfilled + ")"}
+                      " (" + trade.fulfilled + ")"}
                   </Badge>
                 </TooltipTrigger>
                 <TooltipContent className="z-50 mb-2 mr-4">
@@ -196,7 +196,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                         ? "This trade is staged and ready to be executed at market open"
                         : aggregatedStatus === "Partial"
                           ? "This trade has been partially executed"
-                          : "This trade is closed"}
+                          : "This trade is completed"}
                   </p>
                 </TooltipContent>
               </Tooltip>
@@ -218,7 +218,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
         {/* **Analysis** */}
         <span className="line-clamp-2 text-sm text-black/80 dark:text-white/80">
           <div className="relative inline-flex items-center space-x-1.5 pr-1">
-            <Icons.activity className="size-4 shrink-0 pt-1.5 text-teal-700 dark:text-teal-400" />
+            <Icons.activity className="size-3 shrink-0 text-teal-700 dark:text-teal-400" />
           </div>
           <span className="font-bold">{trade.signal}</span>: {trade.analysis}
         </span>
@@ -315,11 +315,11 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
             </div>
           )}
           {/* Current Price */}
-          {trade.status !== "Closed" && (
+          {trade.status !== "Completed" && (
             <div>
               <p className="text-sm text-muted-foreground">Current Price</p>
 
-              <div className="-space-y-1.5">
+              <div className="-space-y-1 sm:space-y-0 sm:flex sm:items-center sm:space-x-1">
                 <p
                   className={cn(
                     trade.currentPrice > averageBuyPrice
@@ -352,14 +352,21 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
         </div>
       </CardContent>
       <CardFooter className="flex h-11 items-center justify-between rounded-b-lg border-t border-border bg-muted/30 px-3 py-2 lg:px-3 lg:py-2">
+        {/* Staged */}
+        {aggregatedStatus === "Staged" && (
+          <span className="text-sm font-semibold text-muted-foreground">
+            To be executed at market open tomorrow
+          </span>
+        )}
+
         {/* Current / Realised Profit */}
         {aggregatedStatus !== "Staged" ? (
           <div className="-my-0.5 -space-y-0.5">
             <div className="flex items-end space-x-1.5">
               <p className="text-xs font-bold text-black dark:text-white">
-                {aggregatedStatus === "Closed" && realisedProfit > 0 ? (
+                {aggregatedStatus === "Completed" && realisedProfit > 0 ? (
                   <span>Realised Gains</span>
-                ) : aggregatedStatus === "Closed" && realisedProfit < 0 ? (
+                ) : aggregatedStatus === "Completed" && realisedProfit < 0 ? (
                   <span>Total Losses</span>
                 ) : (aggregatedStatus === "Open" ||
                     aggregatedStatus === "Partial") &&
@@ -377,7 +384,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
               <div className="flex items-center space-x-1">
                 <p
                   className={cn(
-                    (aggregatedStatus === "Closed"
+                    (aggregatedStatus === "Completed"
                       ? realisedProfit
                       : currentProfit) > 0
                       ? "text-teal-700 dark:text-teal-400"
@@ -385,18 +392,18 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                     "text-sm font-bold"
                   )}
                 >
-                  {(aggregatedStatus === "Closed"
+                  {(aggregatedStatus === "Completed"
                     ? realisedProfit
                     : currentProfit) > 0 && "+"}
                   {formatCurrency(
-                    aggregatedStatus === "Closed"
+                    aggregatedStatus === "Completed"
                       ? realisedProfit
                       : currentProfit
                   )}
                 </p>
                 <span
                   className={cn(
-                    (aggregatedStatus === "Closed"
+                    (aggregatedStatus === "Completed"
                       ? realisedProfit
                       : currentProfit) > 0
                       ? "text-teal-700 dark:text-teal-400"
@@ -406,7 +413,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                 >
                   (
                   {formatPercentage(
-                    (aggregatedStatus === "Closed"
+                    (aggregatedStatus === "Completed"
                       ? realisedProfit
                       : currentProfit) / totalBuyAmount
                   )}
@@ -428,7 +435,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
             <Icons.steps className="-ml-0.5 h-3 w-3 text-muted-foreground" />
 
             <p className="flex items-center gap-1 divide-x">
-              <span className="pr-0.5">Multiple Steps</span>
+              <span className="pr-0.5">Multi-Step Trade</span>
               <span
                 className={cn(
                   stepsCompleted === stepsTotal

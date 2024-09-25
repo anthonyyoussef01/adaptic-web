@@ -32,7 +32,7 @@ export default function RootLayout({
             disableTransitionOnChange
           >
             <Navigation />
-            <main className="max-w-9xl m-auto pt-2 sm:px-4">{children}</main>
+            <main className="max-w-9xl m-auto sm:px-4">{children}</main>
             <Footer />
           </ThemeProvider>
         </body>

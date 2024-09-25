@@ -65,7 +65,7 @@ export function TradeDetailModal({
   const stepsCompleted =
     trade.steps?.filter(
       (step: { status: string }) =>
-        step.status === "Executed" || step.status === "Closed"
+        step.status === "Executed" || step.status === "Completed"
     ).length || 0
   const stepsTotal = trade.steps ? trade.steps.length : 0
 
@@ -152,7 +152,7 @@ export function TradeDetailModal({
                 </span>
 
                 {aggregatedStatus !== "Staged" &&
-                  aggregatedStatus !== "Closed" && (
+                  aggregatedStatus !== "Completed" && (
                     <div
                       className={cn(
                         trade.currentPrice > averageBuyPrice
@@ -197,7 +197,7 @@ export function TradeDetailModal({
                 >
                   {aggregatedStatus.toUpperCase()}
                   {aggregatedStatus === "Partial" &&
-                    "(" + trade.fulfilled + ")"}
+                    " (" + trade.fulfilled + ")"}
                 </Badge>
               </TooltipTrigger>
               <TooltipContent className="z-50 mb-2 mr-4">
@@ -208,7 +208,7 @@ export function TradeDetailModal({
                       ? "This trade is staged and ready to be executed at market open"
                       : aggregatedStatus === "Partial"
                         ? "This trade has been partially executed"
-                        : "This trade is closed"}
+                        : "This trade is completed"}
                 </p>
               </TooltipContent>
             </Tooltip>
@@ -227,29 +227,24 @@ export function TradeDetailModal({
       <Separator className="my-6 md:my-1" />
 
       {/* **Analysis** */}
-      <div className="space-y-2 px-3 lg:px-4">
-        <div className="flex items-center space-x-1.5">
-          <Icons.activity className="size-3 text-muted-foreground" />
-          <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            Signal
-          </span>
+      <span className="line-clamp-4 px-3 text-base text-black/80 dark:text-white/80 lg:px-4">
+        <div className="relative inline-flex items-center space-x-1.5 pr-1">
+          <Icons.activity className="size-3 shrink-0 text-teal-700 dark:text-teal-400" />
         </div>
-        <span className="ellipsis-4 line-clamp-4 text-sm text-black/80 dark:text-white/80 lg:text-base">
-          <span className="font-bold">{trade.signal}</span> - {trade.analysis}
-        </span>
-      </div>
+        <span className="font-bold">{trade.signal}</span>: {trade.analysis}
+      </span>
 
       <Separator className="my-6 md:my-1" />
 
-      <div className="space-y-2 px-3 lg:px-4">
+      <div className="space-y-3 px-3 lg:px-4">
         <div className="flex items-center space-x-1.5">
           <Icons.candlestickChart className="size-3 text-muted-foreground" />
           <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            Trade Summary
+            Summary
           </span>
         </div>
         {/* Strategy, Instrument, Class */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3">
           <div>
             <p className="text-sm text-muted-foreground sm:text-base">
               Strategy
@@ -273,7 +268,7 @@ export function TradeDetailModal({
         </div>
 
         {/* Entry, Volume, Target, Stop Loss */}
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3">
           <div>
             <p className="text-sm text-muted-foreground sm:text-base">
               Buy Price
@@ -305,7 +300,7 @@ export function TradeDetailModal({
           </div>
         </div>
 
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-3">
           {/* Stop Loss */}
           <div>
             <p className="text-sm text-muted-foreground sm:text-base">
@@ -372,13 +367,13 @@ export function TradeDetailModal({
             </div>
           )}
           {/* Current Price */}
-          {trade.status !== "Closed" && (
+          {trade.status !== "Completed" && (
             <div>
               <p className="text-sm text-muted-foreground sm:text-base">
                 Current Price
               </p>
 
-              <div className="-space-y-1.5">
+              <div className="-space-y-1 sm:flex sm:items-center sm:space-x-1 sm:space-y-0">
                 <p
                   className={cn(
                     trade.currentPrice > averageBuyPrice
@@ -408,6 +403,20 @@ export function TradeDetailModal({
               </div>
             </div>
           )}
+          {/* Fees */}
+          <div>
+            <p className="text-sm text-muted-foreground">Total Fees</p>
+            <p
+              className={cn(
+                totalFees !== 0 && "text-red-700 dark:text-red-400",
+
+                "text-sm font-bold sm:text-base"
+              )}
+            >
+              {" "}
+              {formatCurrency(-+totalFees)}
+            </p>
+          </div>
         </div>
       </div>
 
@@ -420,7 +429,7 @@ export function TradeDetailModal({
           <div className="flex items-center space-x-1.5">
             <Icons.steps className="size-3 text-muted-foreground" />
             <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-              Trade Steps ({stepsCompleted}/{stepsTotal})
+              Steps ({stepsCompleted}/{stepsTotal})
             </span>
           </div>
 
@@ -439,7 +448,7 @@ export function TradeDetailModal({
                 <AccordionItem
                   key={idx}
                   value={`step-${idx}`}
-                  className="rounded-lg border border-border  px-3 shadow-md shadow-black/10 transition duration-200 ease-in-out hover:scale-[1.01] hover:no-underline hover:shadow-xl lg:px-4"
+                  className="rounded-lg border border-border px-3 shadow-md shadow-black/10 transition duration-200 ease-in-out hover:scale-[1.01] hover:no-underline hover:shadow-xl lg:px-4"
                 >
                   <AccordionTrigger className="hover:no-underline">
                     <div className="-my-2 flex w-full items-center justify-between pr-2">
@@ -525,11 +534,11 @@ export function TradeDetailModal({
                                 className={cn(
                                   stepFee && stepFee?.fee > 0
                                     ? "text-red-700 dark:text-red-400"
-                                    : "text-green-700 dark:text-green-400",
+                                    : "text-teal-700 dark:text-teal-400",
                                   "text-sm font-bold sm:text-base"
                                 )}
                               >
-                                {formatCurrency(-+stepFee.fee)}
+                                {formatCurrency(stepFee.fee)}
                               </p>
                             </div>
                           )}
@@ -557,7 +566,7 @@ export function TradeDetailModal({
                               </p>
                             </div>
                           )}
-                          {(step.status === "Closed" ||
+                          {(step.status === "Completed" ||
                             step.status === "Executed") &&
                             step.sellPrice && (
                               <div>
@@ -630,7 +639,7 @@ export function TradeDetailModal({
                                 className={cn(
                                   stepFee && stepFee?.fee > 0
                                     ? "text-red-700 dark:text-red-400"
-                                    : "text-green-700 dark:text-green-400",
+                                    : "text-teal-700 dark:text-teal-400",
                                   "text-sm font-bold sm:text-base"
                                 )}
                               >

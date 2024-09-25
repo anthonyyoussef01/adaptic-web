@@ -45,6 +45,7 @@ export function Trades() {
       instrument: "Equity",
       signal: "Breakout",
       status: "Staged",
+      exchange: "NASDAQ",
       buyPrice: 178.0,
       currentPrice: 180.0,
       qty: 500,
@@ -250,7 +251,7 @@ export function Trades() {
       class: "Options",
       instrument: "Call Option",
       signal: "Volatility",
-      status: "Closed",
+      status: "Completed",
       executedAt: "2024-09-24T10:40:05Z",
       buyPrice: 485.0,
       currentPrice: 500.0,
@@ -275,7 +276,7 @@ export function Trades() {
           targetPrice: 510.0,
           note: "Buying options to form an iron butterfly around Nvidia. Stop loss at $460.",
           executionTime: "2024-09-24T10:40:05Z",
-          status: "Closed",
+          status: "Completed",
         },
         {
           sequence: 2,
@@ -286,7 +287,7 @@ export function Trades() {
           type: "limit",
           note: "Exiting the iron butterfly at $510.",
           executionTime: null,
-          status: "Closed",
+          status: "Completed",
         },
       ],
     },
@@ -606,6 +607,100 @@ export function Trades() {
         },
       ],
     },
+    {
+      assetName: "Ethereum",
+      ticker: "ETH",
+      logo: "https://logo.clearbit.com/ethereum.org",
+      class: "Crypto",
+      instrument: "Cryptocurrency",
+      signal: "DeFi Boom",
+      status: "Partial",
+      executedAt: "2024-09-23T11:00:00Z",
+      buyPrice: 3200.0,
+      currentPrice: 3500.0,
+      qty: 5.0,
+      targetPrice: 4000.0,
+      stopLoss: 3000.0,
+      analysis:
+        "Ethereum is benefiting from the rise of decentralized finance applications, with strong network activity and adoption.",
+      projectedProfit: 4000.0,
+      confidence: "80%",
+      fulfilled: "50%",
+      strategy: "HODL",
+      steps: [
+        {
+          sequence: 1,
+          action: "enter",
+          buyPrice: 3200.0,
+          qty: 5.0,
+          side: "buy",
+          type: "market",
+          stopLoss: 3000.0,
+          targetPrice: 4000.0,
+          note: "Bought 5 ETH at $3200 following a DeFi boom signal. Stop loss at $3000, target at $4000.",
+          executionTime: "2024-09-23T11:00:00Z",
+          status: "Partial",
+          fulfilled: "50%",
+        },
+        {
+          sequence: 2,
+          action: "exit",
+          targetPrice: 4000.0,
+          qty: 5.0,
+          side: "sell",
+          type: "limit",
+          note: "Selling 5 ETH at $4000.",
+          executionTime: null,
+          status: "Staged",
+        },
+      ],
+    },
+    {
+      assetName: "USD/JPY",
+      ticker: "USDJPY",
+      logo: "https://logo.clearbit.com/usdjpy.com",
+      class: "Forex",
+      instrument: "Currency Pair",
+      signal: "Risk-Off Sentiment",
+      status: "Completed",
+      executedAt: "2024-09-22T12:00:00Z",
+      buyPrice: 110.0,
+      currentPrice: 108.0,
+      qty: 100000.0,
+      targetPrice: 105.0,
+      stopLoss: 112.0,
+      analysis:
+        "Investors are flocking to the safe-haven Japanese Yen amid rising geopolitical tensions.",
+      projectedProfit: 200000.0,
+      confidence: "75%",
+      strategy: "Carry Trade",
+      steps: [
+        {
+          sequence: 1,
+          action: "enter",
+          buyPrice: 110.0,
+          qty: 100000.0,
+          side: "buy",
+          type: "market",
+          stopLoss: 112.0,
+          targetPrice: 105.0,
+          note: "Entered a carry trade position on USD/JPY, aiming for appreciation. Stop loss at 112, target at 105.",
+          executionTime: "2024-09-22T12:00:00Z",
+          status: "Executed",
+        },
+        {
+          sequence: 2,
+          action: "exit",
+          targetPrice: 105.0,
+          qty: 100000.0,
+          side: "sell",
+          type: "limit",
+          note: "Exiting the carry trade position at 105.",
+          executionTime: null,
+          status: "Executed",
+        },
+      ],
+    },
   ]
 
   // Reset currentPage when activeTab changes
@@ -636,14 +731,14 @@ export function Trades() {
             <TabsTrigger value="open" className="font-semibold">
               Open
             </TabsTrigger>
-            <TabsTrigger value="closed" className="font-semibold">
-              Closed
+            <TabsTrigger value="completed" className="font-semibold">
+              Completed
             </TabsTrigger>
           </TabsList>
         </Tabs>
 
         {/* Grid of Trade Cards */}
-        <div className="mt-4 grid grid-cols-1 gap-4 md:grid-cols-2">
+        <div className="mt-4 grid grid-cols-1 gap-4 xl:grid-cols-2">
           {trades
             .filter((trade) => {
               if (activeTab === "all") return true
@@ -676,7 +771,9 @@ export function Trades() {
                   )
                 }).length > 6 && (
                   <PaginationItem>
-                    <PaginationLink href="#">1</PaginationLink>
+                    <PaginationLink onClick={() => setCurrentPage(1)}>
+                      1
+                    </PaginationLink>
                   </PaginationItem>
                 )}
               {trades &&
@@ -687,7 +784,9 @@ export function Trades() {
                   )
                 }).length > 12 && (
                   <PaginationItem>
-                    <PaginationLink href="#">2</PaginationLink>
+                    <PaginationLink onClick={() => setCurrentPage(2)}>
+                      2
+                    </PaginationLink>
                   </PaginationItem>
                 )}
               {trades &&
@@ -698,7 +797,9 @@ export function Trades() {
                   )
                 }).length > 18 && (
                   <PaginationItem>
-                    <PaginationLink href="#">3</PaginationLink>
+                    <PaginationLink onClick={() => setCurrentPage(3)}>
+                      3
+                    </PaginationLink>
                   </PaginationItem>
                 )}
               {trades &&

@@ -43,7 +43,14 @@ export function PortfolioChart({ data, isDesktop }: PortfolioChartProps) {
         },
         height: 300,
         width: chartContainerRef.current.offsetWidth,
+        rightPriceScale: {
+          borderColor: "rgba(0, 0, 0, 0.1)",
+        },
+        timeScale: {
+          borderColor: "rgba(0, 0, 0, 0.1)",
+        },
       })
+
       chartRef.current = chart
 
       const areaSeries = chart.addAreaSeries()

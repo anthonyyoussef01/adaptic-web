@@ -29,10 +29,10 @@ export default function Navigation() {
   console.log(pathname, "pathname")
 
   return (
-    <header className="max-w-9xl sticky top-0 z-40 mx-auto w-full bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+    <header className="sticky top-0 z-40 mx-auto w-full max-w-9xl bg-background/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="flex w-full flex-row justify-between py-4">
         <div className="flex items-center space-x-6">
-          <Logo className="h-9 fill-teal-500 text-black transition duration-200 hover:scale-[1.01] hover:text-black/70 dark:text-white dark:hover:text-white/80 hover:fill-teal-500/70 md:h-8" />
+          <Logo className="h-9 fill-teal-500 text-black transition duration-200 hover:scale-[1.01] hover:fill-teal-500/70 hover:text-black/70 dark:text-white dark:hover:text-white/80 md:h-8" />
           <div>
             {pathname !== "/" &&
               pathname !== "/markets" &&

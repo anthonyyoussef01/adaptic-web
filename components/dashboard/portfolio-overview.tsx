@@ -62,7 +62,7 @@ const dayData = [
   { time: "2023-12-27", value: 250000.66 },
   { time: "2023-12-28", value: 250000.68 },
   { time: "2023-12-31", value: 250000.77 },
-  { time: "2024-09-19", value: 250000.72 },
+  { time: "2024-09-19", value: 99993.72 },
   { time: "2024-01-04", value: 250000.71 },
   { time: "2024-01-07", value: 250000.72 },
   { time: "2024-01-08", value: 250000.72 },
@@ -161,7 +161,7 @@ const dayData = [
   { time: "2024-05-22", value: 263940.15 },
   { time: "2024-05-23", value: 263940.18 },
   { time: "2024-05-24", value: 263940.16 },
-  { time: "2024-05-28", value: 263940.23 },
+  { time: "2024-05-28", value: 103940.23 },
 ]
 
 const checkForDuplicates = (arr: any) => {
@@ -626,7 +626,7 @@ const PortfolioOverview: React.FC = () => {
   const intervalOptions = getIntervalsForTimeframe(selectedTimeframe)
 
   return (
-    <Card className="relative mx-3 rounded-3xl bg-indigo-700 shadow-2xl shadow-black/10 sm:mx-0">
+    <Card className="relative mx-3 rounded-3xl bg-teal-800 shadow-2xl shadow-black/10 sm:mx-0">
       <CardHeader className="flex flex-row items-start justify-between">
         <CardTitle className="pt-1.5 text-white/60 sm:pt-1">
           <span className="sm:hidden">AUM</span>
@@ -637,7 +637,7 @@ const PortfolioOverview: React.FC = () => {
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
-                className="flex items-center space-x-1 bg-indigo-800 pr-2 text-white/80 hover:bg-indigo-800/50 hover:text-white focus:bg-indigo-800/50 focus:text-white focus-visible:ring-white"
+                className="flex items-center space-x-1 bg-teal-900 pr-2 text-white/80 hover:bg-teal-900/50 hover:text-white focus:bg-teal-900/50 focus:text-white focus-visible:ring-white"
               >
                 <span>
                   {
@@ -669,7 +669,7 @@ const PortfolioOverview: React.FC = () => {
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
-                className="flex items-center space-x-1 bg-indigo-800 pr-2 text-white/80 hover:bg-indigo-800/50 hover:text-white focus:bg-indigo-800/50 focus:text-white focus-visible:ring-white"
+                className="flex items-center space-x-1 bg-teal-900 pr-2 text-white/80 hover:bg-teal-900/50 hover:text-white focus:bg-teal-900/50 focus:text-white focus-visible:ring-white"
               >
                 <span>
                   {
@@ -700,12 +700,7 @@ const PortfolioOverview: React.FC = () => {
           $7,839,940.00
         </span>
 
-        <span
-          className={cn(
-            "flex items-end space-x-1.5 text-xs font-semibold text-green-600 sm:pt-1 lg:pt-2 lg:text-sm",
-            isDesktop ? "text-green-300" : "text-green-600 dark:text-green-400"
-          )}
-        >
+        <span className="text-green00 flex items-end space-x-1.5 text-xs font-semibold text-teal-400 sm:pt-1 lg:pt-2 lg:text-sm">
           <span className="text-sm font-bold lg:text-lg">+$548,795.80</span>
           <span className="relative pb-0.5 lg:pb-1">
             (7.4% in the{" "}
@@ -714,7 +709,7 @@ const PortfolioOverview: React.FC = () => {
         </span>
       </div>
       <CardContent>
-        <div className="font-satoshi -ml-3 -mr-2 mt-6 lg:-ml-4 lg:-ml-5">
+        <div className="-ml-3 -mr-2 mt-6 font-satoshi lg:-ml-4 lg:-ml-5">
           {filteredData && filteredData.length > 0 ? (
             <PortfolioChart data={filteredData} isDesktop={isDesktop} />
           ) : (

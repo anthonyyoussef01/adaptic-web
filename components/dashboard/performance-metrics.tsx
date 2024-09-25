@@ -13,7 +13,7 @@ function KPICard({ label, value, change }: KPICardProps) {
   const { isDesktop } = useMediaQuery()
 
   return (
-    <Card className="p-3 shadow-sm lg:border-indigo-400/5 lg:bg-indigo-500/30">
+    <Card className="p-3 shadow-sm lg:border-teal-500/5 lg:bg-teal-600/30">
       <p
         className={cn(
           isDesktop ? "text-white/80" : "text-muted-foreground",
@@ -28,7 +28,7 @@ function KPICard({ label, value, change }: KPICardProps) {
       {change && (
         <p
           className={`text-sm ${
-            change.startsWith("+") ? "text-green-400" : "text-red-400"
+            change.startsWith("+") ? "text-teal-400" : "text-red-400"
           }`}
         >
           {change}
@@ -51,7 +51,7 @@ const PerformanceMetrics: React.FC = () => {
   ]
 
   return (
-    <Card className="relative rounded-none border-none shadow-2xl shadow-black/10 sm:mx-0 sm:rounded-3xl sm:border-solid lg:bg-indigo-700">
+    <Card className="relative rounded-none border-none shadow-2xl shadow-black/10 sm:mx-0 sm:rounded-3xl sm:border-solid lg:bg-teal-800">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className={cn(isDesktop && "text-white/60")}>
           Performance

@@ -59,7 +59,7 @@ export function AIInsights() {
                 className="mb-2 flex items-center justify-between"
               >
                 <span>{forecast.period}</span>
-                <span className="font-semibold text-green-600">
+                <span className="font-semibold text-teal-600">
                   {forecast.return > 0 ? "+" : ""}
                   {forecast.return.toFixed(2)}%
                 </span>

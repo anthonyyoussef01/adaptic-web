@@ -181,15 +181,73 @@ export const FEE_CONFIG = {
   REGULATORY_FEES_PERCENTAGE: parseFloat(
     process.env.REGULATORY_FEES_PERCENTAGE || "0.00221"
   ), // 0.00221% default
+
 }
 
 export function calculateFees(step: any, assetClass: string) {
   let fee = 0
   let tradeValue = 0
+  let perContractFee = 0
+  let baseCommission = 0
+  let commissionFee = 0
+  let exchangeFee = 0
+  let nfaFee = 0
+  let cmeFee = 0
+  let clearingFee = 0
+  let otherFees = 0
+  let regulatoryFee = 0
 
   // Normalize assetClass for options
   if (assetClass === "Call Option" || assetClass === "Put Option") {
     assetClass = "Options"
+  }
+
+  if (assetClass === "Equity") {
+    assetClass = "Shares"
+  }
+
+  if (assetClass === "Stock" || assetClass === "ETF") {
+    assetClass = "Shares"
+  }
+
+  if (assetClass === "Future") {
+    assetClass = "Futures"
+  }
+
+  if (assetClass === "Forex") {
+    assetClass = "Forex"
+  }
+
+  if (assetClass === "Crypto") {
+    assetClass = "Crypto"
+  }
+
+  if (assetClass === "Commodity") {
+    assetClass = "Commodities"
+  }
+
+  if (assetClass === "Bond") {
+    assetClass = "Bonds"
+  }
+
+  if (assetClass === "Index") {
+    assetClass = "Indices"
+  }
+
+  if (assetClass === "Mutual Fund") {
+    assetClass = "Mutual Funds"
+  }
+
+  if (assetClass === "Future Option") {
+    assetClass = "Future Options"
+  }
+
+  if (assetClass === "Crypto Option") {
+    assetClass = "Crypto Options"
+  }
+
+  if (assetClass === "Commodity Option") {
+    assetClass = "Commodity Options"
   }
 
   // Adjust tradeValue based on the action
@@ -202,11 +260,11 @@ export function calculateFees(step: any, assetClass: string) {
   switch (assetClass) {
     case "Shares":
       // Commission Fee
-      const commissionFee =
+      commissionFee =
         (tradeValue * FEE_CONFIG.SHARES_COMMISSION_PERCENTAGE) / 100
 
       // Regulatory Fees
-      const regulatoryFee =
+      regulatoryFee =
         (tradeValue * FEE_CONFIG.REGULATORY_FEES_PERCENTAGE) / 100
 
       fee = commissionFee + regulatoryFee
@@ -214,11 +272,11 @@ export function calculateFees(step: any, assetClass: string) {
 
     case "Options":
       // Per Contract Fee
-      const perContractFee =
+      perContractFee =
         (step.qty || 0) * FEE_CONFIG.OPTIONS_PER_CONTRACT_FEE
 
       // Base Commission
-      const baseCommission = FEE_CONFIG.OPTIONS_BASE_COMMISSION
+      baseCommission = FEE_CONFIG.OPTIONS_BASE_COMMISSION
 
       fee = perContractFee + baseCommission
       break
@@ -230,6 +288,78 @@ export function calculateFees(step: any, assetClass: string) {
 
       fee = transactionFee
       break
+
+    case "Futures":
+      // Per Contract Fee
+      perContractFee = 0.85
+
+      // Base Commission
+      baseCommission = 0.85
+
+      // Exchange Fee
+      exchangeFee = 0.25
+
+      // NFA Fee
+      nfaFee = 0.02
+
+      // CME Fee
+      cmeFee = 0.01
+
+      // Clearing Fee
+      clearingFee = 0.30
+
+      // Other Fees
+      otherFees = 0.01
+
+      fee = perContractFee + baseCommission + exchangeFee + nfaFee + cmeFee + clearingFee + otherFees
+
+      break
+
+    case "Forex":
+      // Commission Fee
+      commissionFee =
+        (tradeValue * FEE_CONFIG.SHARES_COMMISSION_PERCENTAGE) / 100
+
+      // Regulatory Fees
+      regulatoryFee =
+        (tradeValue * FEE_CONFIG.REGULATORY_FEES_PERCENTAGE) / 100
+
+      fee = commissionFee + regulatoryFee
+      break
+
+    case "Indices":
+      // Commission Fee
+      commissionFee =
+        (tradeValue * FEE_CONFIG.SHARES_COMMISSION_PERCENTAGE) / 100
+
+      // Regulatory Fees
+      regulatoryFee =
+        (tradeValue * FEE_CONFIG.REGULATORY_FEES_PERCENTAGE) / 100
+
+      fee = commissionFee + regulatoryFee
+      break
+
+    case "Commodities":
+      // Per Contract Fee
+      perContractFee = 0.85
+
+      // Base Commission
+      baseCommission = 0.85
+
+      // Exchange Fee
+      exchangeFee = 0.25
+
+      // NFA Fee
+      nfaFee = 0.02
+
+      // CME Fee
+      cmeFee = 0.01
+
+      // Clearing Fee
+      clearingFee = 0.30
+
+      // Other Fees
+      otherFees = 0.01
 
     default:
       // Default fee calculation
@@ -306,18 +436,23 @@ export function determineTradeStatus(trade: any): string {
     return null
   })
 
-  // if last step is executed or closed, then trade is closed
-  if (stepStatuses[stepStatuses.length - 1] === "Executed" || stepStatuses[stepStatuses.length - 1] === "Closed") {
-    return "Closed"
+  // if last step is executed or completed, then trade is completed
+  if (stepStatuses[stepStatuses.length - 1] === "Executed" || stepStatuses[stepStatuses.length - 1] === "Completed") {
+    return "Completed"
   }
 
-  // if any step is executed, closed, or open, then trade is open
-  else if (stepStatuses.includes("Executed") || stepStatuses.includes("Closed") || stepStatuses.includes("Open")) {
+  // if any step is executed, completed, or open, then trade is open
+  else if (stepStatuses.includes("Executed") || stepStatuses.includes("Completed") || stepStatuses.includes("Open")) {
     return "Open"
   }
 
   // else if there is only one step and it is partial, then trade is partial
   else if (stepStatuses.length === 1 && stepStatuses[0] === "Partial") {
+    return "Partial"
+  }
+
+  // if there is any 'partial' step, then trade is partial
+  else if (stepStatuses.includes("Partial")) {
     return "Partial"
   }
 
@@ -413,7 +548,7 @@ export function calculateCurrentProfit(trade: any, aggregatedData: any) {
 export function calculateRealisedProfit(trade: any, aggregatedData: any) {
   const { averageBuyPrice, totalQty } = aggregatedData
 
-  if (trade.status !== "Closed") return 0
+  if (trade.status !== "Completed") return 0
 
   let realisedProfit = 0
   const totalFees = calculateTotalFees(trade).totalFees
@@ -421,7 +556,7 @@ export function calculateRealisedProfit(trade: any, aggregatedData: any) {
   if (trade.steps && trade.steps.length > 0) {
     // For multi-leg trades
     const exitSteps = trade.steps.filter(
-      (step: any) => step.action === "exit" && step.status === "Closed"
+      (step: any) => step.action === "exit" && step.status === "Completed"
     )
 
     realisedProfit = exitSteps.reduce((sum: number, step: any) => {
@@ -456,7 +591,7 @@ export function calculateRealisedProfit(trade: any, aggregatedData: any) {
 export function calculateTotalExitAmount(trade: any, aggregatedData: any) {
   const { totalQty } = aggregatedData
 
-  if (trade.status !== "Closed") return 0
+  if (trade.status !== "Completed") return 0
 
   const sellPrice = trade.sellPrice || trade.currentPrice
   if (!sellPrice || !totalQty) return 0

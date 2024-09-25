@@ -69,7 +69,7 @@ export function ArticleCard({
             loader={({ src }) => src}
           />
         )}
-        <CardTitle className="line-clamp-3 px-3 pt-3 leading-5 font-bold">
+        <CardTitle className="line-clamp-3 px-3 pt-3 font-bold leading-5">
           {title}
         </CardTitle>
         <span className="px-3 text-xs text-muted-foreground">
@@ -128,12 +128,12 @@ export function ArticleCard({
           <span className="flex items-center space-x-1">
             {sentiment === "Bullish" ? (
               <span className="-ml-0.5 flex items-center -space-x-0.5">
-                <Icons.arrowUp className="h-2.5 w-2.5 text-green-600" />
-                <Icons.arrowUp className="h-2.5 w-2.5 text-green-600" />
+                <Icons.arrowUp className="h-2.5 w-2.5 text-teal-600" />
+                <Icons.arrowUp className="h-2.5 w-2.5 text-teal-600" />
               </span>
             ) : sentiment === "Somewhat_Bullish" ||
               sentiment === "Somewhat-Bullish" ? (
-              <Icons.arrowUp className="-ml-0.5 h-3 w-3 text-green-600" />
+              <Icons.arrowUp className="-ml-0.5 h-3 w-3 text-teal-600" />
             ) : sentiment === "Bearish" ? (
               <span className="-ml-0.5 flex items-center -space-x-0.5">
                 <Icons.arrowDown className="h-2.5 w-2.5 text-red-600" />
@@ -150,7 +150,7 @@ export function ArticleCard({
                 sentiment === "Bullish" ||
                   sentiment === "Somewhat_Bullish" ||
                   sentiment === "Somewhat-Bullish"
-                  ? "text-green-600"
+                  ? "text-teal-600"
                   : sentiment === "Bearish" ||
                       sentiment === "Somewhat-Bearish" ||
                       sentiment === "Somewhat_Bearish"
