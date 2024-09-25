@@ -106,14 +106,18 @@ export function TradeDetailModal({
                   <Tooltip>
                     <TooltipTrigger>
                       {trade.class === "Shares" ? (
-                        <Icons.stock className="size-3.5" />
+                        <Icons.stock className="size-4" />
                       ) : trade.class === "Crypto" ? (
-                        <Icons.crypto className="size-3.5" />
+                        <Icons.crypto className="size-4" />
                       ) : trade.instrument === "Call Option" ? (
-                        <Icons.call className="h-3.5" />
+                        <Icons.call className="h-4" />
+                      ) : trade.instrument === "Put Option" ? (
+                        <Icons.put className="h-4" />
+                      ) : trade.class === "Commodities" ? (
+                        <Icons.commodities className="h-5" />
                       ) : (
-                        trade.instrument === "Put Option" && (
-                          <Icons.put className="h-3.5" />
+                        trade.class === "Forex" && (
+                          <Icons.forex className="h-4" />
                         )
                       )}
                       <p className="sr-only">{trade.instrument}</p>
@@ -122,14 +126,18 @@ export function TradeDetailModal({
                       <div className="flex items-center space-x-2">
                         {/* Repeat Icon here for consistency */}
                         {trade.class === "Shares" ? (
-                          <Icons.stock className="size-3.5" />
+                          <Icons.stock className="size-4" />
                         ) : trade.class === "Crypto" ? (
-                          <Icons.crypto className="size-3.5" />
+                          <Icons.crypto className="size-4" />
                         ) : trade.instrument === "Call Option" ? (
-                          <Icons.call className="h-3.5" />
+                          <Icons.call className="h-4" />
+                        ) : trade.instrument === "Put Option" ? (
+                          <Icons.put className="h-4" />
+                        ) : trade.class === "Commodities" ? (
+                          <Icons.commodities className="h-5" />
                         ) : (
-                          trade.instrument === "Put Option" && (
-                            <Icons.put className="h-3.5" />
+                          trade.class === "Forex" && (
+                            <Icons.forex className="h-4" />
                           )
                         )}
                         <p className="text-semibold text-sm">{trade.class}</p>
