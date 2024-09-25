@@ -352,13 +352,6 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
         </div>
       </CardContent>
       <CardFooter className="flex h-11 items-center justify-between rounded-b-lg border-t border-border bg-muted/30 px-3 py-2 lg:px-3 lg:py-2">
-        {/* Staged */}
-        {aggregatedStatus === "Staged" && (
-          <span className="text-xs font-semibold italic text-muted-foreground">
-            Scheduled for market open on 19/10/24
-          </span>
-        )}
-
         {/* Current / Realised Profit */}
         {aggregatedStatus !== "Staged" ? (
           <div className="-my-0.5 -space-y-0.5">
@@ -435,7 +428,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
             <Icons.steps className="-ml-0.5 h-3 w-3 text-muted-foreground" />
 
             <p className="flex items-center gap-1 divide-x">
-              <span className="pr-0.5">Multi-Step Trade</span>
+              <span className="pr-0.5">Multi-Leg</span>
               <span
                 className={cn(
                   stepsCompleted === stepsTotal
@@ -450,7 +443,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
               </span>
             </p>
             {stepsCompleted === stepsTotal && (
-              <Icons.check className="-mx-1 h-2.5 w-2 text-teal-700 dark:text-teal-400" />
+              <Icons.check className="-mx-1 h-3 w-3 text-teal-700 dark:text-teal-400" />
             )}
           </Badge>
         )}

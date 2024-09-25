@@ -54,7 +54,7 @@ const PerformanceMetrics: React.FC = () => {
     <Card className="relative rounded-none border-none shadow-2xl shadow-black/10 sm:mx-0 sm:rounded-3xl sm:border-solid lg:bg-teal-800">
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle className={cn(isDesktop && "text-white/60")}>
-          Performance
+          Portfolio KPIs
         </CardTitle>
       </CardHeader>
 

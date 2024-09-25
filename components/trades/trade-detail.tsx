@@ -429,7 +429,24 @@ export function TradeDetailModal({
           <div className="flex items-center space-x-1.5">
             <Icons.steps className="size-3 text-muted-foreground" />
             <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-              Steps ({stepsCompleted}/{stepsTotal})
+              Legs{" "}
+              <span className="text-xs font-semibold">
+                (
+                {stepsCompleted === stepsTotal && (
+                  <Icons.check className="inline-flex h-3 w-3 shrink-0 text-teal-700 dark:text-teal-400" />
+                )}{" "}
+                <span
+                  className={cn(
+                    stepsCompleted === stepsTotal
+                      ? "text-teal-700 dark:text-teal-500"
+                      : "text-muted-foreground",
+                    "text-xs font-semibold"
+                  )}
+                >
+                  {stepsCompleted} / {stepsTotal}{" "}
+                </span>
+                Completed)
+              </span>
             </span>
           </div>
 
