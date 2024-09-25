@@ -248,7 +248,7 @@ export function AssetAllocation() {
     const maxPercentage = Math.max(...data.map((item) => item.percentage))
 
     return (
-      <div className="mt-4 grid w-full gap-4">
+      <div className="mt-4 grid w-full gap-2.5 md:gap-3 lg:gap-3.5">
         {data.map((item) => (
           <AllocationItem
             key={item.groupKey || item.symbol}

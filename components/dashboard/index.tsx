@@ -33,9 +33,9 @@ export default function Dashboard({
       <span className="text-xl sm:text-2xl px-3 sm:px-0 font-bold">Dashboard</span>
 
       <div className="mx-auto w-full space-y-6">
-        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-10">
           {/* Main Content */}
-          <div className="space-y-6 lg:col-span-2">
+          <div className="space-y-6 lg:col-span-7">
             {/* Portfolio Overview */}
             <PortfolioOverview />
 
@@ -52,7 +52,7 @@ export default function Dashboard({
           </div>
 
           {/* Right Sidebar */}
-          <div className="space-y-6">
+          <div className="space-y-6 lg:col-span-3">
             {/* Market Sentiment */}
             <MarketSentiment
               sentimentColor={sentimentColor}

@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { ArticleCard } from "./ArticleCard"
 import { NewsArticle } from "@/types/news"
-
+import { cn } from "@/lib/utils"
 interface MarketSentimentProps {
   sentimentColor: string
   sentimentBackground: string
@@ -23,15 +23,19 @@ export function MarketSentiment({
   newsData,
 }: MarketSentimentProps) {
   return (
-    <Card className="relative flex flex-col justify-between overflow-hidden rounded-none border-none sm:border-solid border-muted-foreground/20 shadow-2xl shadow-black/10 sm:rounded-3xl">
+    <Card className="relative flex flex-col justify-between overflow-hidden rounded-none border-none border-muted-foreground/20 shadow-2xl shadow-black/10 sm:rounded-3xl sm:border-solid">
       <CardHeader className="z-10 flex flex-row items-start justify-between">
         <div>
-          <CardTitle>
+          <CardTitle className="text-lg font-bold lg:text-base">
             The markets are{" "}
-            <strong className={sentimentColor}>{marketSentiment}</strong>
+            <strong
+              className={cn(sentimentColor && sentimentColor, "font-black")}
+            >
+              {marketSentiment}
+            </strong>
           </CardTitle>
-          <CardDescription className="text-muted-foreground">
-            Recent sentiment on assets within your portfolio.
+          <CardDescription className="text-black/80 dark:text-white/80 sm:mt-1 sm:text-base lg:text-sm">
+            Recent coverage on assets within your portfolio.
           </CardDescription>
         </div>
         <Button variant="link" size="xs">
@@ -47,7 +51,7 @@ export function MarketSentiment({
           }
         }}
       >
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-1">
           {newsData &&
             newsData.length > 0 &&
             newsData.map((news: NewsArticle) => (

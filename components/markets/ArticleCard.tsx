@@ -58,18 +58,18 @@ export function ArticleCard({
       className="transform cursor-pointer rounded-2xl transition duration-200 ease-in-out hover:scale-[1.01] hover:shadow-xl hover:shadow-black/10"
       onClick={(e) => handleRedirectToLink(e, url, "_blank", false)}
     >
-      <CardHeader className="space-y-2 px-0 pb-3 pt-0 font-semibold">
+      <CardHeader className="space-y-1 overflow-hidden px-0 pb-3 pt-0 font-semibold lg:px-0">
         {bannerImage && (
           <Image
             src={bannerImage}
             alt={title}
             width={400}
             height={140}
-            className="h-36 w-full rounded-t-lg object-cover"
+            className="h-36 w-full rounded-t-xl object-cover"
             loader={({ src }) => src}
           />
         )}
-        <CardTitle className="line-clamp-2 px-3 pt-3 leading-6">
+        <CardTitle className="line-clamp-3 px-3 pt-3 leading-5 font-bold">
           {title}
         </CardTitle>
         <span className="px-3 text-xs text-muted-foreground">
@@ -113,7 +113,7 @@ export function ArticleCard({
               ))}
         </span>
       </CardContent>
-      <CardFooter className="flex items-center justify-between px-3 pb-3 text-sm">
+      <CardFooter className="flex items-center justify-between px-3 pb-3 text-sm lg:px-3 lg:pb-3">
         <span className="flex items-center space-x-1.5">
           <Avatar className="bg-white p-[1px]" size="xs">
             <AvatarImage src={logo} alt={source} className="rounded-full" />
@@ -127,21 +127,21 @@ export function ArticleCard({
         <Badge variant="outline" className="w-fit shrink-0" size="xs">
           <span className="flex items-center space-x-1">
             {sentiment === "Bullish" ? (
-              <span className="flex items-center -space-x-0.5">
+              <span className="-ml-0.5 flex items-center -space-x-0.5">
                 <Icons.arrowUp className="h-2.5 w-2.5 text-green-600" />
                 <Icons.arrowUp className="h-2.5 w-2.5 text-green-600" />
               </span>
             ) : sentiment === "Somewhat_Bullish" ||
               sentiment === "Somewhat-Bullish" ? (
-              <Icons.arrowUp className="h-3 w-3 text-green-600" />
+              <Icons.arrowUp className="-ml-0.5 h-3 w-3 text-green-600" />
             ) : sentiment === "Bearish" ? (
-              <span className="flex items-center -space-x-0.5">
+              <span className="-ml-0.5 flex items-center -space-x-0.5">
                 <Icons.arrowDown className="h-2.5 w-2.5 text-red-600" />
                 <Icons.arrowDown className="h-2.5 w-2.5 text-red-600" />
               </span>
             ) : sentiment === "Somewhat-Bearish" ||
               sentiment === "Somewhat_Bearish" ? (
-              <Icons.arrowDown className="h-3 w-3 text-red-600" />
+              <Icons.arrowDown className="-ml-0.5 h-3 w-3 text-red-600" />
             ) : (
               ""
             )}

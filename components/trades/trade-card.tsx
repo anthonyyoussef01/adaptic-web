@@ -218,7 +218,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
         {/* **Analysis** */}
         <span className="line-clamp-2 text-sm text-black/80 dark:text-white/80">
           <div className="relative inline-flex items-center space-x-1.5 pr-1">
-            <Icons.activity className="size-4 pt-1.5 shrink-0 text-teal-700 dark:text-teal-400" />
+            <Icons.activity className="size-4 shrink-0 pt-1.5 text-teal-700 dark:text-teal-400" />
           </div>
           <span className="font-bold">{trade.signal}</span>: {trade.analysis}
         </span>
@@ -351,7 +351,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
           )}
         </div>
       </CardContent>
-      <CardFooter className="flex h-12 items-center justify-between rounded-b-lg border-t border-border bg-muted/30 px-3 py-2 lg:px-3 lg:py-2">
+      <CardFooter className="flex h-11 items-center justify-between rounded-b-lg border-t border-border bg-muted/30 px-3 py-2 lg:px-3 lg:py-2">
         {/* Current / Realised Profit */}
         {aggregatedStatus !== "Staged" ? (
           <div className="-my-0.5 -space-y-0.5">
@@ -423,25 +423,27 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
           <Badge
             variant="outline"
             size="sm"
-            className="flex h-5 w-fit items-center space-x-1 py-1"
+            className="flex h-6 w-fit items-center space-x-1 py-0 pr-2"
           >
             <Icons.steps className="-ml-0.5 h-3 w-3 text-muted-foreground" />
 
-            <p className="">
-              Multi-leg Trade:{" "}
+            <p className="flex items-center gap-1 divide-x">
+              <span className="pr-0.5">Multiple Steps</span>
               <span
                 className={cn(
                   stepsCompleted === stepsTotal
-                    ? "text-teal-500"
+                    ? "text-teal-700 dark:text-teal-500"
                     : "text-muted-foreground",
-                  "font-bold"
+                  "flex items-center space-x-0.5 font-semibold"
                 )}
               >
-                {stepsCompleted}/{stepsTotal}
+                <span className="pl-1.5">{stepsCompleted}</span>
+                <span className="font-normal opacity-70">/</span>
+                <span>{stepsTotal}</span>
               </span>
             </p>
             {stepsCompleted === stepsTotal && (
-              <Icons.check className="-ml-1 h-3 w-3 text-teal-500" />
+              <Icons.check className="-mx-1 h-2.5 w-2 text-teal-700 dark:text-teal-400" />
             )}
           </Badge>
         )}
