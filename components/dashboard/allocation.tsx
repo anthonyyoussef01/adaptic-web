@@ -177,7 +177,6 @@ export function AssetAllocation() {
   const AllocationItem = ({
     title,
     subtitle,
-    amount,
     percentage,
     icon,
     color,
@@ -186,7 +185,6 @@ export function AssetAllocation() {
   }: {
     title: string
     subtitle: string
-    amount: number
     percentage: number
     icon: React.ReactNode
     color: string
@@ -225,9 +223,13 @@ export function AssetAllocation() {
         <div className="">
           <div className="flex items-center space-x-2">
             {icon}
-            <span className="shrink-1 line-clamp-1 pr-2">{title}</span>
+            <span className="shrink-1 line-clamp-1 pr-2 font-semibold">
+              {title}
+            </span>
           </div>
-          <span className="text-xs text-muted-foreground">{subtitle}</span>
+          <span className="text-xs font-bold text-muted-foreground">
+            {subtitle}
+          </span>
         </div>
         {/* <div className="mt-2 text-lg font-bold">${amount.toLocaleString()}</div> */}
         <div className="mt-1 text-lg font-bold">{percentage.toFixed(2)}%</div>
@@ -252,7 +254,6 @@ export function AssetAllocation() {
             key={item.groupKey || item.symbol}
             title={item.groupKey || item.name}
             subtitle={getSubtitle(item)}
-            amount={item.totalAmount || item.amount}
             percentage={item.percentage}
             icon={getIcon(item.groupKey || item.type)}
             color={getColor(item)}

@@ -627,15 +627,17 @@ const PortfolioOverview: React.FC = () => {
 
   return (
     <Card className="relative mx-3 rounded-3xl bg-indigo-700 shadow-2xl shadow-black/10 sm:mx-0">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <CardTitle className="text-white/60">Total Assets</CardTitle>
+      <CardHeader className="flex flex-row items-start justify-between">
+        <CardTitle className="pt-1.5 text-white/60 sm:pt-1">
+          <span className="sm:hidden">AUM</span>
+          <span className="hidden sm:block">Assets Under Management (AUM)</span>
+        </CardTitle>
         <div className="flex space-x-2">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
-                variant="secondary"
-                className="flex items-center space-x-1 pr-2"
+                className="flex items-center space-x-1 bg-indigo-800 pr-2 text-white/80 hover:bg-indigo-800/50 hover:text-white focus:bg-indigo-800/50 focus:text-white focus-visible:ring-white"
               >
                 <span>
                   {
@@ -667,8 +669,7 @@ const PortfolioOverview: React.FC = () => {
             <DropdownMenuTrigger asChild>
               <Button
                 size="sm"
-                variant="secondary"
-                className="flex items-center space-x-1 pr-2"
+                className="flex items-center space-x-1 bg-indigo-800 pr-2 text-white/80 hover:bg-indigo-800/50 hover:text-white focus:bg-indigo-800/50 focus:text-white focus-visible:ring-white"
               >
                 <span>
                   {
@@ -694,7 +695,7 @@ const PortfolioOverview: React.FC = () => {
         </div>
       </CardHeader>
 
-      <div className="absolute left-3 top-14 z-10 flex flex-col sm:left-4 sm:top-12 sm:flex-row sm:items-center sm:space-x-2">
+      <div className="absolute left-3 top-14 z-10 flex flex-col sm:left-4 sm:top-10 sm:flex-row sm:items-center sm:space-x-2">
         <span className="text-xl font-bold text-white lg:text-3xl">
           $7,839,940.00
         </span>
@@ -714,7 +715,11 @@ const PortfolioOverview: React.FC = () => {
       </div>
       <CardContent>
         <div className="font-satoshi -ml-3 -mr-2 mt-6 lg:-ml-4 lg:-ml-5">
-          <PortfolioChart data={filteredData} isDesktop={isDesktop} />
+          {filteredData && filteredData.length > 0 ? (
+            <PortfolioChart data={filteredData} isDesktop={isDesktop} />
+          ) : (
+            <span className="block min-h-6 min-w-3" />
+          )}
         </div>
       </CardContent>
     </Card>

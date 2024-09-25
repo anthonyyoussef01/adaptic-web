@@ -30,6 +30,8 @@ export default function Dashboard({
 }: DashboardProps) {
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      <span className="text-xl sm:text-2xl px-3 sm:px-0 font-bold">Dashboard</span>
+
       <div className="mx-auto w-full space-y-6">
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
           {/* Main Content */}
@@ -60,7 +62,7 @@ export default function Dashboard({
             />
 
             {/* Major Events */}
-            <Card className="rounded-none border-none sm:border-solid shadow-2xl shadow-black/10 sm:rounded-3xl">
+            <Card className="rounded-none border-none shadow-2xl shadow-black/10 sm:rounded-3xl sm:border-solid">
               <CardHeader className="flex flex-row items-center justify-between">
                 <CardTitle>Major Events</CardTitle>
                 <Button variant="link" size="xs">

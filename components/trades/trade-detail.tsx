@@ -76,12 +76,12 @@ export function TradeDetailModal({
       setShowModal={onClose}
     >
       {/* **Header** */}
-      <div className="flex w-full flex-row items-start justify-between px-3 lg:px-4">
+      <div className="flex w-full flex-row items-center justify-between px-3 lg:px-4">
         <div>
-          <div className="flex items-start space-x-1.5 font-bold">
+          <div className="flex items-start space-x-1.5 font-bold lg:space-x-3">
             <Avatar
               size={isDesktop ? "md" : "sm"}
-              className="mt-1 bg-white p-1"
+              className={cn(isDesktop ? "p-1" : "p-0.5", "mt-1 bg-white")}
             >
               <AvatarImage
                 src={trade.logo}
@@ -106,30 +106,30 @@ export function TradeDetailModal({
                   <Tooltip>
                     <TooltipTrigger>
                       {trade.class === "Shares" ? (
-                        <Icons.stock className="size-3" />
+                        <Icons.stock className="size-3.5" />
                       ) : trade.class === "Crypto" ? (
-                        <Icons.crypto className="size-3" />
-                      ) : trade.class === "Call Option" ? (
-                        <Icons.call className="h-3" />
+                        <Icons.crypto className="size-3.5" />
+                      ) : trade.instrument === "Call Option" ? (
+                        <Icons.call className="h-3.5" />
                       ) : (
-                        trade.class === "Put Option" && (
-                          <Icons.put className="h-3" />
+                        trade.instrument === "Put Option" && (
+                          <Icons.put className="h-3.5" />
                         )
                       )}
-                      <p className="sr-only">{trade.class}</p>
+                      <p className="sr-only">{trade.instrument}</p>
                     </TooltipTrigger>
                     <TooltipContent className="z-50 mb-2 mr-4">
                       <div className="flex items-center space-x-2">
                         {/* Repeat Icon here for consistency */}
                         {trade.class === "Shares" ? (
-                          <Icons.stock className="size-3" />
+                          <Icons.stock className="size-3.5" />
                         ) : trade.class === "Crypto" ? (
-                          <Icons.crypto className="size-3" />
-                        ) : trade.class === "Call Option" ? (
-                          <Icons.call className="h-3" />
+                          <Icons.crypto className="size-3.5" />
+                        ) : trade.instrument === "Call Option" ? (
+                          <Icons.call className="h-3.5" />
                         ) : (
-                          trade.class === "Put Option" && (
-                            <Icons.put className="h-3" />
+                          trade.instrument === "Put Option" && (
+                            <Icons.put className="h-3.5" />
                           )
                         )}
                         <p className="text-semibold text-sm">{trade.class}</p>
@@ -137,10 +137,13 @@ export function TradeDetailModal({
                     </TooltipContent>
                   </Tooltip>
                 </TooltipProvider>
+
+                {/** Current Price and Price Change for Asset */}
                 <span className="text-sm font-semibold">
                   {formatCurrency(trade.currentPrice)}
                 </span>
-                {aggregatedStatus !== "Pending" &&
+
+                {aggregatedStatus !== "Staged" &&
                   aggregatedStatus !== "Closed" && (
                     <div
                       className={cn(
@@ -170,7 +173,7 @@ export function TradeDetailModal({
               <TooltipTrigger>
                 <Badge
                   variant={
-                    aggregatedStatus === "Pending"
+                    aggregatedStatus === "Staged"
                       ? "outline"
                       : aggregatedStatus === "Open"
                         ? "green"
@@ -179,7 +182,10 @@ export function TradeDetailModal({
                           : "default"
                   }
                   animate={aggregatedStatus === "Open"}
-                  className="h-5 px-2 text-[10px]"
+                  className={cn(
+                    aggregatedStatus === "Staged" ? "h-6" : "h-5",
+                    "px-2 text-[10px]"
+                  )}
                 >
                   {aggregatedStatus.toUpperCase()}
                   {aggregatedStatus === "Partial" &&
@@ -190,8 +196,8 @@ export function TradeDetailModal({
                 <p className="text-semibold text-sm">
                   {aggregatedStatus === "Open"
                     ? "This trade has an open position or has had a leg executed"
-                    : aggregatedStatus === "Pending"
-                      ? "This trade is pending and ready to be executed at market open"
+                    : aggregatedStatus === "Staged"
+                      ? "This trade is staged and ready to be executed at market open"
                       : aggregatedStatus === "Partial"
                         ? "This trade has been partially executed"
                         : "This trade is closed"}
@@ -206,12 +212,11 @@ export function TradeDetailModal({
             onEdit={() => console.log("Edit clicked")}
             onCancel={() => console.log("Cancel clicked")}
             onCloseOut={() => console.log("Close out clicked")}
-            onViewDetails={() => console.log("View Details clicked")}
           />
         </div>
       </div>
 
-      <Separator className="my-6 md:my-2" />
+      <Separator className="my-6 md:my-1" />
 
       {/* **Analysis** */}
       <div className="space-y-2 px-3 lg:px-4">
@@ -221,157 +226,193 @@ export function TradeDetailModal({
             Signal
           </span>
         </div>
-        <span className="ellipsis-4 line-clamp-4 text-base text-black/80 dark:text-white/80">
-          {trade.analysis}
+        <span className="ellipsis-4 line-clamp-4 text-sm text-black/80 dark:text-white/80 lg:text-base">
+          <span className="font-bold">{trade.signal}</span> - {trade.analysis}
         </span>
       </div>
 
-      <Separator className="my-6 md:my-2" />
+      <Separator className="my-6 md:my-1" />
 
-      <div className="mt-2 space-y-4 px-3 lg:px-4">
+      <div className="space-y-2 px-3 lg:px-4">
         <div className="flex items-center space-x-1.5">
           <Icons.candlestickChart className="size-3 text-muted-foreground" />
           <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-            Trade Overview
+            Trade Summary
           </span>
         </div>
-        <div className="grid grid-cols-3 gap-4 md:grid-cols-4">
+        {/* Strategy, Instrument, Class */}
+        <div className="grid grid-cols-3 gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">Entry</p>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              Strategy
+            </p>
+            <p className="text-sm font-bold sm:text-base">{trade.strategy}</p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              Instrument
+            </p>
+            <p className="text-sm font-bold sm:text-base">{trade.instrument}</p>
+          </div>
+          <div>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              Risk Management
+            </p>
+            <p className="text-sm font-bold sm:text-base">
+              {trade.riskManagement || "N/A"}
+            </p>
+          </div>
+        </div>
+
+        {/* Entry, Volume, Target, Stop Loss */}
+        <div className="grid grid-cols-3 gap-4">
+          <div>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              Buy Price
+            </p>
             <p className="text-sm font-bold sm:text-base">
               {formatCurrency(averageBuyPrice)}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Quantity</p>
+            <p className="text-sm text-muted-foreground sm:text-base">Volume</p>
             <p className="text-sm font-bold sm:text-base">
-              {totalQty.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}{" "}
-              <span className="text-xs font-normal">
-                {trade.class === "Shares"
-                  ? "shares"
-                  : trade.class === "Crypto"
-                    ? "tokens"
-                    : "contracts"}
+              {totalQty.toLocaleString()}{" "}
+              <span className="text-xs font-normal sm:text-sm">
+                {trade.instrument === "Shares"
+                  ? "Shares"
+                  : trade.instrument === "Crypto"
+                    ? "Tokens"
+                    : "Contracts"}
               </span>
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Target Price</p>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              Target Price
+            </p>
             <p className="text-sm font-bold sm:text-base">
               {targetPrice !== null ? formatCurrency(targetPrice) : "Varies"}
             </p>
           </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Stop Loss</p>
-            <p className="text-sm font-bold sm:text-base">
-              {stopLoss !== null ? formatCurrency(stopLoss) : "Varies"}
-            </p>
-          </div>
-          <div>
-            <p className="text-sm text-muted-foreground">Strategy</p>
-            <p className="text-sm font-bold sm:text-base">{trade.strategy}</p>
-          </div>
+        </div>
 
-          {/* Fees */}
+        <div className="grid grid-cols-3 gap-4">
+          {/* Stop Loss */}
           <div>
-            <p className="text-sm text-muted-foreground">Total Fees</p>
+            <p className="text-sm text-muted-foreground sm:text-base">
+              Stop Loss
+            </p>
             <p
               className={cn(
-                totalFees !== 0 && "text-red-700 dark:text-red-400",
-
+                stopLoss > trade.sellPrice && "text-red-700 dark:text-red-400",
                 "text-sm font-bold sm:text-base"
               )}
             >
-              {" "}
-              {formatCurrency(-+totalFees)}
+              {stopLoss !== null ? formatCurrency(stopLoss) : "Varies"}
             </p>
           </div>
-          {/* Strike Price */}
-          {trade.strikePrice && (
-            <div>
-              <p className="text-sm text-muted-foreground">Strike Price</p>
-              <p className="text-sm font-bold sm:text-base">
-                {formatCurrency(trade.strikePrice)}
-              </p>
-            </div>
-          )}
-
           {/* Target Profit */}
           <div>
             <div className="flex items-center space-x-1.5">
-              <p className="text-sm text-muted-foreground">
+              <p className="text-sm text-muted-foreground sm:text-base">
                 Target <span className="text-xs">(Net Profit)</span>
               </p>
             </div>
             <p className="text-sm font-bold sm:text-base">
               {formatCurrency(targetProfit)}{" "}
-              <span className="pt-0.5 text-xs font-semibold">
-                ({formatPercentage(targetProfit / totalBuyAmount)} )
+              <span className="pt-0.5 text-xs font-semibold  sm:text-sm">
+                ({formatPercentage(targetProfit / totalBuyAmount)})
               </span>
             </p>
           </div>
 
-          {/* Current / Realised Profit */}
-          {aggregatedStatus !== "Pending" && (
-            <div className="shrink-0">
-              <div className="flex items-end space-x-1.5">
-                <p className="text-sm text-muted-foreground">
-                  {aggregatedStatus === "Closed" ? "" : "Current"} P/L{" "}
-                  {aggregatedStatus === "Closed" ? "Outcome" : ""}{" "}
-                  <span className="text-xs">(Net)</span>
-                </p>
-              </div>
-              <div className="flex items-center space-x-1.5">
+          {/* Sell Price */}
+          {trade.sellPrice && (
+            <div>
+              <p className="text-sm text-muted-foreground sm:text-base">
+                Sell Price
+              </p>
+
+              <div className="-space-y-1.5">
                 <p
                   className={cn(
-                    (aggregatedStatus === "Closed"
-                      ? realisedProfit
-                      : currentProfit) > 0
+                    trade.sellPrice > averageBuyPrice
                       ? "text-teal-700 dark:text-teal-400"
                       : "text-red-700 dark:text-red-400",
                     "text-sm font-bold sm:text-base"
                   )}
                 >
-                  {formatCurrency(
-                    aggregatedStatus === "Closed"
-                      ? realisedProfit
-                      : currentProfit
-                  )}
+                  {formatCurrency(trade.sellPrice)}
                 </p>
-                <span
+                <p
                   className={cn(
-                    (aggregatedStatus === "Closed"
-                      ? realisedProfit
-                      : currentProfit) > 0
+                    trade.sellPrice > averageBuyPrice
                       ? "text-teal-700 dark:text-teal-400"
                       : "text-red-700 dark:text-red-400",
-                    "pt-0.5 text-xs font-semibold"
+                    "pt-0.5 text-xs font-semibold  sm:text-sm"
                   )}
                 >
-                  (
+                  {trade.sellPrice - averageBuyPrice > 0 && "+"}
+                  {formatCurrency(trade.sellPrice - averageBuyPrice)} (
                   {formatPercentage(
-                    (aggregatedStatus === "Closed"
-                      ? realisedProfit
-                      : currentProfit) / totalBuyAmount
+                    (trade.sellPrice - averageBuyPrice) / averageBuyPrice
                   )}
                   )
-                </span>
+                </p>
+              </div>
+            </div>
+          )}
+          {/* Current Price */}
+          {trade.status !== "Closed" && (
+            <div>
+              <p className="text-sm text-muted-foreground sm:text-base">
+                Current Price
+              </p>
+
+              <div className="-space-y-1.5">
+                <p
+                  className={cn(
+                    trade.currentPrice > averageBuyPrice
+                      ? "text-teal-700 dark:text-teal-400"
+                      : "text-red-700 dark:text-red-400",
+                    "text-sm font-bold sm:text-base"
+                  )}
+                >
+                  {formatCurrency(trade.currentPrice)}
+                </p>
+
+                <p
+                  className={cn(
+                    trade.currentPrice > averageBuyPrice
+                      ? "text-teal-700 dark:text-teal-400"
+                      : "text-red-700 dark:text-red-400",
+                    "pt-0.5 text-xs font-semibold  sm:text-sm"
+                  )}
+                >
+                  {trade.currentPrice > averageBuyPrice && "+"}
+                  {formatCurrency(trade.currentPrice - averageBuyPrice)} (
+                  {formatPercentage(
+                    (trade.currentPrice - averageBuyPrice) / averageBuyPrice
+                  )}
+                  )
+                </p>
               </div>
             </div>
           )}
         </div>
       </div>
 
-      <Separator className="my-6 md:my-2" />
+      <Separator className="my-6 md:my-1" />
 
       {/* **Trade Steps Section** */}
       {trade.steps && (
-        <div className="mt-2 px-3 lg:px-4">
+        <div className="space-y-2 px-3 lg:px-4">
           {/* **Section Title with Icon and Label** */}
           <div className="flex items-center space-x-1.5">
             <Icons.steps className="size-3 text-muted-foreground" />
             <span className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
-              Multi-Leg Trade Steps ({stepsCompleted}/{stepsTotal})
+              Trade Steps ({stepsCompleted}/{stepsTotal})
             </span>
           </div>
 
@@ -379,7 +420,7 @@ export function TradeDetailModal({
             type="single"
             collapsible
             defaultValue={isDesktop ? `step-${stepsCompleted}` : undefined}
-            className="mt-4 space-y-4"
+            className="space-y-4 pt-2"
           >
             {trade.steps.map((step: any, idx: number) => {
               // get stepFees from individualFees object (find individualFees object where object.sequence === step.sequence)
@@ -402,7 +443,7 @@ export function TradeDetailModal({
                       {/* **Status Badge** */}
                       <Badge
                         variant={
-                          step.status === "Pending"
+                          step.status === "Staged"
                             ? "outline"
                             : step.status === "Open"
                               ? "green"
@@ -450,7 +491,7 @@ export function TradeDetailModal({
                           {step.qty && (
                             <div>
                               <p className="text-sm text-muted-foreground">
-                                Quantity
+                                Volume
                               </p>
                               <p className="text-sm font-bold sm:text-base">
                                 {step.qty.toLocaleString()}
@@ -510,13 +551,13 @@ export function TradeDetailModal({
                           )}
                           {(step.status === "Closed" ||
                             step.status === "Executed") &&
-                            step.strikePrice && (
+                            step.sellPrice && (
                               <div>
                                 <p className="text-sm text-muted-foreground">
-                                  Strike Price
+                                  Sell Price
                                 </p>
                                 <p className="text-sm font-bold sm:text-base">
-                                  {formatCurrency(step.strikePrice)}
+                                  {formatCurrency(step.sellPrice)}
                                 </p>
                               </div>
                             )}
@@ -533,7 +574,7 @@ export function TradeDetailModal({
                           {step.qty && (
                             <div>
                               <p className="text-sm text-muted-foreground">
-                                Quantity
+                                Volume
                               </p>
                               <p className="text-sm font-bold sm:text-base">
                                 {step.qty.toLocaleString()}

@@ -196,7 +196,7 @@ export function calculateFees(step: any, assetClass: string) {
   if (step.action === "enter" || step.action === "adjust" || step.action === "hedge") {
     tradeValue = (step.buyPrice || step.hedgePrice || 0) * (step.qty || 0)
   } else if (step.action === "exit" || step.action === "take_profit" || step.action === "stop_loss") {
-    tradeValue = (step.sellPrice || step.strikePrice || 0) * (step.qty || 0)
+    tradeValue = (step.sellPrice || 0) * (step.qty || 0)
   }
 
   switch (assetClass) {
@@ -247,7 +247,7 @@ export function calculateTotalFees(trade: any) {
 
   if (trade.steps && trade.steps.length > 0) {
     for (const step of trade.steps) {
-      const fee = calculateFees(step, trade.class)
+      const fee = calculateFees(step, trade.instrument)
       totalFees += fee
       individualFees.push({ sequence: step.sequence, fee: fee })
     }
@@ -257,23 +257,23 @@ export function calculateTotalFees(trade: any) {
       action: "enter",
       buyPrice: trade.buyPrice,
       qty: trade.qty,
-      class: trade.class,
+      class: trade.instrument,
       sequence: 1, // Assign sequence numbers
     }
 
-    const buyFee = calculateFees(buyStep, trade.class)
+    const buyFee = calculateFees(buyStep, trade.instrument)
     totalFees += buyFee
     individualFees.push({ sequence: buyStep.sequence, fee: buyFee })
 
     const sellStep = {
       action: "exit",
-      sellPrice: trade.strikePrice || trade.sellPrice || trade.currentPrice,
+      sellPrice: trade.sellPrice || trade.sellPrice || trade.currentPrice,
       qty: trade.qty,
-      class: trade.class,
+      class: trade.instrument,
       sequence: 2, // Assign sequence numbers
     }
 
-    const sellFee = calculateFees(sellStep, trade.class)
+    const sellFee = calculateFees(sellStep, trade.instrument)
     totalFees += sellFee
     individualFees.push({ sequence: sellStep.sequence, fee: sellFee })
   }
@@ -321,8 +321,8 @@ export function determineTradeStatus(trade: any): string {
     return "Partial"
   }
 
-  // else status is pending
-  return "Pending"
+  // else status is staged
+  return "Staged"
 }
 
 // Calculate total quantity, average buy price, target price, stop loss, and total buy amount
@@ -386,7 +386,7 @@ export function calculateTargetProfit(trade: any, aggregatedData: any) {
 
   const totalFees = calculateTotalFees(trade).totalFees
 
-  if (trade.class === "Put Option") {
+  if (trade.instrument === "Put Option") {
     return (averageBuyPrice - targetPrice) * totalQty - totalFees
   } else {
     return (targetPrice - averageBuyPrice) * totalQty - totalFees
@@ -402,7 +402,7 @@ export function calculateCurrentProfit(trade: any, aggregatedData: any) {
 
   const totalFees = calculateTotalFees(trade).totalFees
 
-  if (trade.class === "Put Option") {
+  if (trade.instrument === "Put Option") {
     return (averageBuyPrice - currentPrice) * totalQty - totalFees
   } else {
     return (currentPrice - averageBuyPrice) * totalQty - totalFees
@@ -425,26 +425,26 @@ export function calculateRealisedProfit(trade: any, aggregatedData: any) {
     )
 
     realisedProfit = exitSteps.reduce((sum: number, step: any) => {
-      const strikePrice = step.executionPrice || step.strikePrice || trade.currentPrice
-      if (!strikePrice || !step.qty) return sum
+      const sellPrice = step.executionPrice || step.sellPrice || trade.currentPrice
+      if (!sellPrice || !step.qty) return sum
 
-      if (trade.class === "Put Option") {
-        return sum + (averageBuyPrice - strikePrice) * step.qty
+      if (trade.instrument === "Put Option") {
+        return sum + (averageBuyPrice - sellPrice) * step.qty
       } else {
-        return sum + (strikePrice - averageBuyPrice) * step.qty
+        return sum + (sellPrice - averageBuyPrice) * step.qty
       }
     }, 0)
 
     realisedProfit -= totalFees
   } else {
     // Single-leg trade
-    const strikePrice = trade.strikePrice || trade.currentPrice
-    if (!strikePrice || !totalQty) return 0
+    const sellPrice = trade.sellPrice || trade.currentPrice
+    if (!sellPrice || !totalQty) return 0
 
-    if (trade.class === "Put Option") {
-      realisedProfit = (averageBuyPrice - strikePrice) * totalQty - totalFees
+    if (trade.instrument === "Put Option") {
+      realisedProfit = (averageBuyPrice - sellPrice) * totalQty - totalFees
     } else {
-      realisedProfit = (strikePrice - averageBuyPrice) * totalQty - totalFees
+      realisedProfit = (sellPrice - averageBuyPrice) * totalQty - totalFees
     }
   }
 
@@ -458,9 +458,9 @@ export function calculateTotalExitAmount(trade: any, aggregatedData: any) {
 
   if (trade.status !== "Closed") return 0
 
-  const strikePrice = trade.strikePrice || trade.currentPrice
-  if (!strikePrice || !totalQty) return 0
+  const sellPrice = trade.sellPrice || trade.currentPrice
+  if (!sellPrice || !totalQty) return 0
 
-  return strikePrice * totalQty
+  return sellPrice * totalQty
 }
 

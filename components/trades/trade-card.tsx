@@ -1,7 +1,13 @@
 // trade-card.tsx
 
 import React from "react"
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card"
+import {
+  Card,
+  CardHeader,
+  CardTitle,
+  CardContent,
+  CardFooter,
+} from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import {
@@ -61,10 +67,10 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
     >
       {/* Card Header */}
       <div className="flex w-full justify-between">
-        <CardHeader className="mt-0 flex w-full flex-row items-start justify-between px-3 md:-mt-1 lg:px-4">
-          <div>
-            <div className="flex items-start space-x-1.5 font-bold">
-              <Avatar size="sm" className="mt-1 bg-white p-1">
+        <CardHeader className="relative mt-0 flex w-full flex-row items-center justify-between px-3 py-2.5 lg:px-3 lg:py-2.5">
+          <CardTitle className="font-bold">
+            <div className="flex items-center space-x-2.5">
+              <Avatar size="sm" className="bg-white p-1">
                 <AvatarImage
                   src={trade.logo}
                   alt={trade.assetName}
@@ -72,12 +78,12 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                 />
                 <AvatarFallback>{trade.assetName[0]}</AvatarFallback>
               </Avatar>
-              <div>
+              <div className="space-y-0">
                 <div className="flex items-center space-x-1.5">
-                  <span className="ellipsis-1 line-clamp-1 max-w-fit text-sm leading-5 sm:max-w-64 sm:text-base">
+                  <span className="ellipsis-1 line-clamp-1 max-w-fit text-sm leading-5 sm:max-w-64">
                     {trade.assetName}
                   </span>
-                  <p className="whitespace-nowrap text-sm font-semibold text-muted-foreground sm:text-base">
+                  <p className="whitespace-nowrap text-sm font-semibold text-muted-foreground">
                     · {trade.ticker}
                   </p>
                 </div>
@@ -88,30 +94,38 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                     <Tooltip>
                       <TooltipTrigger>
                         {trade.class === "Shares" ? (
-                          <Icons.stock className="size-3" />
+                          <Icons.stock className="size-3.5" />
                         ) : trade.class === "Crypto" ? (
-                          <Icons.crypto className="size-3" />
-                        ) : trade.class === "Call Option" ? (
-                          <Icons.call className="h-3" />
+                          <Icons.crypto className="size-3.5" />
+                        ) : trade.instrument === "Call Option" ? (
+                          <Icons.call className="h-3.5" />
+                        ) : trade.instrument === "Put Option" ? (
+                          <Icons.put className="h-3.5" />
+                        ) : trade.class === "Commodities" ? (
+                          <Icons.commodities className="h-4" />
                         ) : (
-                          trade.class === "Put Option" && (
-                            <Icons.put className="h-3" />
+                          trade.class === "Forex" && (
+                            <Icons.forex className="h-3.5" />
                           )
                         )}
-                        <p className="sr-only">{trade.class}</p>
+                        <p className="sr-only">{trade.instrument}</p>
                       </TooltipTrigger>
                       <TooltipContent className="z-50 mb-2 mr-4">
                         <div className="flex items-center space-x-2">
                           {/* Repeat Icon here for consistency */}
                           {trade.class === "Shares" ? (
-                            <Icons.stock className="size-3" />
+                            <Icons.stock className="size-3.5" />
                           ) : trade.class === "Crypto" ? (
-                            <Icons.crypto className="size-3" />
-                          ) : trade.class === "Call Option" ? (
-                            <Icons.call className="h-3" />
+                            <Icons.crypto className="size-3.5" />
+                          ) : trade.instrument === "Call Option" ? (
+                            <Icons.call className="h-3.5" />
+                          ) : trade.instrument === "Put Option" ? (
+                            <Icons.put className="h-3.5" />
+                          ) : trade.class === "Commodities" ? (
+                            <Icons.commodities className="h-4" />
                           ) : (
-                            trade.class === "Put Option" && (
-                              <Icons.put className="h-3" />
+                            trade.class === "Forex" && (
+                              <Icons.forex className="h-3.5" />
                             )
                           )}
                           <p className="text-semibold text-sm">{trade.class}</p>
@@ -119,10 +133,12 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                       </TooltipContent>
                     </Tooltip>
                   </TooltipProvider>
+
+                  {/* Current Price and Price Change for Asset */}
                   <span className="text-sm font-semibold">
                     {formatCurrency(trade.currentPrice)}
                   </span>
-                  {aggregatedStatus !== "Pending" &&
+                  {aggregatedStatus !== "Staged" &&
                     aggregatedStatus !== "Closed" && (
                       <div
                         className={cn(
@@ -144,16 +160,16 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                 </div>
               </div>
             </div>
-          </div>
+          </CardTitle>
 
-          <div className="flex items-center space-x-2">
+          <div className="flex items-center space-x-3">
             {/* **Status Badge** */}
             <TooltipProvider>
               <Tooltip>
-                <TooltipTrigger>
+                <TooltipTrigger asChild>
                   <Badge
                     variant={
-                      aggregatedStatus === "Pending"
+                      aggregatedStatus === "Staged"
                         ? "outline"
                         : aggregatedStatus === "Open"
                           ? "green"
@@ -162,7 +178,10 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                             : "default"
                     }
                     animate={aggregatedStatus === "Open"}
-                    className="h-5 px-2 text-[10px]"
+                    className={cn(
+                      aggregatedStatus === "Staged" ? "h-6" : "h-5",
+                      "px-2 text-[10px]"
+                    )}
                   >
                     {aggregatedStatus.toUpperCase()}
                     {aggregatedStatus === "Partial" &&
@@ -173,8 +192,8 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                   <p className="text-semibold text-sm">
                     {aggregatedStatus === "Open"
                       ? "This trade has an open position or has had a leg executed"
-                      : aggregatedStatus === "Pending"
-                        ? "This trade is pending and ready to be executed at market open"
+                      : aggregatedStatus === "Staged"
+                        ? "This trade is staged and ready to be executed at market open"
                         : aggregatedStatus === "Partial"
                           ? "This trade has been partially executed"
                           : "This trade is closed"}
@@ -189,88 +208,58 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
               onEdit={() => console.log("Edit clicked")}
               onCancel={() => console.log("Cancel clicked")}
               onCloseOut={() => console.log("Close out clicked")}
-              onViewDetails={() => console.log("View Details clicked")}
             />
           </div>
         </CardHeader>
       </div>
 
       {/* Card Content */}
-      <CardContent className="-mt-1 space-y-3 lg:px-3">
-        <p className="ellipsis-2 line-clamp-2 text-sm">
-          <span className="font-bold">Signal:</span> {trade.analysis}
-        </p>
-
-        {/* Multi-leg Trade Badge */}
-        {trade.steps && trade.steps.length > 1 && (
-          <Badge
-            variant="outline"
-            size="sm"
-            className="my-2 flex w-fit items-center space-x-1 py-1"
-          >
-            <Icons.steps className="-ml-0.5 h-3 w-3 text-muted-foreground" />
-
-            <p className="">
-              Multi-leg Trade:{" "}
-              <span
-                className={cn(
-                  stepsCompleted === stepsTotal
-                    ? "text-teal-500"
-                    : "text-muted-foreground",
-                  "font-bold"
-                )}
-              >
-                {stepsCompleted}/{stepsTotal}
-              </span>
-            </p>
-            {stepsCompleted === stepsTotal && (
-              <Icons.check className="-ml-1 h-3 w-3 text-teal-500" />
-            )}
-          </Badge>
-        )}
+      <CardContent className="space-y-3 pb-3 pt-0 lg:px-3 lg:pb-3 lg:pt-0">
+        {/* **Analysis** */}
+        <span className="line-clamp-2 text-sm text-black/80 dark:text-white/80">
+          <div className="relative inline-flex items-center space-x-1.5 pr-1">
+            <Icons.activity className="size-4 pt-1.5 shrink-0 text-teal-700 dark:text-teal-400" />
+          </div>
+          <span className="font-bold">{trade.signal}</span>: {trade.analysis}
+        </span>
 
         {/* Entry, Volume, Target, Stop Loss */}
-        <div className="grid grid-cols-4 gap-4">
-          <div className="">
-            <p className="text-sm text-muted-foreground">Strategy</p>
-            <p className="text-sm font-bold sm:text-base">{trade.strategy}</p>
-          </div>
+        <div className="grid grid-cols-3 gap-4">
           <div>
-            <p className="text-sm text-muted-foreground">Entry</p>
-            <p className="text-sm font-bold sm:text-base">
+            <p className="text-sm text-muted-foreground">Buy Price</p>
+            <p className="text-sm font-bold">
               {formatCurrency(averageBuyPrice)}
             </p>
           </div>
           <div>
-            <p className="text-sm text-muted-foreground">Quantity</p>
-            <p className="text-sm font-bold sm:text-base">
+            <p className="text-sm text-muted-foreground">Volume</p>
+            <p className="text-sm font-bold">
               {totalQty.toLocaleString()}{" "}
               <span className="text-xs font-normal">
-                {trade.class === "Shares"
-                  ? "shares"
-                  : trade.class === "Crypto"
-                    ? "tokens"
-                    : "contracts"}
+                {trade.instrument === "Shares"
+                  ? "Shares"
+                  : trade.instrument === "Crypto"
+                    ? "Tokens"
+                    : "Contracts"}
               </span>
             </p>
           </div>
           <div>
             <p className="text-sm text-muted-foreground">Target Price</p>
-            <p className="text-sm font-bold sm:text-base">
+            <p className="text-sm font-bold">
               {targetPrice !== null ? formatCurrency(targetPrice) : "Varies"}
             </p>
           </div>
         </div>
 
-        <div className="grid grid-cols-4 gap-4">
+        <div className="grid grid-cols-3 gap-4">
           {/* Stop Loss */}
           <div>
             <p className="text-sm text-muted-foreground">Stop Loss</p>
             <p
               className={cn(
-                stopLoss > trade.strikePrice &&
-                  "text-red-700 dark:text-red-400",
-                "text-sm font-bold sm:text-base"
+                stopLoss > trade.sellPrice && "text-red-700 dark:text-red-400",
+                "text-sm font-bold"
               )}
             >
               {stopLoss !== null ? formatCurrency(stopLoss) : "Varies"}
@@ -283,7 +272,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                 Target <span className="text-xs">(Net Profit)</span>
               </p>
             </div>
-            <p className="text-sm font-bold sm:text-base">
+            <p className="text-sm font-bold">
               {formatCurrency(targetProfit)}{" "}
               <span className="pt-0.5 text-xs font-semibold">
                 ({formatPercentage(targetProfit / totalBuyAmount)})
@@ -291,34 +280,101 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
             </p>
           </div>
 
-          {/* Strike Price */}
-          {trade.strikePrice && (
+          {/* Sell Price */}
+          {trade.sellPrice && (
             <div>
-              <p className="text-sm text-muted-foreground">Strike Price</p>
-              <p
-                className={cn(
-                  trade.strikePrice > averageBuyPrice
-                    ? "text-teal-700 dark:text-teal-400"
-                    : "text-red-700 dark:text-red-400",
-                  "text-sm font-bold sm:text-base"
-                )}
-              >
-                {formatCurrency(trade.strikePrice)}
-              </p>
-            </div>
-          )}
+              <p className="text-sm text-muted-foreground">Sell Price</p>
 
-          {/* Current / Realised Profit */}
-          {aggregatedStatus !== "Pending" && (
-            <div className="shrink-0">
-              <div className="flex items-end space-x-1.5">
-                <p className="text-sm text-muted-foreground">
-                  {aggregatedStatus === "Closed" ? "" : "Current"} P/L{" "}
-                  {aggregatedStatus === "Closed" ? "Outcome" : ""}{" "}
-                  <span className="text-xs">(Net)</span>
+              <div className="-space-y-1.5">
+                <p
+                  className={cn(
+                    trade.sellPrice > averageBuyPrice
+                      ? "text-teal-700 dark:text-teal-400"
+                      : "text-red-700 dark:text-red-400",
+                    "text-sm font-bold"
+                  )}
+                >
+                  {formatCurrency(trade.sellPrice)}
+                </p>
+                <p
+                  className={cn(
+                    trade.sellPrice > averageBuyPrice
+                      ? "text-teal-700 dark:text-teal-400"
+                      : "text-red-700 dark:text-red-400",
+                    "pt-0.5 text-xs font-semibold"
+                  )}
+                >
+                  {trade.sellPrice - averageBuyPrice > 0 && "+"}
+                  {formatCurrency(trade.sellPrice - averageBuyPrice)} (
+                  {formatPercentage(
+                    (trade.sellPrice - averageBuyPrice) / averageBuyPrice
+                  )}
+                  )
                 </p>
               </div>
-              <div className="flex items-center space-x-1.5">
+            </div>
+          )}
+          {/* Current Price */}
+          {trade.status !== "Closed" && (
+            <div>
+              <p className="text-sm text-muted-foreground">Current Price</p>
+
+              <div className="-space-y-1.5">
+                <p
+                  className={cn(
+                    trade.currentPrice > averageBuyPrice
+                      ? "text-teal-700 dark:text-teal-400"
+                      : "text-red-700 dark:text-red-400",
+                    "text-sm font-bold"
+                  )}
+                >
+                  {formatCurrency(trade.currentPrice)}
+                </p>
+
+                <p
+                  className={cn(
+                    trade.currentPrice > averageBuyPrice
+                      ? "text-teal-700 dark:text-teal-400"
+                      : "text-red-700 dark:text-red-400",
+                    "pt-0.5 text-xs font-semibold"
+                  )}
+                >
+                  {trade.currentPrice > averageBuyPrice && "+"}
+                  {formatCurrency(trade.currentPrice - averageBuyPrice)} (
+                  {formatPercentage(
+                    (trade.currentPrice - averageBuyPrice) / averageBuyPrice
+                  )}
+                  )
+                </p>
+              </div>
+            </div>
+          )}
+        </div>
+      </CardContent>
+      <CardFooter className="flex h-12 items-center justify-between rounded-b-lg border-t border-border bg-muted/30 px-3 py-2 lg:px-3 lg:py-2">
+        {/* Current / Realised Profit */}
+        {aggregatedStatus !== "Staged" ? (
+          <div className="-my-0.5 -space-y-0.5">
+            <div className="flex items-end space-x-1.5">
+              <p className="text-xs font-bold text-black dark:text-white">
+                {aggregatedStatus === "Closed" && realisedProfit > 0 ? (
+                  <span>Realised Gains</span>
+                ) : aggregatedStatus === "Closed" && realisedProfit < 0 ? (
+                  <span>Total Losses</span>
+                ) : (aggregatedStatus === "Open" ||
+                    aggregatedStatus === "Partial") &&
+                  (aggregatedStatus === "Open"
+                    ? currentProfit
+                    : realisedProfit) > 0 ? (
+                  <span>Unrealised Gains</span>
+                ) : (
+                  <span>Unrealised Loss</span>
+                )}{" "}
+                <span className="text-xs font-medium opacity-70">(Net)</span>
+              </p>
+            </div>
+            <div className="flex items-center space-x-0.5">
+              <div className="flex items-center space-x-1">
                 <p
                   className={cn(
                     (aggregatedStatus === "Closed"
@@ -326,9 +382,12 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                       : currentProfit) > 0
                       ? "text-teal-700 dark:text-teal-400"
                       : "text-red-700 dark:text-red-400",
-                    "text-sm font-bold sm:text-base"
+                    "text-sm font-bold"
                   )}
                 >
+                  {(aggregatedStatus === "Closed"
+                    ? realisedProfit
+                    : currentProfit) > 0 && "+"}
                   {formatCurrency(
                     aggregatedStatus === "Closed"
                       ? realisedProfit
@@ -355,9 +414,38 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                 </span>
               </div>
             </div>
-          )}
-        </div>
-      </CardContent>
+          </div>
+        ) : (
+          <span></span>
+        )}
+        {/* Multi-leg Trade Badge */}
+        {trade.steps && trade.steps.length > 1 && (
+          <Badge
+            variant="outline"
+            size="sm"
+            className="flex h-5 w-fit items-center space-x-1 py-1"
+          >
+            <Icons.steps className="-ml-0.5 h-3 w-3 text-muted-foreground" />
+
+            <p className="">
+              Multi-leg Trade:{" "}
+              <span
+                className={cn(
+                  stepsCompleted === stepsTotal
+                    ? "text-teal-500"
+                    : "text-muted-foreground",
+                  "font-bold"
+                )}
+              >
+                {stepsCompleted}/{stepsTotal}
+              </span>
+            </p>
+            {stepsCompleted === stepsTotal && (
+              <Icons.check className="-ml-1 h-3 w-3 text-teal-500" />
+            )}
+          </Badge>
+        )}
+      </CardFooter>
     </Card>
   )
 }
