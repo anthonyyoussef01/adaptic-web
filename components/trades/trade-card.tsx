@@ -319,7 +319,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
             <div>
               <p className="text-sm text-muted-foreground">Current Price</p>
 
-              <div className="-space-y-1 sm:space-y-0 sm:flex sm:items-center sm:space-x-1">
+              <div className="-space-y-1">
                 <p
                   className={cn(
                     trade.currentPrice > averageBuyPrice
@@ -354,8 +354,8 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
       <CardFooter className="flex h-11 items-center justify-between rounded-b-lg border-t border-border bg-muted/30 px-3 py-2 lg:px-3 lg:py-2">
         {/* Staged */}
         {aggregatedStatus === "Staged" && (
-          <span className="text-sm font-semibold text-muted-foreground">
-            To be executed at market open tomorrow
+          <span className="text-xs font-semibold italic text-muted-foreground">
+            Scheduled for market open on 19/10/24
           </span>
         )}
 
