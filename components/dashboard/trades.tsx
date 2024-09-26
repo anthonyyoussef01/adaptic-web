@@ -103,7 +103,7 @@ export function Trades() {
       class: "Crypto",
       instrument: "Cryptocurrency",
       signal: "Bullish Divergence",
-      status: "Open",
+      status: "Active",
       executedAt: "2024-09-20T12:30:00Z",
       buyPrice: 26500.0,
       currentPrice: 28000.0,
@@ -161,7 +161,7 @@ export function Trades() {
       class: "Options",
       instrument: "Put Option",
       signal: "Overbought",
-      status: "Open",
+      status: "Active",
       executedAt: "2024-09-18T10:00:00Z",
       buyPrice: 245.0,
       currentPrice: 240.0,
@@ -185,7 +185,7 @@ export function Trades() {
           targetPrice: 230.0,
           note: "Entering 50 Tesla put options to profit from a potential price drop. Stop loss at $255, target at $230.",
           executionTime: "2024-09-18T10:00:00Z",
-          status: "Open",
+          status: "Active",
         },
         {
           sequence: 2,
@@ -298,7 +298,7 @@ export function Trades() {
       class: "Shares",
       instrument: "Equity",
       signal: "Uptrend",
-      status: "Open",
+      status: "Active",
       executedAt: "2024-09-25T09:00:00Z",
       buyPrice: 135.0,
       currentPrice: 140.0,
@@ -322,7 +322,7 @@ export function Trades() {
           targetPrice: 150.0,
           note: "Buying 50 shares of AMZN as part of a trend-following strategy. Stop loss at $125, target at $150.",
           executionTime: "2024-09-25T09:00:00Z",
-          status: "Open",
+          status: "Active",
         },
         {
           sequence: 2,
@@ -389,7 +389,7 @@ export function Trades() {
       class: "Forex",
       instrument: "Currency Pair",
       signal: "Interest Rate Divergence",
-      status: "Open",
+      status: "Active",
       buyPrice: 1.1,
       currentPrice: 1.12,
       qty: 100000,
@@ -434,7 +434,7 @@ export function Trades() {
       class: "Shares",
       instrument: "Equity",
       signal: "Support Bounce",
-      status: "Open",
+      status: "Active",
       buyPrice: 60.0,
       currentPrice: 62.5,
       qty: 200,
@@ -524,7 +524,7 @@ export function Trades() {
       class: "Commodities",
       instrument: "Futures",
       signal: "Supply Shock",
-      status: "Open",
+      status: "Active",
       buyPrice: 70.0,
       currentPrice: 75.0,
       qty: 50,
@@ -728,8 +728,8 @@ export function Trades() {
             <TabsTrigger value="partial" className="font-semibold">
               Partial
             </TabsTrigger>
-            <TabsTrigger value="open" className="font-semibold">
-              Open
+            <TabsTrigger value="active" className="font-semibold">
+              Active
             </TabsTrigger>
             <TabsTrigger value="completed" className="font-semibold">
               Completed

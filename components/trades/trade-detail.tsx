@@ -183,26 +183,27 @@ export function TradeDetailModal({
                   variant={
                     aggregatedStatus === "Staged"
                       ? "outline"
-                      : aggregatedStatus === "Open"
+                      : aggregatedStatus === "Active"
                         ? "green"
                         : aggregatedStatus === "Partial"
                           ? "blue"
                           : "default"
                   }
-                  animate={aggregatedStatus === "Open"}
+                  animate={aggregatedStatus === "Active"}
                   className={cn(
-                    aggregatedStatus === "Staged" ? "h-6" : "h-5",
-                    "px-2 text-[10px]"
+                    aggregatedStatus === "Completed" ? "h-6" : "h-5",
+                    "whitespace-nowrap px-2 text-[10px]"
                   )}
                 >
                   {aggregatedStatus.toUpperCase()}
                   {aggregatedStatus === "Partial" &&
+                    trade.fulfilled &&
                     " (" + trade.fulfilled + ")"}
                 </Badge>
               </TooltipTrigger>
               <TooltipContent className="z-50 mb-2 mr-4">
                 <p className="text-semibold text-sm">
-                  {aggregatedStatus === "Open"
+                  {aggregatedStatus === "Active"
                     ? "This trade has an open position or has had a leg executed"
                     : aggregatedStatus === "Staged"
                       ? "This trade is staged and ready to be executed at market open"
@@ -478,14 +479,14 @@ export function TradeDetailModal({
                       <Badge
                         variant={
                           step.status === "Staged"
-                            ? "outline"
-                            : step.status === "Open"
+                            ? "default"
+                            : step.status === "Active"
                               ? "green"
                               : step.status === "Partial"
                                 ? "blue"
-                                : "default"
+                                : "outline"
                         }
-                        animate={step.status === "Open"}
+                        animate={step.status === "Active"}
                         className="h-5 px-2 text-[10px]"
                       >
                         {step.status.toUpperCase()}

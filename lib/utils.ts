@@ -442,8 +442,8 @@ export function determineTradeStatus(trade: any): string {
   }
 
   // if any step is executed, completed, or open, then trade is open
-  else if (stepStatuses.includes("Executed") || stepStatuses.includes("Completed") || stepStatuses.includes("Open")) {
-    return "Open"
+  else if (stepStatuses.includes("Executed") || stepStatuses.includes("Completed") || stepStatuses.includes("Active")) {
+    return "Active"
   }
 
   // else if there is only one step and it is partial, then trade is partial

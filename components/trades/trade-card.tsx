@@ -170,16 +170,16 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                   <Badge
                     variant={
                       aggregatedStatus === "Staged"
-                        ? "outline"
-                        : aggregatedStatus === "Open"
+                        ? "default"
+                        : aggregatedStatus === "Active"
                           ? "green"
                           : aggregatedStatus === "Partial"
                             ? "blue"
-                            : "default"
+                            : "outline"
                     }
-                    animate={aggregatedStatus === "Open"}
+                    animate={aggregatedStatus === "Active"}
                     className={cn(
-                      aggregatedStatus === "Staged" ? "h-6" : "h-5",
+                      aggregatedStatus === "Completed" ? "h-6" : "h-5",
                       "px-2 text-[10px]"
                     )}
                   >
@@ -190,7 +190,7 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                 </TooltipTrigger>
                 <TooltipContent className="z-50 mb-2 mr-4">
                   <p className="text-semibold text-sm">
-                    {aggregatedStatus === "Open"
+                    {aggregatedStatus === "Active"
                       ? "This trade has an open position or has had a leg executed"
                       : aggregatedStatus === "Staged"
                         ? "This trade is staged and ready to be executed at market open"
@@ -361,9 +361,9 @@ export function TradeCard({ trade, onClick }: TradeCardProps) {
                   <span>Realised Gains</span>
                 ) : aggregatedStatus === "Completed" && realisedProfit < 0 ? (
                   <span>Total Losses</span>
-                ) : (aggregatedStatus === "Open" ||
+                ) : (aggregatedStatus === "Active" ||
                     aggregatedStatus === "Partial") &&
-                  (aggregatedStatus === "Open"
+                  (aggregatedStatus === "Active"
                     ? currentProfit
                     : realisedProfit) > 0 ? (
                   <span>Unrealised Gains</span>
